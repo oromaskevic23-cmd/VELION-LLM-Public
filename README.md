@@ -2188,3 +2188,728 @@ VELION scales by creating the smallest sufficient governed execution team for ea
 QUALITY OF ROUTING
 >
 RAW AGENT COUNT
+# VELION Network
+
+## Federated Network Architecture for Governed Nano Core Agent Fleets
+
+Status: SPECIFIED / PLANNED
+
+VELION Network defines the distributed communication and runtime architecture for governed Nano Core Agent fleets.
+
+NCA = Nano Core Agent.
+
+The architecture is designed to evolve across:
+
+1,000  
+→ 10,000  
+→ 100,000  
+→ 1,000,000 NCA
+
+This range represents TARGET_CAPACITY / DESIGN_CAPACITY.
+
+It does not claim that one million NCA are currently deployed or live-verified.
+
+---
+
+## 1. Network Objective
+
+VELION Network must provide a governed communication fabric connecting:
+
+- missions
+- orchestrators
+- runtime domains
+- fleet controllers
+- NCA
+- model providers
+- memory systems
+- evidence systems
+- verification systems
+
+The network must remain:
+
+- provider-independent
+- fault-aware
+- policy-controlled
+- observable
+- auditable
+- horizontally scalable
+- Zero Trust by default
+
+---
+
+## 2. Canonical Topology
+
+ARCHITECT
+→ HANTER
+→ FEDERATED ORCHESTRATOR-DIRECTORS
+→ RUNTIME DOMAINS
+→ FLEET CONTROLLERS
+→ NCA GROUPS
+→ INDIVIDUAL NCA
+
+Supporting layers:
+
+VELION MEMORY
+
+VELION NETWORK
+
+MODEL ROUTING
+
+EVIDENCE SYSTEM
+
+AUDIT SYSTEM
+
+ORION
+
+HANTER is:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+HANTER must not become a single global execution bottleneck.
+
+ORION remains:
+
+ADVISORY_ONLY
+
+---
+
+## 3. Federated Runtime Domains
+
+VELION should divide execution into independent Runtime Domains.
+
+A Runtime Domain may represent:
+
+- provider
+- region
+- cloud environment
+- edge environment
+- capability family
+- security boundary
+- business domain
+- workload class
+
+Each Runtime Domain should have its own:
+
+- DOMAIN_ID
+- CONTROLLER_ID
+- POLICY_PROFILE
+- PROVIDER_SET
+- CAPABILITY_SET
+- TASK_QUEUE
+- HEALTH_STATE
+- CAPACITY_STATE
+- MEMORY_SCOPE
+- EVIDENCE_CHANNEL
+- AUDIT_CHANNEL
+
+Runtime domains reduce systemic blast radius.
+
+---
+
+## 4. No Single Global Runtime
+
+VELION must not depend on one machine, one provider, one queue, or one database for all execution.
+
+Canonical principle:
+
+ONE PROVIDER FAILURE
+!=
+VELION FAILURE
+
+ONE RUNTIME FAILURE
+!=
+FLEET FAILURE
+
+ONE NCA FAILURE
+!=
+MISSION FAILURE
+
+ONE DATABASE FAILURE
+!=
+LOSS OF CANONICAL SYSTEM STATE
+
+where redundancy and recovery mechanisms are actually implemented and verified.
+
+---
+
+## 5. Provider Independence
+
+VELION Network should support multiple approved infrastructure providers.
+
+Provider selection may consider:
+
+- health
+- latency
+- geography
+- capability
+- compute availability
+- model availability
+- cost
+- policy
+- data classification
+- reliability
+
+No provider receives authority merely because it provides infrastructure.
+
+PROVIDER != AUTHORITY
+
+---
+
+## 6. Network Identity
+
+Every network participant should have a governed identity.
+
+Possible identities:
+
+- RUNTIME_ID
+- DOMAIN_ID
+- CONTROLLER_ID
+- NCA_ID
+- MISSION_ID
+- TASK_ID
+- EXECUTION_ID
+- EVIDENCE_ID
+
+Identity should be traceable across execution and evidence.
+
+---
+
+## 7. Zero Trust Network
+
+VELION Network follows:
+
+DENY BY DEFAULT
+
+Every network action should be evaluated according to:
+
+SOURCE_IDENTITY
+→ DESTINATION
+→ CAPABILITY
+→ POLICY
+→ MISSION
+→ TASK
+→ AUTHORIZATION
+→ EXECUTION
+
+Canonical rules:
+
+Identity != Authority
+
+Capability != Approval
+
+Intelligence != Privilege
+
+Network Reachability != Execution Authority
+
+---
+
+## 8. Capability-Scoped Communication
+
+An NCA should communicate only with services required by its task.
+
+Example:
+
+NCA_RESEARCH
+
+may receive:
+
+WEB_READ
+
+but not automatically:
+
+DATABASE_WRITE
+
+DEPLOY_PRODUCTION
+
+SEND_PAYMENT
+
+MERGE_MAIN
+
+Network access must follow task capability.
+
+---
+
+## 9. Task Transport
+
+Task messages should include:
+
+- mission_id
+- task_id
+- execution_id
+- sender
+- receiver
+- capability
+- policy_profile
+- priority
+- created_at
+- expires_at
+- idempotency_key
+- payload_reference
+- evidence_requirement
+
+Large sensitive payloads should not be unnecessarily copied across the network.
+
+---
+
+## 10. Queue Architecture
+
+At large scale, VELION should avoid one universal queue.
+
+Possible hierarchy:
+
+GLOBAL MISSION ROUTING
+→ DOMAIN QUEUE
+→ FLEET QUEUE
+→ CAPABILITY QUEUE
+→ NCA CLAIM
+
+Queue partitioning may use:
+
+- runtime
+- region
+- provider
+- mission
+- capability
+- priority
+- security classification
+
+---
+
+## 11. Backpressure
+
+When execution demand exceeds capacity, VELION must apply backpressure.
+
+Possible responses:
+
+- reduce task admission
+- queue lower-priority work
+- scale eligible runtime capacity
+- reroute eligible tasks
+- reject invalid workloads
+- delay background tasks
+
+The system must not create unlimited work merely because target fleet capacity is large.
+
+---
+
+## 12. Rate Limiting
+
+Rate limits may apply to:
+
+- NCA
+- runtime
+- provider
+- model
+- API
+- mission
+- capability
+- tenant
+- external destination
+
+Rate limits protect:
+
+- infrastructure
+- providers
+- budgets
+- third-party services
+- system stability
+
+---
+
+## 13. Provider Health
+
+Provider health should be measured explicitly.
+
+Suggested states:
+
+UNKNOWN
+
+HEALTHY
+
+DEGRADED
+
+UNAVAILABLE
+
+QUARANTINED
+
+Health may incorporate:
+
+- response latency
+- error rate
+- timeout rate
+- capacity
+- authentication status
+- rate limits
+- model availability
+
+---
+
+## 14. Failover
+
+Failover must be policy-aware.
+
+Flow:
+
+PROVIDER_DEGRADED
+→ PAUSE_NEW_ASSIGNMENTS
+→ IDENTIFY_ELIGIBLE_TASKS
+→ SELECT_APPROVED_PROVIDER
+→ REVALIDATE_POLICY
+→ REASSIGN
+→ VERIFY_EXECUTION
+→ RECORD_EVIDENCE
+
+Failover must not bypass:
+
+- security policy
+- data residency policy
+- classification policy
+- budget policy
+- approval requirements
+
+---
+
+## 15. Circuit Breakers
+
+Repeated provider or runtime failure should activate a circuit breaker.
+
+Example:
+
+CLOSED
+→ FAILURE_THRESHOLD
+→ OPEN
+→ COOLDOWN
+→ HALF_OPEN
+→ HEALTH_TEST
+→ CLOSED
+
+or remain:
+
+OPEN
+
+until recovery is verified.
+
+---
+
+## 16. Retry Budgets
+
+Retries must be finite.
+
+Each network task should define:
+
+- max attempts
+- timeout
+- retry delay
+- exponential backoff
+- retryable errors
+- terminal errors
+
+Infinite retry loops are prohibited.
+
+---
+
+## 17. Idempotency
+
+VELION should use idempotency for consequential execution.
+
+Recommended:
+
+IDEMPOTENCY_KEY =
+MISSION_ID
++ TASK_ID
++ ACTION_CLASS
++ VERSION
+
+Duplicate requests must not automatically produce duplicate side effects.
+
+---
+
+## 18. Split-Brain Prevention
+
+Distributed controllers may disagree during network partitions.
+
+VELION should define:
+
+- ownership leases
+- controller epochs
+- fencing tokens
+- versioned state
+- conflict detection
+- reconciliation rules
+
+Two controllers must not independently assume irreversible authority over the same task.
+
+---
+
+## 19. Network Partition Handling
+
+During partition:
+
+- preserve local evidence
+- prevent unsafe privilege escalation
+- respect existing leases
+- stop operations requiring unavailable authority
+- continue only explicitly permitted degraded operations
+- reconcile state after connectivity returns
+
+Availability must not override governance.
+
+---
+
+## 20. NCA Quarantine
+
+A suspicious NCA may be isolated.
+
+Quarantine may disable:
+
+- new task claims
+- outbound network
+- sensitive capabilities
+- memory writes
+- external side effects
+
+Evidence must remain preserved for investigation.
+
+---
+
+## 21. Runtime Quarantine
+
+An entire runtime may be isolated if:
+
+- integrity is uncertain
+- credential compromise is suspected
+- policy enforcement fails
+- unexpected network behavior occurs
+- evidence becomes inconsistent
+
+Other healthy Runtime Domains should remain isolated from the affected domain.
+
+---
+
+## 22. Network Observability
+
+Recommended network metrics:
+
+- active_runtime_domains
+- healthy_providers
+- degraded_providers
+- unavailable_providers
+- active_nca
+- network_requests
+- request_errors
+- request_latency_p50
+- request_latency_p95
+- request_latency_p99
+- queue_depth
+- queue_latency
+- retry_rate
+- failover_count
+- circuit_breaker_state
+- quarantined_nca
+- quarantined_runtimes
+
+---
+
+## 23. Evidence Transport
+
+Execution evidence should be durable and traceable.
+
+Evidence records may contain:
+
+- evidence_id
+- mission_id
+- task_id
+- execution_id
+- nca_id
+- runtime_id
+- provider
+- timestamp
+- request_hash
+- response_hash
+- status
+- verifier
+- source_commit
+
+Evidence transport must not silently modify evidence contents.
+
+---
+
+## 24. Massive-Scale Telemetry
+
+At 1M target capacity, individual high-frequency telemetry from every NCA may become inefficient.
+
+VELION should support:
+
+- local aggregation
+- hierarchical metrics
+- sampling
+- event prioritization
+- anomaly escalation
+- compressed evidence references
+- domain summaries
+
+Critical security and audit events must not be discarded merely to reduce telemetry cost.
+
+---
+
+## 25. Network Capacity Classes
+
+### N1
+
+1–1,000 NCA
+
+Large governed fleet.
+
+### N2
+
+1,001–10,000 NCA
+
+Distributed target fleet.
+
+### N3
+
+10,001–100,000 NCA
+
+Massive distributed target fleet.
+
+### N4
+
+100,001–1,000,000 NCA
+
+Million-NCA target network architecture.
+
+N2–N4 remain target/design capacity until runtime evidence demonstrates otherwise.
+
+---
+
+## 26. Security Boundary
+
+Public documentation may describe architecture and protocols.
+
+Private implementation remains behind:
+
+PRIVATE_IMPLEMENTATION_BOUNDARY
+
+Do not publish:
+
+- credentials
+- API tokens
+- private keys
+- approval tokens
+- private runtime endpoints
+- sensitive topology
+- private operational memory
+- unreleased vulnerabilities
+- confidential provider configuration
+
+---
+
+## 27. Model Network
+
+VELION Network may connect NCA to multiple approved model providers.
+
+Routing:
+
+TASK
+→ MODEL_POLICY
+→ PROVIDER_POLICY
+→ HEALTH
+→ COST_LATENCY_POLICY
+→ MODEL
+→ EXECUTION
+→ VERIFICATION
+
+Using multiple providers does not prove a distributed proprietary foundation model.
+
+DISTRIBUTED_RUNTIME != DISTRIBUTED_MODEL_WEIGHTS
+
+---
+
+## 28. Memory Network
+
+Memory synchronization should follow scope.
+
+NCA LOCAL
+→ TEAM
+→ DOMAIN
+→ VERIFIED SHARED MEMORY
+→ CANONICAL CONTINUITY
+
+Do not replicate all private memory to all NCA.
+
+Memory synchronization must respect:
+
+- classification
+- provenance
+- authorization
+- version
+- conflict state
+
+---
+
+## 29. Million-NCA Qualification
+
+Before VELION can claim LIVE_VERIFIED_CAPACITY_1M, evidence should demonstrate at minimum:
+
+- qualified scheduler throughput
+- sustainable network throughput
+- acceptable queue latency
+- provider isolation
+- runtime isolation
+- failover
+- memory consistency
+- evidence throughput
+- security enforcement
+- economic feasibility
+- observability viability
+
+Until then:
+
+1M NCA = TARGET_CAPACITY / DESIGN_CAPACITY
+
+---
+
+## 30. Canonical Authorship
+
+Alexander Romaskevich  
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+HANTER:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+---
+
+## 31. Final Network Principle
+
+VELION Network should scale execution without creating a single uncontrolled authority center.
+
+DISTRIBUTED CAPACITY
+
++
+
+FEDERATED CONTROL
+
++
+
+ZERO TRUST
+
++
+
+EVIDENCE
+
+=
+
+VELION NETWORK
