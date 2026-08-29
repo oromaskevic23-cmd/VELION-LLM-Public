@@ -1136,3 +1136,529 @@ Architect / Final Architectural Decision Authority
 Public signature: **RomaskevicH**
 
 HANTER — **Chief Systems**
+# VELION NCA Task Routing and Allocation Model
+
+Status: SPECIFIED / PLANNED
+
+This document defines how VELION converts a mission into governed executable work distributed across Nano Core Agents.
+
+NCA = Nano Core Agent.
+
+---
+
+## 1. Core Principle
+
+VELION must not assign work randomly.
+
+Every mission should be decomposed into a structured task graph and routed to the smallest sufficient verified NCA team.
+
+Canonical principle:
+
+SMALLEST SUFFICIENT VERIFIED TEAM
+
+The objective is not maximum agent count.
+
+The objective is:
+
+RIGHT TASK
+→ RIGHT CAPABILITY
+→ RIGHT NCA
+→ RIGHT MODEL
+→ RIGHT RUNTIME
+→ VERIFIED RESULT
+
+---
+
+## 2. Mission Processing Pipeline
+
+Canonical pipeline:
+
+MISSION_INPUT
+→ MEMORY_BOOTSTRAP
+→ MISSION_NORMALIZATION
+→ COMPLEXITY_ASSESSMENT
+→ TASK_GRAPH_GENERATION
+→ DEPENDENCY_ANALYSIS
+→ CAPABILITY_REQUIREMENTS
+→ CAPACITY_ESTIMATION
+→ NCA_CANDIDATE_SELECTION
+→ POLICY_CHECK
+→ PROVIDER_SELECTION
+→ TASK_ASSIGNMENT
+→ EXECUTION
+→ TEST
+→ EVIDENCE
+→ RESULT_SYNTHESIS
+→ MEMORY_COMMIT
+
+Every stage should be traceable.
+
+---
+
+## 3. Task Graph
+
+A mission may contain:
+
+- sequential tasks
+- parallel tasks
+- conditional tasks
+- verification tasks
+- critic tasks
+- fallback tasks
+- human approval gates
+
+Each task should contain:
+
+- TASK_ID
+- MISSION_ID
+- TASK_TYPE
+- DESCRIPTION
+- REQUIRED_CAPABILITIES
+- REQUIRED_MODEL_CLASS
+- REQUIRED_RUNTIME
+- DEPENDENCIES
+- PRIORITY
+- BUDGET
+- TIMEOUT
+- RETRY_POLICY
+- APPROVAL_REQUIREMENT
+- EVIDENCE_REQUIREMENT
+- EXECUTION_STATE
+
+---
+
+## 4. Task States
+
+Canonical task states:
+
+CREATED
+
+READY
+
+BLOCKED
+
+CLAIMED
+
+EXECUTING
+
+WAITING_APPROVAL
+
+SUCCEEDED
+
+FAILED
+
+RETRY_PENDING
+
+QUARANTINED
+
+VERIFIED
+
+CANCELLED
+
+A task must not be marked VERIFIED merely because an NCA returned output.
+
+Canonical rule:
+
+OUTPUT != VERIFIED_RESULT
+
+---
+
+## 5. Capability Routing
+
+Each task defines the capabilities it requires.
+
+Example capabilities:
+
+- RESEARCH
+- CODE_GENERATION
+- CODE_REVIEW
+- TEST_EXECUTION
+- DATA_ANALYSIS
+- DOCUMENTATION
+- SECURITY_REVIEW
+- DATABASE_READ
+- DATABASE_WRITE
+- DEPLOY_PREVIEW
+- GITHUB_READ
+- GITHUB_BRANCH_WRITE
+- PULL_REQUEST_CREATE
+- MEMORY_READ
+- MEMORY_WRITE
+
+VELION matches:
+
+TASK_REQUIREMENTS
+→ NCA_CAPABILITY_SET
+
+An NCA without the required capability must not receive the task.
+
+---
+
+## 6. Candidate Selection
+
+VELION may score candidate NCA using:
+
+- capability match
+- specialization
+- runtime availability
+- provider health
+- current workload
+- historical verification rate
+- latency
+- cost
+- failure history
+- policy compatibility
+- memory locality
+
+Candidate score is advisory.
+
+Policy remains authoritative.
+
+---
+
+## 7. Dynamic Allocation
+
+VELION should scale dynamically.
+
+If one NCA is sufficient:
+
+ALLOCATE 1
+
+If multiple independent subtasks exist:
+
+ALLOCATE N
+
+If additional NCA provide no measurable benefit:
+
+DO NOT SCALE OUT
+
+Scaling triggers may include:
+
+- high task parallelism
+- latency pressure
+- specialist requirements
+- workload backlog
+- verification requirements
+- redundancy needs
+- provider failure
+- evaluation demand
+
+---
+
+## 8. Load Balancing
+
+Fleet controllers should avoid concentrating all work on one runtime or provider.
+
+Possible routing dimensions:
+
+- provider
+- runtime
+- region
+- orchestrator
+- capability class
+- model
+- mission
+- priority
+
+Routing should account for:
+
+- provider availability
+- rate limits
+- queue depth
+- latency
+- compute availability
+- budget
+- policy
+
+---
+
+## 9. Task Ownership
+
+Every executing task must have a clear owner.
+
+Recommended ownership fields:
+
+- TASK_ID
+- OWNER_NCA_ID
+- CLAIM_ID
+- LEASE_ID
+- CLAIMED_AT
+- LEASE_EXPIRES_AT
+
+This prevents ambiguous execution ownership.
+
+---
+
+## 10. Lease Model
+
+Tasks should use bounded leases.
+
+Flow:
+
+READY
+→ CLAIMED
+→ LEASE_ACTIVE
+→ EXECUTING
+
+If lease expires without valid heartbeat:
+
+LEASE_EXPIRED
+→ RELEASE
+→ RETRY_OR_REASSIGN
+
+A stale NCA must not permanently own work.
+
+---
+
+## 11. Duplicate Execution Prevention
+
+Massive fleets increase duplicate execution risk.
+
+VELION should use:
+
+- idempotency keys
+- task ownership locks
+- lease IDs
+- execution IDs
+- deduplication records
+- result hashes
+
+Canonical rule:
+
+ONE LOGICAL TASK
+!=
+UNLIMITED EXECUTIONS
+
+Duplicate execution must be detectable.
+
+---
+
+## 12. Retry Governance
+
+Retries must be bounded.
+
+Each task should define:
+
+- MAX_RETRIES
+- RETRY_DELAY
+- BACKOFF_POLICY
+- RETRYABLE_ERRORS
+- NON_RETRYABLE_ERRORS
+
+Repeated failure should trigger:
+
+FAILED
+or
+QUARANTINED
+
+not infinite execution loops.
+
+---
+
+## 13. Verification Routing
+
+Important tasks may require separate verifier NCA.
+
+Execution pattern:
+
+BUILDER_NCA
+→ OUTPUT
+→ VERIFIER_NCA
+→ EVIDENCE
+→ VERIFIED_RESULT
+
+For higher-risk work:
+
+BUILDER
+→ CRITIC
+→ VERIFIER
+→ POLICY_GATE
+→ FINAL_RESULT
+
+The same NCA should not automatically approve its own high-impact work.
+
+---
+
+## 14. Provider Failover
+
+If a provider becomes unhealthy:
+
+PROVIDER_HEALTH = DEGRADED
+
+VELION may:
+
+- pause new assignments
+- reroute eligible tasks
+- preserve existing evidence
+- release expired leases
+- move tasks to another approved provider
+
+Failover must respect task policy.
+
+---
+
+## 15. Cost-Aware Routing
+
+Every mission may define budgets.
+
+Possible controls:
+
+- TOKEN_BUDGET
+- COMPUTE_BUDGET
+- TASK_BUDGET
+- PROVIDER_BUDGET
+- TIME_BUDGET
+
+VELION should prefer the smallest sufficient resource profile.
+
+Cheap execution must not bypass verification or security.
+
+---
+
+## 16. Priority Routing
+
+Example priorities:
+
+P0 — critical governed mission
+
+P1 — high priority
+
+P2 — normal
+
+P3 — low priority
+
+P4 — background
+
+Priority influences queue ordering.
+
+Priority does not override policy.
+
+---
+
+## 17. Evidence
+
+Each task should produce evidence containing:
+
+- mission_id
+- task_id
+- nca_id
+- execution_id
+- provider
+- runtime
+- timestamps
+- input_hash
+- output_hash
+- result
+- verification_state
+- verifier_id
+- error_code
+- retry_count
+
+Evidence enables later audit and reconstruction.
+
+---
+
+## 18. Massive Fleet Scaling
+
+At 1K–1M NCA target scale, routing should become hierarchical.
+
+MISSION
+
+→ ORCHESTRATOR DOMAIN
+
+→ FLEET CONTROLLER
+
+→ TASK PARTITION
+
+→ NCA GROUP
+
+→ INDIVIDUAL NCA
+
+A single central queue should not become a universal bottleneck.
+
+Partitioning may use:
+
+- domain
+- region
+- provider
+- capability
+- mission
+- priority
+
+---
+
+## 19. Anti-Phantom Rule
+
+Assigned work is not proof of execution.
+
+TASK_CREATED != TASK_EXECUTED
+
+TASK_CLAIMED != TASK_COMPLETED
+
+TASK_COMPLETED != TASK_VERIFIED
+
+NCA_ALLOCATED != NCA_EXECUTING
+
+NCA_EXECUTING != NCA_VERIFIED
+
+All operational reports must preserve these distinctions.
+
+---
+
+## 20. Security
+
+Task routing remains Zero Trust.
+
+Required:
+
+DENY BY DEFAULT
+
+Capability-scoped assignment
+
+Policy validation before execution
+
+No credential propagation between unrelated NCA
+
+Runtime isolation
+
+Provider isolation
+
+Evidence collection
+
+Revocable leases
+
+Quarantine capability
+
+Human approval gates where required
+
+---
+
+## 21. Canonical Authority
+
+Alexander Romaskevich
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+HANTER:
+
+Chief Systems
+AI Command Center / Deputy to the Architect
+
+---
+
+## 22. Final Principle
+
+VELION does not scale by creating meaningless agent counts.
+
+VELION scales by creating the smallest sufficient governed execution team for each mission and expanding only when measurable task requirements justify expansion.
+
+QUALITY OF ROUTING
+>
+RAW AGENT COUNT
