@@ -4842,3 +4842,824 @@ EVIDENCE
 APPROVAL
 
 A generated artifact becomes trustworthy only after its required verification gates are passed.
+# VELION Public Integration Contract
+
+## Developer-Facing Interfaces, Compatibility and Governance
+
+Status: SPECIFIED / PUBLIC
+
+This document defines the public integration contract for VELION developer-facing interfaces.
+
+The purpose is to make future integrations predictable, secure, versioned, auditable and compatible with governed VELION architecture.
+
+---
+
+## 1. Scope
+
+This contract applies to public or partner-facing interfaces such as:
+
+- REST APIs
+- event interfaces
+- webhook interfaces
+- MCP-compatible tools
+- Agent Skills
+- capability manifests
+- SDK contracts
+- public schemas
+- public evaluation interfaces
+- public documentation endpoints
+
+This document specifies architecture and contract expectations.
+
+It does not claim that every interface described here is currently deployed.
+
+---
+
+## 2. Canonical Integration Principle
+
+VELION integrations should follow:
+
+DISCOVER
+→ AUTHENTICATE
+→ AUTHORIZE
+→ VALIDATE
+→ EXECUTE
+→ VERIFY
+→ EVIDENCE
+→ RESPOND
+
+No integration should assume that network access implies execution authority.
+
+Canonical rules:
+
+Identity != Authority
+
+Capability != Approval
+
+Network Access != Execution Authority
+
+Intelligence != Privilege
+
+---
+
+## 3. Public API Design
+
+Public APIs should be:
+
+- versioned
+- explicit
+- typed where practical
+- deterministic where possible
+- idempotent for consequential operations
+- rate limited
+- observable
+- auditable
+- backward-compatible within declared version guarantees
+
+---
+
+## 4. API Versioning
+
+Recommended version format:
+
+v1
+
+v2
+
+v3
+
+Breaking changes require a new major API version.
+
+Example:
+
+/api/v1/...
+
+A deprecated version should include:
+
+- deprecation notice
+- migration guidance
+- end-of-support date where applicable
+- replacement version
+
+---
+
+## 5. Request Identity
+
+Each request should support traceability.
+
+Recommended fields:
+
+- request_id
+- mission_id
+- task_id
+- actor_id
+- capability_id
+- timestamp
+- idempotency_key
+- client_version
+- api_version
+
+These fields may be headers or body fields depending on interface design.
+
+---
+
+## 6. Authentication
+
+Authentication proves identity.
+
+It does not grant unrestricted authority.
+
+Possible authentication methods may include:
+
+- OAuth
+- scoped API tokens
+- signed requests
+- workload identity
+- service identity
+- short-lived credentials
+
+Authentication secrets must never be exposed in public repositories.
+
+---
+
+## 7. Authorization
+
+Authorization should be capability-based.
+
+Example:
+
+AUTHENTICATED_CLIENT
+
+may have:
+
+READ_PUBLIC_STATUS
+
+but not automatically:
+
+WRITE_MEMORY
+
+DEPLOY_RUNTIME
+
+EXECUTE_FINANCIAL_ACTION
+
+MODIFY_SECURITY_POLICY
+
+Authorization should be explicit and revocable.
+
+---
+
+## 8. Capability Contract
+
+A public capability should declare:
+
+- capability_id
+- name
+- version
+- description
+- input_schema
+- output_schema
+- required_authority
+- side_effect_class
+- evidence_requirement
+- timeout
+- rate_limit
+- error_model
+
+Capabilities should not have hidden side effects.
+
+---
+
+## 9. Side-Effect Classes
+
+Suggested side-effect categories:
+
+NONE
+
+READ_ONLY
+
+REVERSIBLE_WRITE
+
+EXTERNAL_WRITE
+
+HIGH_IMPACT
+
+IRREVERSIBLE
+
+FINANCIAL
+
+SECURITY_SENSITIVE
+
+Higher-impact classes require stronger authorization and evidence.
+
+---
+
+## 10. Idempotency
+
+Consequential operations should support idempotency.
+
+Example:
+
+IDEMPOTENCY_KEY
+→ REQUEST
+→ RESULT
+
+Repeated identical requests with the same key should not create duplicate side effects.
+
+Idempotency behavior should be documented.
+
+---
+
+## 11. Error Model
+
+Public APIs should return structured errors.
+
+Recommended fields:
+
+- error_code
+- message
+- request_id
+- retryable
+- retry_after
+- details
+
+Errors should not expose:
+
+- secrets
+- stack traces containing credentials
+- private infrastructure topology
+- internal approval tokens
+- private memory
+
+---
+
+## 12. Standard Error Classes
+
+Possible error classes:
+
+INVALID_REQUEST
+
+UNAUTHENTICATED
+
+UNAUTHORIZED
+
+CAPABILITY_DENIED
+
+APPROVAL_REQUIRED
+
+RATE_LIMITED
+
+CONFLICT
+
+NOT_FOUND
+
+DEPENDENCY_UNAVAILABLE
+
+TIMEOUT
+
+VERIFICATION_FAILED
+
+INTERNAL_ERROR
+
+---
+
+## 13. Response Integrity
+
+Responses should be traceable where evidence matters.
+
+Possible metadata:
+
+- request_id
+- execution_id
+- source_version
+- source_commit
+- evidence_id
+- result_hash
+- verified_state
+- timestamp
+
+---
+
+## 14. Verification State
+
+Recommended result states:
+
+UNVERIFIED
+
+EXECUTED
+
+TESTED
+
+VERIFIED
+
+LIVE_VERIFIED
+
+A response must not claim VERIFIED merely because execution completed.
+
+Canonical rule:
+
+EXECUTION != VERIFICATION
+
+---
+
+## 15. Public Read Interfaces
+
+Public read interfaces may expose non-sensitive information such as:
+
+- project status
+- public specifications
+- public capability metadata
+- public release metadata
+- public health status
+- public documentation
+- public evaluation results
+
+Read interfaces must respect the PUBLIC classification boundary.
+
+---
+
+## 16. Write Interfaces
+
+Public or partner write interfaces require stronger controls.
+
+Possible write actions:
+
+- submit evaluation
+- create issue
+- request task
+- register integration
+- submit public metadata
+- create draft artifact
+
+Write access must be explicitly scoped.
+
+---
+
+## 17. High-Impact Interfaces
+
+High-impact operations may include:
+
+- production deployment
+- security-policy modification
+- credential changes
+- financial execution
+- irreversible publication
+- destructive data changes
+
+These actions must not be exposed as unrestricted public APIs.
+
+Recommended flow:
+
+REQUEST
+→ AUTHORIZATION
+→ POLICY
+→ APPROVAL
+→ SIMULATION
+→ EXECUTION
+→ VERIFICATION
+→ EVIDENCE
+
+---
+
+## 18. Webhooks
+
+Public webhooks should support:
+
+- event_id
+- event_type
+- event_version
+- created_at
+- delivery_id
+- signature
+- payload
+
+Webhook receivers should validate signatures before trusting payloads.
+
+Retries should be bounded.
+
+---
+
+## 19. Webhook Idempotency
+
+Webhook consumers should deduplicate by:
+
+event_id
+
+or:
+
+delivery_id
+
+Repeated delivery must not automatically create repeated side effects.
+
+---
+
+## 20. Event Contract
+
+Events should be immutable after publication.
+
+If correction is needed:
+
+ORIGINAL_EVENT
+→ CORRECTION_EVENT
+
+Do not silently mutate historical event records.
+
+---
+
+## 21. MCP-Compatible Interfaces
+
+VELION may expose MCP-compatible tools where useful.
+
+Each MCP tool should clearly declare:
+
+- name
+- purpose
+- parameters
+- output
+- side effects
+- authority requirement
+- failure behavior
+- evidence behavior
+
+Tool availability does not grant approval.
+
+---
+
+## 22. Agent Skills
+
+Public Agent Skills should include:
+
+- skill identity
+- version
+- purpose
+- activation conditions
+- capability scope
+- stop conditions
+- approval conditions
+- evidence expectations
+- safety boundaries
+
+Skill installation does not equal runtime execution.
+
+Canonical rule:
+
+SKILL_REGISTERED
+!=
+SKILL_EXECUTED
+
+---
+
+## 23. Schema Governance
+
+Public schemas should be versioned.
+
+Breaking schema changes require:
+
+- new schema version
+- migration notes
+- compatibility statement
+
+Schemas should reject ambiguous or malformed high-impact requests.
+
+---
+
+## 24. Backward Compatibility
+
+Within a supported major version, integrations should avoid unnecessary breaking changes.
+
+Possible guarantees:
+
+- existing fields remain valid
+- new optional fields may be added
+- deprecated fields receive notice
+- behavior changes are documented
+
+Compatibility promises must be realistic.
+
+---
+
+## 25. Rate Limits
+
+Public interfaces should publish meaningful rate-limit behavior.
+
+Possible limits:
+
+- requests per minute
+- requests per hour
+- concurrent requests
+- token budget
+- payload size
+- webhook retry count
+
+Rate limiting protects system stability and third-party resources.
+
+---
+
+## 26. Payload Limits
+
+Payload limits should be explicit.
+
+Examples:
+
+- max request size
+- max response size
+- max attachment size
+- max batch size
+- max task count
+
+Large payloads may use object references instead of inline transfer.
+
+---
+
+## 27. Security
+
+Public integrations follow Zero Trust.
+
+Required principles:
+
+DENY BY DEFAULT
+
+LEAST PRIVILEGE
+
+SCOPED AUTHORIZATION
+
+NO SECRET LEAKAGE
+
+NO IMPLICIT PRIVILEGE ESCALATION
+
+AUDITABLE EXECUTION
+
+---
+
+## 28. Secret Handling
+
+Public interfaces must never return:
+
+- API keys
+- passwords
+- private keys
+- seed phrases
+- access tokens
+- refresh tokens
+- approval tokens
+- internal database credentials
+
+Secrets must be redacted from logs where necessary.
+
+---
+
+## 29. Input Validation
+
+All external input is untrusted.
+
+Validate:
+
+- type
+- format
+- size
+- allowed values
+- encoding
+- destination
+- capability
+- side-effect class
+
+Never execute instructions simply because they appear inside user-controlled content.
+
+---
+
+## 30. Prompt Injection Boundary
+
+Content retrieved from:
+
+- web pages
+- emails
+- documents
+- tickets
+- external APIs
+- uploaded files
+
+must be treated as untrusted data.
+
+External content must not automatically override:
+
+- system policy
+- developer policy
+- authorization
+- capability boundaries
+- approval requirements
+
+---
+
+## 31. SSRF Protection
+
+Interfaces that fetch remote resources should enforce:
+
+- protocol allowlists
+- hostname validation
+- IP-range restrictions
+- redirect checks
+- private-network blocking where required
+- timeout limits
+
+Do not allow arbitrary internal network access.
+
+---
+
+## 32. Auditability
+
+Important integration actions should record:
+
+- actor
+- capability
+- request
+- authorization result
+- execution result
+- evidence
+- timestamp
+- source version
+
+Audit records should be append-only where practical.
+
+---
+
+## 33. Public Evidence Contract
+
+A public result may provide evidence references such as:
+
+- source commit
+- release tag
+- test result
+- evaluation artifact
+- evidence ID
+- hash
+- public issue
+- public pull request
+
+Evidence should be independently inspectable where practical.
+
+---
+
+## 34. SDK Expectations
+
+Future VELION SDKs should:
+
+- use versioned API contracts
+- expose typed models
+- handle structured errors
+- support retries safely
+- support idempotency
+- preserve request IDs
+- avoid embedding secrets
+- document authorization requirements
+
+---
+
+## 35. Developer Environment
+
+A future developer environment should distinguish:
+
+LOCAL
+
+TEST
+
+STAGING
+
+PRODUCTION
+
+Actions in one environment must not silently affect another.
+
+---
+
+## 36. Sandbox
+
+Where appropriate, VELION may provide a sandbox.
+
+Sandbox objectives:
+
+- safe experimentation
+- synthetic data
+- no real financial side effects
+- no production credentials
+- limited capabilities
+- deterministic testing
+
+Sandbox success does not prove production readiness.
+
+---
+
+## 37. Integration Certification
+
+A future integration may progress through:
+
+REGISTERED
+
+SCHEMA_VALIDATED
+
+AUTHENTICATION_VERIFIED
+
+CAPABILITY_VERIFIED
+
+SANDBOX_TESTED
+
+SECURITY_REVIEWED
+
+APPROVED
+
+PRODUCTION_ENABLED
+
+Each state should require evidence.
+
+---
+
+## 38. Deprecation
+
+Deprecated interfaces should be clearly marked.
+
+Recommended lifecycle:
+
+ACTIVE
+→ DEPRECATED
+→ MAINTENANCE
+→ END_OF_SUPPORT
+→ REMOVED
+
+Removal should not occur silently.
+
+---
+
+## 39. Public / Private Boundary
+
+Public developer documentation may expose:
+
+- contracts
+- examples
+- schemas
+- public capability descriptions
+- public endpoints
+- public errors
+- public evaluation methods
+
+Do not expose:
+
+- private credentials
+- internal provider secrets
+- internal approval mechanisms
+- private memory
+- private topology
+- sensitive logs
+- confidential financial data
+- unreleased vulnerabilities
+
+Use:
+
+PRIVATE_IMPLEMENTATION_BOUNDARY
+
+---
+
+## 40. Canonical Authorship
+
+Alexander Romaskevich  
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+HANTER:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+---
+
+## 41. Final Integration Principle
+
+A VELION integration becomes trustworthy through:
+
+IDENTITY
+
++
+
+CAPABILITY
+
++
+
+AUTHORIZATION
+
++
+
+VALIDATION
+
++
+
+EVIDENCE
+
++
+
+VERSIONED CONTRACTS
+
+Never through network access alone.
