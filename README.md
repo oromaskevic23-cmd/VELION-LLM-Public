@@ -5663,3 +5663,959 @@ EVIDENCE
 VERSIONED CONTRACTS
 
 Never through network access alone.
+# VELION Google Search & Public Indexing Specification
+
+Status: SPECIFIED / GOOGLE_DISCOVERABILITY_PREPARED
+
+Project:
+
+**VELION LLM**
+
+Parent architecture:
+
+**IMPERIAL Core**
+
+Canonical author and Architect:
+
+**Alexander Romaskevich**  
+**Александр Николаевич Ромаскевич**
+
+Public signature:
+
+**RomaskevicH**
+
+Canonical roles:
+
+**Founder • Owner • CEO of IMPERIAL Core**
+
+**Architect / Final Architectural Decision Authority**
+
+HANTER:
+
+**Chief Systems**
+
+**AI Command Center / Deputy to the Architect**
+
+---
+
+# 1. Objective
+
+This specification defines the public web discovery and search-indexing architecture for VELION.
+
+The objective is to create a technically correct path from public engineering work to verifiable search-engine discovery.
+
+Canonical pipeline:
+
+PUBLIC ENGINEERING ARTIFACT
+→ CANONICAL AUTHORSHIP
+→ PUBLIC WEB PAGE
+→ CRAWLABLE URL
+→ STRUCTURED METADATA
+→ SITEMAP
+→ SEARCH ENGINE DISCOVERY
+→ INDEX VERIFICATION
+→ PUBLIC SEARCH PRESENCE
+
+No stage may be claimed complete without evidence.
+
+---
+
+# 2. Current Truth Boundary
+
+This repository may prepare VELION for public discoverability.
+
+It does not by itself prove Google indexing.
+
+Canonical states:
+
+GOOGLE_DISCOVERABILITY_PREPARED = YES
+
+GOOGLE_CRAWLED = NOT_VERIFIED
+
+GOOGLE_INDEXED = NOT_VERIFIED
+
+GOOGLE_RANKING = NOT_VERIFIED
+
+SEARCH_CONSOLE_VERIFIED = NOT_VERIFIED
+
+SITEMAP_SUBMITTED = NOT_VERIFIED
+
+These states may be promoted only after external verification.
+
+---
+
+# 3. Canonical Public Identity
+
+Canonical Person:
+
+**Alexander Romaskevich**
+
+Alternate canonical name:
+
+**Александр Николаевич Ромаскевич**
+
+Public signature:
+
+**RomaskevicH**
+
+Affiliation:
+
+**IMPERIAL Core**
+
+Roles:
+
+**Founder • Owner • CEO**
+
+**Architect / Final Architectural Decision Authority**
+
+Associated public engineering program:
+
+**VELION**
+
+Primary public AI engineering project:
+
+**VELION LLM**
+
+---
+
+# 4. Canonical System Identity
+
+Parent architecture:
+
+**IMPERIAL Core**
+
+Engineering program:
+
+**VELION**
+
+AI/model-system layer:
+
+**VELION LLM**
+
+Agent architecture:
+
+**Nano Core Agent**
+
+Abbreviation:
+
+**NCA**
+
+System-level AI role:
+
+**HANTER — Chief Systems**
+
+Coordination layer:
+
+**ORION — ADVISORY_ONLY**
+
+---
+
+# 5. Canonical Entity Graph
+
+Public web properties should express the relationship consistently:
+
+Alexander Romaskevich
+→ Founder • Owner • CEO of IMPERIAL Core
+→ Architect / Final Architectural Decision Authority
+→ VELION
+→ VELION LLM
+→ Nano Core Agent architecture
+
+HANTER
+→ Chief Systems
+→ AI Command Center / Deputy to the Architect
+
+ORION
+→ advisory collective intelligence / coordination layer
+
+This relationship should remain consistent across public pages.
+
+---
+
+# 6. Canonical Search Terms
+
+Public technical pages may naturally reference:
+
+Alexander Romaskevich
+
+Александр Николаевич Ромаскевич
+
+RomaskevicH
+
+IMPERIAL Core
+
+VELION
+
+VELION LLM
+
+VELION Code
+
+VELION Memory
+
+VELION Network
+
+VELION Council
+
+VELION Forge
+
+HANTER
+
+Nano Core Agent
+
+Nano Core Agents
+
+NCA
+
+ORION
+
+Do not use keyword stuffing.
+
+Content quality and technical accuracy take priority over keyword density.
+
+---
+
+# 7. Canonical Page Architecture
+
+When a public VELION website exists, recommended public routes are:
+
+/
+
+/about
+
+/architect
+
+/velion
+
+/velion-llm
+
+/architecture
+
+/nano-core-agents
+
+/memory
+
+/network
+
+/council
+
+/forge
+
+/governance
+
+/security
+
+/research
+
+/evaluations
+
+/developers
+
+/docs
+
+Only real pages should be published or included in a sitemap.
+
+---
+
+# 8. Architect Page
+
+The canonical Architect page should identify:
+
+Alexander Romaskevich
+
+Александр Николаевич Ромаскевич
+
+RomaskevicH
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Associated public projects:
+
+IMPERIAL Core
+
+VELION
+
+VELION LLM
+
+Public claims must remain evidence-based.
+
+---
+
+# 9. VELION LLM Page
+
+Recommended title:
+
+VELION LLM — Agent-Native Distributed AI Architecture
+
+Recommended description:
+
+VELION LLM is an agent-native distributed AI engineering program by Alexander Romaskevich (RomaskevicH), Founder • Owner • CEO of IMPERIAL Core and Architect / Final Architectural Decision Authority.
+
+The page should explain:
+
+- VELION architecture
+- Nano Core Agents
+- model routing
+- VELION Memory
+- VELION Network
+- VELION Council
+- VELION Forge
+- governance
+- evaluations
+- public evidence
+
+---
+
+# 10. Canonical URL
+
+Every indexable production page should declare one canonical URL.
+
+Conceptually:
+
+<link rel="canonical" href="VERIFIED_PUBLIC_URL">
+
+The URL must be replaced with the real deployed public URL.
+
+Never publish a fabricated canonical domain.
+
+---
+
+# 11. Robots Policy
+
+A public production website should provide:
+
+/robots.txt
+
+Recommended policy for intentionally public pages:
+
+User-agent: *
+Allow: /
+
+Sitemap: VERIFIED_PUBLIC_SITEMAP_URL
+
+The sitemap URL must reference a real deployed sitemap.
+
+Private or sensitive paths must not rely solely on robots.txt for security.
+
+Authorization must protect private resources.
+
+---
+
+# 12. Sitemap
+
+A production website should expose:
+
+/sitemap.xml
+
+The sitemap should contain only:
+
+- real URLs
+- canonical URLs
+- public URLs
+- indexable URLs
+
+Do not include:
+
+- nonexistent pages
+- private routes
+- authenticated dashboards
+- internal APIs
+- temporary preview URLs
+- secret infrastructure
+
+---
+
+# 13. Sitemap Evidence
+
+Before declaring:
+
+SITEMAP_LIVE = VERIFIED
+
+verify:
+
+HTTP status = 200
+
+valid XML
+
+correct Content-Type where applicable
+
+all referenced URLs exist
+
+canonical host is correct
+
+no private URLs are exposed
+
+---
+
+# 14. Meta Robots
+
+Public pages intended for indexing should not accidentally contain:
+
+noindex
+
+Pages that should remain private or excluded may intentionally use:
+
+noindex
+
+where appropriate.
+
+Search exclusion is not an access-control mechanism.
+
+---
+
+# 15. Page Titles
+
+Every major public page should have a unique descriptive title.
+
+Examples:
+
+VELION LLM — Agent-Native Distributed AI Architecture
+
+Alexander Romaskevich — Founder of IMPERIAL Core & Architect of VELION
+
+Nano Core Agents — VELION NCA Architecture
+
+VELION Memory — Governed AI Memory Architecture
+
+VELION Network — Federated NCA Runtime Architecture
+
+VELION Council — Governed Multi-Agent Deliberation
+
+VELION Forge — AI Build and Validation Architecture
+
+---
+
+# 16. Meta Descriptions
+
+Descriptions should be:
+
+- accurate
+- concise
+- human-readable
+- unique where practical
+- aligned with visible page content
+
+Do not fabricate achievements for search visibility.
+
+---
+
+# 17. Structured Data
+
+Where appropriate, the public website may use JSON-LD.
+
+Recommended schema.org entity types:
+
+Person
+
+Organization
+
+WebSite
+
+WebPage
+
+SoftwareSourceCode
+
+CreativeWork
+
+Structured data must match visible content.
+
+---
+
+# 18. Canonical Person JSON-LD
+
+When a verified public website exists, an Architect page may use a structure conceptually equivalent to:
+
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Alexander Romaskevich",
+  "alternateName": [
+    "Александр Николаевич Ромаскевич",
+    "RomaskevicH"
+  ],
+  "jobTitle": [
+    "Founder",
+    "Owner",
+    "CEO",
+    "Architect"
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "IMPERIAL Core"
+  }
+}
+
+Only verified public identity URLs should be added through sameAs.
+
+---
+
+# 19. sameAs Policy
+
+The sameAs property is a strong identity signal.
+
+Only verified profiles controlled by or accurately representing the canonical person should be included.
+
+Possible categories:
+
+- official GitHub profile
+- official project website
+- verified professional profile
+- other verified public identity
+
+Do not create fictional profile URLs.
+
+---
+
+# 20. Organization Structured Data
+
+A future public IMPERIAL Core page may expose:
+
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "IMPERIAL Core",
+  "founder": {
+    "@type": "Person",
+    "name": "Alexander Romaskevich"
+  }
+}
+
+Additional properties should be added only when factually verified.
+
+---
+
+# 21. Repository Identity
+
+Public source repositories should consistently expose:
+
+Project:
+
+VELION LLM
+
+Author:
+
+Alexander Romaskevich
+
+Signature:
+
+RomaskevicH
+
+Parent architecture:
+
+IMPERIAL Core
+
+HANTER:
+
+Chief Systems
+
+This information should be consistent across:
+
+README
+
+AUTHORSHIP
+
+repository description
+
+documentation
+
+releases
+
+public website
+
+---
+
+# 22. GitHub Discovery
+
+Public GitHub repositories may be discovered by search engines.
+
+However:
+
+GITHUB_PUBLIC = YES
+
+does not imply:
+
+GOOGLE_INDEXED = YES
+
+GitHub repository indexing remains controlled by external search-engine behavior.
+
+---
+
+# 23. Internal Linking
+
+Public VELION pages should form a coherent internal graph.
+
+Example:
+
+HOME
+→ VELION
+→ VELION LLM
+→ NCA
+→ MEMORY
+→ NETWORK
+→ COUNCIL
+→ FORGE
+→ GOVERNANCE
+→ EVALUATIONS
+→ DEVELOPERS
+
+The Architect page should link naturally to public engineering projects.
+
+Project pages should link back to canonical authorship.
+
+---
+
+# 24. Public Evidence Page
+
+A future:
+
+/evidence
+
+page may expose verified public engineering evidence such as:
+
+- source commits
+- releases
+- public test results
+- evaluation methodology
+- architecture versions
+- public security policies
+- public verification artifacts
+
+Do not publish sensitive runtime evidence.
+
+---
+
+# 25. Search Console
+
+When a canonical domain is live, the site owner should verify it in Google Search Console.
+
+Canonical workflow:
+
+DOMAIN_LIVE
+→ OWNERSHIP_VERIFIED
+→ SEARCH_CONSOLE_PROPERTY_CREATED
+→ SITEMAP_SUBMITTED
+→ URL_INSPECTION
+→ INDEX_REQUEST
+→ GOOGLE_RESPONSE
+→ EVIDENCE_RECORDED
+
+---
+
+# 26. Google Verification
+
+Allowed verification methods depend on the deployed property and Google requirements.
+
+Examples may include:
+
+- DNS verification
+- HTML file
+- HTML meta tag
+- supported analytics/tag integrations
+
+Use only verification methods actually supported for the deployed property.
+
+---
+
+# 27. URL Inspection
+
+Important canonical pages should be checked individually after deployment.
+
+Priority pages:
+
+HOME
+
+ARCHITECT
+
+VELION
+
+VELION LLM
+
+NANO CORE AGENTS
+
+ARCHITECTURE
+
+DEVELOPERS
+
+Evidence should record the actual inspection result.
+
+---
+
+# 28. Indexing Status
+
+Recommended status vocabulary:
+
+NOT_SUBMITTED
+
+SUBMITTED
+
+DISCOVERED
+
+CRAWLED
+
+INDEXED
+
+EXCLUDED
+
+ERROR
+
+UNKNOWN
+
+Do not convert UNKNOWN to INDEXED without evidence.
+
+---
+
+# 29. Search Evidence Record
+
+A search evidence record may contain:
+
+SEARCH_EVIDENCE_ID
+
+URL
+
+CANONICAL_URL
+
+SUBMITTED_AT
+
+CRAWL_STATE
+
+INDEX_STATE
+
+LAST_CRAWL
+
+SITEMAP_STATE
+
+SEARCH_CONSOLE_STATE
+
+EVIDENCE_CAPTURED_AT
+
+EVIDENCE_REFERENCE
+
+---
+
+# 30. Public Security Boundary
+
+Search optimization must never expose:
+
+- API keys
+- passwords
+- access tokens
+- private keys
+- seed phrases
+- wallet secrets
+- approval tokens
+- private prompts
+- private NCA memory
+- private datasets
+- internal financial information
+- private infrastructure topology
+- sensitive logs
+- unreleased vulnerabilities
+
+Canonical priority:
+
+SECURITY > DISCOVERABILITY
+
+---
+
+# 31. No Search Manipulation
+
+VELION public properties must not use deceptive search practices.
+
+Do not use:
+
+- hidden keyword stuffing
+- doorway pages
+- fabricated backlinks
+- fake identities
+- fake reviews
+- fake citations
+- cloaking
+- misleading structured data
+
+Discoverability should derive from real public engineering content.
+
+---
+
+# 32. Multilingual Identity
+
+Where useful, public pages may expose both:
+
+Alexander Romaskevich
+
+and:
+
+Александр Николаевич Ромаскевич
+
+This supports accurate multilingual identity association.
+
+The public signature remains:
+
+RomaskevicH
+
+---
+
+# 33. Internationalization
+
+Future public sites may support:
+
+English
+
+Ukrainian
+
+Russian
+
+or additional languages.
+
+Localized pages should use proper language metadata and, where applicable, hreflang relationships.
+
+Translations must preserve technical meaning.
+
+---
+
+# 34. Performance
+
+Search-ready public pages should prioritize:
+
+- fast response
+- mobile usability
+- stable rendering
+- accessible navigation
+- semantic HTML
+- limited unnecessary JavaScript
+- correct HTTP status codes
+
+Performance improvements must not compromise correctness or security.
+
+---
+
+# 35. Accessibility
+
+Public VELION documentation should target accessible design.
+
+Recommended:
+
+- semantic headings
+- keyboard navigation
+- meaningful link labels
+- alt text for informative images
+- sufficient contrast
+- responsive layout
+
+Public technical knowledge should remain usable by a broad audience.
+
+---
+
+# 36. Monitoring
+
+After deployment, monitor:
+
+- uptime
+- HTTP errors
+- broken links
+- sitemap errors
+- crawl errors
+- canonical conflicts
+- accidental noindex
+- structured-data errors
+- Search Console indexing changes
+
+Search state can change over time.
+
+---
+
+# 37. Indexing Is External
+
+VELION does not control Google's indexing algorithm.
+
+Therefore:
+
+REQUEST_INDEXING != INDEXED
+
+INDEXED != PERMANENTLY_INDEXED
+
+INDEXED != TOP_RESULT
+
+TOP_RESULT != TECHNICAL_SUPERIORITY
+
+Search presence must not be confused with engineering quality.
+
+---
+
+# 38. Canonical Technical Truth
+
+VELION is an active engineering architecture/program.
+
+Public documentation may describe:
+
+- architecture
+- governance
+- specifications
+- research
+- evaluations
+- target scalability
+- verified engineering evidence
+
+Without evidence it must not claim:
+
+- production AGI
+- superintelligence
+- universal benchmark superiority
+- proprietary trained foundation-model weights
+- one million live NCA
+- production readiness
+
+---
+
+# 39. Canonical Authorship
+
+**Alexander Romaskevich**
+
+**Александр Николаевич Ромаскевич**
+
+Founder • Owner • CEO of **IMPERIAL Core**
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+**RomaskevicH**
+
+VELION and VELION LLM public engineering documentation use this canonical authorship.
+
+HANTER:
+
+**Chief Systems**
+
+**AI Command Center / Deputy to the Architect**
+
+---
+
+# 40. Final Search Principle
+
+VELION public presence follows:
+
+REAL ENGINEERING
+
+→ REAL PUBLIC ARTIFACT
+
+→ CANONICAL AUTHORSHIP
+
+→ SECURE PUBLIC WEBSITE
+
+→ STRUCTURED DISCOVERY
+
+→ SEARCH ENGINE CRAWL
+
+→ VERIFIED INDEXING
+
+→ PUBLIC EVIDENCE
+
+Never:
+
+SEO CLAIM
+→ FABRICATED STATUS
+
+Always:
+
+EVIDENCE BEFORE CLAIM
