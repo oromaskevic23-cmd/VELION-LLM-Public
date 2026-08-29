@@ -4160,3 +4160,685 @@ EVIDENCE
 The Council may recommend.
 
 The governed authority decides.
+# VELION Forge
+
+## Governed Build, Validation and Release Engineering Layer
+
+Status: SPECIFIED / PLANNED
+
+VELION Forge defines the controlled engineering pipeline used to transform approved technical work into validated, traceable and release-ready artifacts.
+
+VELION Forge is not an unrestricted deployment engine.
+
+It is a governed engineering layer.
+
+---
+
+## 1. Purpose
+
+VELION Forge coordinates:
+
+- code generation
+- code review
+- static analysis
+- dependency inspection
+- testing
+- security checks
+- packaging
+- artifact hashing
+- provenance
+- release preparation
+- deployment preparation
+- rollback preparation
+- evidence creation
+
+VELION Forge may operate on:
+
+- source code
+- Agent Skills
+- NCA packages
+- infrastructure configuration
+- documentation
+- model-routing configuration
+- evaluation suites
+- public releases
+- internal runtime artifacts
+
+---
+
+## 2. Canonical Forge Pipeline
+
+Canonical pipeline:
+
+MISSION
+→ SOURCE_DISCOVERY
+→ REQUIREMENTS
+→ IMPLEMENTATION_PLAN
+→ BUILD
+→ STATIC_VALIDATION
+→ UNIT_TEST
+→ INTEGRATION_TEST
+→ SECURITY_REVIEW
+→ POLICY_CHECK
+→ PACKAGE
+→ ARTIFACT_HASH
+→ EVIDENCE
+→ RELEASE_CANDIDATE
+→ APPROVAL_GATE
+→ DEPLOYMENT_PREPARATION
+
+Where production deployment is authorized:
+
+APPROVAL
+→ DEPLOY
+→ LIVE_VERIFY
+→ POST_DEPLOY_EVIDENCE
+
+---
+
+## 3. Truth Boundaries
+
+VELION Forge must preserve engineering status layers.
+
+SOURCE_CREATED
+!=
+BUILD_PASS
+
+BUILD_PASS
+!=
+TEST_PASS
+
+TEST_PASS
+!=
+SECURITY_PASS
+
+SECURITY_PASS
+!=
+RELEASE_READY
+
+RELEASE_READY
+!=
+DEPLOYED
+
+DEPLOYED
+!=
+LIVE_VERIFIED
+
+LIVE_VERIFIED
+!=
+PRODUCTION_AUTHORIZED
+
+These states must not be collapsed.
+
+---
+
+## 4. Build Identity
+
+Every build should have a unique identity.
+
+Recommended fields:
+
+- BUILD_ID
+- MISSION_ID
+- SOURCE_REPOSITORY
+- SOURCE_BRANCH
+- SOURCE_COMMIT
+- BUILDER_ID
+- RUNTIME_ID
+- BUILD_STARTED_AT
+- BUILD_FINISHED_AT
+- BUILD_STATUS
+- ARTIFACT_ID
+- ARTIFACT_HASH
+- TEST_RUN_ID
+- SECURITY_REVIEW_ID
+- RELEASE_CANDIDATE_ID
+
+This enables exact reconstruction.
+
+---
+
+## 5. Source Authority
+
+VELION Forge must know what source is authoritative.
+
+Possible states:
+
+SOURCE_UNKNOWN
+
+SOURCE_DISCOVERED
+
+SOURCE_VERIFIED
+
+SOURCE_PINNED
+
+SOURCE_SUPERSEDED
+
+A build should not silently mix unrelated source states.
+
+Canonical rule:
+
+SOURCE_LOCATION != SOURCE_AUTHORITY
+
+---
+
+## 6. Reproducibility
+
+Where technically practical, Forge should support reproducible builds.
+
+Important controls include:
+
+- pinned dependencies
+- explicit runtime versions
+- deterministic configuration
+- documented build commands
+- dependency lockfiles
+- artifact hashes
+- environment records
+
+A release should identify its exact source commit.
+
+---
+
+## 7. Dependency Governance
+
+Dependencies should be inspected before release.
+
+Checks may include:
+
+- package identity
+- version
+- source
+- license
+- integrity hash
+- known vulnerabilities
+- maintenance state
+- transitive dependencies
+
+Third-party software must preserve its applicable license obligations.
+
+---
+
+## 8. Static Validation
+
+Static validation may include:
+
+- syntax checks
+- type checks
+- linting
+- schema validation
+- configuration validation
+- forbidden pattern checks
+- secret pattern checks
+- unsafe permission detection
+
+Static validation is not a substitute for runtime testing.
+
+---
+
+## 9. Unit Testing
+
+Unit tests should validate isolated behavior.
+
+Each test run should preserve:
+
+- TEST_RUN_ID
+- SOURCE_COMMIT
+- environment
+- test count
+- passed count
+- failed count
+- skipped count
+- duration
+- logs
+- result hash
+
+Canonical rule:
+
+TESTS_EXIST != TESTS_RAN
+
+---
+
+## 10. Integration Testing
+
+Integration tests validate component interaction.
+
+Examples:
+
+- API ↔ database
+- NCA ↔ runtime
+- task router ↔ worker
+- model router ↔ provider
+- memory ↔ retrieval layer
+- policy engine ↔ execution gateway
+- Forge ↔ repository
+- deployment artifact ↔ target runtime
+
+Integration status must be separately recorded.
+
+---
+
+## 11. End-to-End Testing
+
+Where applicable, E2E testing should validate a complete governed workflow.
+
+Example:
+
+MISSION
+→ TASK ROUTING
+→ NCA EXECUTION
+→ RESULT
+→ VERIFICATION
+→ EVIDENCE
+→ REPORT
+
+An E2E PASS should identify the exact environment and scenario.
+
+---
+
+## 12. Security Review
+
+Forge should include defensive security review.
+
+Possible checks:
+
+- secret leakage
+- unsafe permissions
+- dependency vulnerabilities
+- insecure defaults
+- injection risks
+- unsafe network access
+- credential exposure
+- privilege escalation paths
+- unexpected external side effects
+
+Security scope is:
+
+DEFENSIVE / AUTHORIZED TARGETS ONLY
+
+---
+
+## 13. Secret Protection
+
+Forge must not package or publish secrets unintentionally.
+
+Sensitive examples:
+
+- API keys
+- access tokens
+- private keys
+- seed phrases
+- passwords
+- approval tokens
+- production credentials
+- private database URLs
+
+Secret detection should occur before public release.
+
+---
+
+## 14. Build Isolation
+
+Build jobs should be isolated where practical.
+
+Isolation may include:
+
+- filesystem isolation
+- network restrictions
+- temporary credentials
+- scoped permissions
+- container boundaries
+- disposable build environments
+
+A build process must not automatically inherit broad production authority.
+
+---
+
+## 15. Artifact Packaging
+
+Forge artifacts may include:
+
+- ZIP archives
+- container images
+- package registries
+- binaries
+- source bundles
+- generated documentation
+- signed manifests
+- deployment bundles
+
+Every artifact should have:
+
+- ARTIFACT_ID
+- VERSION
+- SOURCE_COMMIT
+- SHA-256 or equivalent integrity hash
+- BUILD_ID
+- creation timestamp
+- classification
+- release state
+
+---
+
+## 16. Artifact Integrity
+
+Recommended integrity chain:
+
+SOURCE_COMMIT
+→ BUILD_ID
+→ ARTIFACT
+→ HASH
+→ TEST_EVIDENCE
+→ RELEASE_CANDIDATE
+
+Any artifact modification should invalidate the prior integrity chain.
+
+---
+
+## 17. Release Candidate
+
+A release candidate should satisfy explicitly defined gates.
+
+Example:
+
+BUILD_PASS
+
+STATIC_VALIDATION_PASS
+
+UNIT_TEST_PASS
+
+INTEGRATION_TEST_PASS
+
+SECURITY_REVIEW_PASS
+
+LICENSE_REVIEW_PASS
+
+ARTIFACT_HASH_PRESENT
+
+EVIDENCE_COMPLETE
+
+Only then:
+
+RELEASE_CANDIDATE = READY
+
+---
+
+## 18. Release Approval
+
+Release readiness does not equal authorization.
+
+Canonical flow:
+
+RELEASE_CANDIDATE
+→ REVIEW
+→ APPROVAL_GATE
+→ RELEASE
+
+For high-impact releases:
+
+ARCHITECT_APPROVAL may be required.
+
+---
+
+## 19. Deployment Preparation
+
+Forge may prepare deployment artifacts and instructions.
+
+Possible output:
+
+- deployment manifest
+- configuration schema
+- migration plan
+- rollback plan
+- health checks
+- readiness checks
+- smoke tests
+- verification plan
+
+Preparation does not equal deployment.
+
+---
+
+## 20. Deployment Evidence
+
+If deployment occurs, evidence should include:
+
+- DEPLOYMENT_ID
+- SOURCE_COMMIT
+- ARTIFACT_HASH
+- TARGET_RUNTIME
+- DEPLOYED_AT
+- DEPLOY_RESULT
+- HEALTH_CHECK
+- READINESS_CHECK
+- LIVE_TEST
+- ROLLBACK_STATUS
+- EVIDENCE_ID
+
+---
+
+## 21. Rollback
+
+Every significant deployment should have a rollback strategy where feasible.
+
+Possible rollback triggers:
+
+- failed health check
+- failed readiness check
+- security regression
+- data integrity failure
+- severe performance regression
+- policy violation
+
+Rollback must itself be auditable.
+
+---
+
+## 22. Forge and NCA
+
+NCA may participate in Forge workflows.
+
+Example roles:
+
+CODE_BUILDER_NCA
+
+TEST_NCA
+
+SECURITY_REVIEW_NCA
+
+DEPENDENCY_REVIEW_NCA
+
+RELEASE_REVIEW_NCA
+
+DOCUMENTATION_NCA
+
+However:
+
+NCA_GENERATED_CODE
+!=
+TRUSTED_CODE
+
+All generated artifacts remain subject to validation.
+
+---
+
+## 23. Forge and Council
+
+VELION Council may review complex Forge outputs.
+
+Example:
+
+FORGE
+→ RELEASE_CANDIDATE
+→ COUNCIL_REVIEW
+→ FINDINGS
+→ FIX
+→ REVALIDATION
+→ APPROVAL_GATE
+
+Council review does not replace required tests.
+
+---
+
+## 24. Forge and Memory
+
+Verified build evidence may be promoted into VELION Memory.
+
+Examples:
+
+- source commit
+- package version
+- artifact hash
+- test result
+- security result
+- deployment result
+
+Unverified claims should not become canonical memory.
+
+---
+
+## 25. Forge at Massive Scale
+
+At large NCA scale, build workload may be distributed.
+
+Possible hierarchy:
+
+MISSION
+→ FORGE CONTROLLER
+→ BUILD PARTITIONS
+→ SPECIALIST NCA
+→ TEST WORKERS
+→ SECURITY REVIEW
+→ ARTIFACT AGGREGATION
+
+Mass parallelism must not produce uncontrolled release activity.
+
+---
+
+## 26. Build Queue
+
+Forge may use prioritized queues.
+
+Example priorities:
+
+P0 — critical remediation
+
+P1 — release blocker
+
+P2 — normal engineering
+
+P3 — optimization
+
+P4 — background
+
+Priority must not bypass security or approval gates.
+
+---
+
+## 27. Forge Metrics
+
+Recommended metrics:
+
+- builds_started
+- builds_completed
+- builds_failed
+- build_duration
+- unit_test_pass_rate
+- integration_test_pass_rate
+- security_findings
+- dependency_findings
+- artifacts_generated
+- release_candidates
+- deployment_success_rate
+- rollback_count
+
+Metrics should preserve environment and version context.
+
+---
+
+## 28. Public Release Boundary
+
+Public Forge outputs must exclude private implementation details.
+
+Do not publish:
+
+- secrets
+- internal credentials
+- private deployment topology
+- confidential logs
+- private prompts
+- proprietary datasets
+- private operational memory
+- unreleased security weaknesses
+
+Use:
+
+PRIVATE_IMPLEMENTATION_BOUNDARY
+
+---
+
+## 29. Supply Chain Security
+
+VELION Forge should protect the software supply chain.
+
+Recommended controls:
+
+- dependency pinning
+- integrity hashes
+- provenance records
+- minimal permissions
+- signed releases where appropriate
+- reproducible build strategy
+- source-to-artifact traceability
+- release evidence
+
+---
+
+## 30. Canonical Authorship
+
+Alexander Romaskevich  
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+HANTER:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+---
+
+## 31. Final Principle
+
+VELION Forge converts engineering work into trustworthy artifacts through:
+
+SOURCE
+
++
+
+BUILD
+
++
+
+TEST
+
++
+
+SECURITY
+
++
+
+EVIDENCE
+
++
+
+APPROVAL
+
+A generated artifact becomes trustworthy only after its required verification gates are passed.
