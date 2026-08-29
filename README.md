@@ -3651,3 +3651,512 @@ TECHNICAL WORK
 Never reverse the chain by creating claims first and evidence later.
 
 EVIDENCE BEFORE CLAIM.
+# VELION Council
+
+## Governed Multi-Agent Deliberation and Decision Support Layer
+
+Status: SPECIFIED / PLANNED
+
+VELION Council defines a governed deliberation layer for complex missions that benefit from multiple independent AI perspectives, specialist review, adversarial critique, and evidence-backed synthesis.
+
+VELION Council is not a sovereign authority.
+
+It does not replace the Architect.
+
+It does not automatically grant execution permission.
+
+---
+
+## 1. Purpose
+
+VELION Council exists to improve decision quality through structured multi-agent collaboration.
+
+Possible Council functions include:
+
+- architecture review
+- engineering review
+- security review
+- policy review
+- research synthesis
+- risk analysis
+- model comparison
+- disagreement analysis
+- strategic planning
+- evidence review
+- pre-deployment review
+- high-impact action review
+
+---
+
+## 2. Canonical Authority Boundary
+
+Canonical authority chain:
+
+ARCHITECT
+→ HANTER
+→ FEDERATED ORCHESTRATOR-DIRECTORS
+→ RUNTIME DOMAINS
+→ NCA
+
+VELION Council is advisory unless a specific governed workflow grants a bounded decision role.
+
+Canonical rule:
+
+COUNCIL_CONSENSUS != EXECUTION_AUTHORITY
+
+RECOMMENDATION != APPROVAL
+
+INTELLIGENCE != PRIVILEGE
+
+---
+
+## 3. Council Composition
+
+A Council session may contain different specialist roles.
+
+Example:
+
+BUILDER
+
+CRITIC
+
+VERIFIER
+
+SECURITY_REVIEWER
+
+POLICY_REVIEWER
+
+DOMAIN_SPECIALIST
+
+COST_REVIEWER
+
+RELIABILITY_REVIEWER
+
+EVIDENCE_REVIEWER
+
+FINAL_SYNTHESIZER
+
+These are logical roles.
+
+They must not be represented as independent human experts unless real humans participated.
+
+---
+
+## 4. Dynamic Council Size
+
+VELION Council should use the smallest sufficient set of reviewers.
+
+Example:
+
+Simple mission:
+2–3 participants
+
+Moderate mission:
+3–7 participants
+
+Complex mission:
+5–15 participants
+
+Critical architecture or security review:
+larger governed panel where justified
+
+The purpose is not to maximize agent count.
+
+The purpose is to maximize useful independent review.
+
+---
+
+## 5. Deliberation Flow
+
+Canonical Council flow:
+
+MISSION
+→ ISSUE_DEFINITION
+→ EVIDENCE_COLLECTION
+→ INDEPENDENT_ANALYSIS
+→ DISSENT_CAPTURE
+→ CRITIQUE
+→ VERIFICATION
+→ RISK_REVIEW
+→ SYNTHESIS
+→ RECOMMENDATION
+→ AUTHORITY_GATE
+
+The Council must preserve meaningful disagreement rather than forcing artificial consensus.
+
+---
+
+## 6. Independent Analysis
+
+Council participants should generate their initial assessments independently where practical.
+
+This reduces premature convergence.
+
+Independent analysis may include:
+
+- proposed solution
+- assumptions
+- risks
+- confidence
+- evidence
+- unknowns
+- blockers
+
+---
+
+## 7. Dissent Preservation
+
+Disagreement is valuable evidence.
+
+VELION Council should record:
+
+- majority position
+- minority position
+- unresolved disagreement
+- evidence supporting each position
+- confidence level
+- required follow-up tests
+
+Canonical rule:
+
+DISAGREEMENT != FAILURE
+
+Forced consensus must not erase uncertainty.
+
+---
+
+## 8. Builder-Critic Pattern
+
+A common pattern:
+
+BUILDER
+→ PROPOSAL
+→ CRITIC
+→ FINDINGS
+→ BUILDER_REVISION
+→ VERIFIER
+→ EVIDENCE
+
+This pattern is suitable for:
+
+- code
+- architecture
+- documentation
+- policies
+- deployment plans
+- research outputs
+
+---
+
+## 9. Parallel Review Pattern
+
+For high-complexity tasks:
+
+MISSION
+
+→ SECURITY REVIEW
+→ ARCHITECTURE REVIEW
+→ RELIABILITY REVIEW
+→ COST REVIEW
+→ POLICY REVIEW
+
+Then:
+
+SYNTHESIS
+
+Independent review channels should not be silently merged before conflicts are identified.
+
+---
+
+## 10. Consensus States
+
+Suggested Council states:
+
+UNREVIEWED
+
+REVIEW_IN_PROGRESS
+
+CONSENSUS
+
+QUALIFIED_CONSENSUS
+
+DISAGREEMENT
+
+BLOCKED
+
+INSUFFICIENT_EVIDENCE
+
+REQUIRES_ARCHITECT_DECISION
+
+Consensus alone does not imply implementation approval.
+
+---
+
+## 11. Confidence
+
+Each recommendation may include:
+
+CONFIDENCE_LOW
+
+CONFIDENCE_MEDIUM
+
+CONFIDENCE_HIGH
+
+Confidence should reflect evidence quality, not rhetorical certainty.
+
+---
+
+## 12. Evidence Requirements
+
+Council recommendations should reference evidence.
+
+Possible evidence:
+
+- source commit
+- test result
+- benchmark
+- API evidence
+- runtime logs
+- audit record
+- architecture specification
+- issue
+- pull request
+- reproducible experiment
+- security finding
+
+Unsupported claims should be clearly labeled.
+
+---
+
+## 13. Security Council
+
+Security-sensitive missions may use specialist review roles such as:
+
+SENTINEL
+
+VULCAN
+
+CERBERUS
+
+AEGIS
+
+BASTION
+
+ARGUS
+
+MINERVA
+
+FORENSIC
+
+REDSHIELD
+
+GUARDIAN-SEC
+
+These are defensive logical review lenses.
+
+They must not be represented as autonomous offensive actors.
+
+Security scope is:
+
+DEFENSIVE / AUTHORIZED TARGETS ONLY
+
+---
+
+## 14. High-Impact Decisions
+
+The Council may advise on:
+
+- production deployments
+- infrastructure changes
+- financial proposals
+- public releases
+- security changes
+- access-policy changes
+- architecture migrations
+
+But high-impact execution remains subject to the applicable approval process.
+
+COUNCIL_RECOMMENDATION
+→ POLICY_GATE
+→ APPROVAL
+→ EXECUTION
+
+---
+
+## 15. Council Memory
+
+Council records may be stored in governed memory.
+
+Possible fields:
+
+- COUNCIL_SESSION_ID
+- MISSION_ID
+- PARTICIPANTS
+- ROLE_MAP
+- INPUT_EVIDENCE
+- RECOMMENDATIONS
+- DISSENT
+- CONFIDENCE
+- FINAL_SYNTHESIS
+- AUTHORITY_DECISION
+- EVIDENCE_IDS
+- CREATED_AT
+
+Sensitive deliberation remains within its classification boundary.
+
+---
+
+## 16. Anti-Fabrication Rule
+
+A Council session must not claim:
+
+- participants that did not execute
+- tests that were not run
+- evidence that does not exist
+- consensus where disagreement remains
+- human review where only AI review occurred
+
+Canonical truth:
+
+ALLOCATED_REVIEWER != EXECUTED_REVIEWER
+
+EXECUTED_REVIEWER != VERIFIED_REVIEWER
+
+COUNCIL_OUTPUT != VERIFIED_DECISION
+
+---
+
+## 17. Model Diversity
+
+Where useful, Council roles may use different approved model providers.
+
+Possible pattern:
+
+MODEL_A
+→ BUILDER
+
+MODEL_B
+→ CRITIC
+
+MODEL_C
+→ VERIFIER
+
+However:
+
+MULTI_PROVIDER != INDEPENDENT_TRUTH
+
+MODEL_DIVERSITY != GUARANTEED_CORRECTNESS
+
+All outputs still require evidence.
+
+---
+
+## 18. Failure Handling
+
+If one Council participant fails:
+
+- preserve other completed outputs
+- record failed reviewer state
+- retry only when policy permits
+- optionally replace with another qualified reviewer
+- do not fabricate the missing review
+
+If critical review is unavailable:
+
+REQUIRES_ARCHITECT_DECISION
+or
+BLOCKED
+
+---
+
+## 19. Council Scaling
+
+At large NCA scale, Council itself should remain bounded.
+
+VELION should not create a million-agent Council.
+
+Instead:
+
+1M NCA FLEET
+→ LOCAL REVIEWS
+→ DOMAIN COUNCILS
+→ SELECTED EVIDENCE
+→ HIGHER-LEVEL COUNCIL
+→ SYNTHESIS
+
+This keeps deliberation computationally and cognitively manageable.
+
+---
+
+## 20. ORION Relationship
+
+ORION may contribute cross-fleet advisory intelligence.
+
+ORION remains:
+
+ADVISORY_ONLY
+
+ORION feedback may inform Council review but cannot silently grant execution authority.
+
+---
+
+## 21. HANTER Relationship
+
+HANTER:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+HANTER may coordinate Council sessions and system-level review.
+
+HANTER does not replace the Architect's final authority.
+
+---
+
+## 22. Canonical Authorship
+
+Alexander Romaskevich
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+HANTER:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+---
+
+## 23. Final Principle
+
+VELION Council exists to improve decisions through:
+
+INDEPENDENT ANALYSIS
+
++
+
+DISSENT
+
++
+
+CRITIQUE
+
++
+
+VERIFICATION
+
++
+
+EVIDENCE
+
+The Council may recommend.
+
+The governed authority decides.
