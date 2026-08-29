@@ -803,3 +803,234 @@ VELION may scale intelligence horizontally.
 Authority must never scale automatically with intelligence.
 
 Intelligence != Privilege
+# VELION NCA Scale Evaluation
+
+Status: SPECIFIED / PLANNED
+
+This document defines evidence gates for testing VELION Nano Core Agent scalability.
+
+No simulated result may be presented as a live deployment result.
+
+---
+
+## Gate S3 — 1,000 NCA
+
+Objective:
+
+Verify governed fleet coordination at approximately 1,000 NCA.
+
+Required measurements:
+
+- scheduler throughput
+- task assignment latency
+- queue latency
+- task completion rate
+- duplicate execution rate
+- failure recovery
+- evidence generation
+- policy enforcement
+- fleet observability
+- quarantine behavior
+
+Required output:
+
+S3_SIMULATED_PASS
+
+or
+
+S3_LIVE_VERIFIED_PASS
+
+These states must remain separate.
+
+---
+
+## Gate S4 — 10,000 NCA
+
+Sequence:
+
+SIMULATION  
+→ STRESS TEST  
+→ CONTROLLED DEPLOYMENT  
+→ EVIDENCE  
+→ VERIFICATION
+
+Required measurements:
+
+- scheduler saturation
+- queue depth
+- claim latency
+- retry behavior
+- dead-letter behavior
+- provider throttling
+- network overhead
+- memory consistency
+- evidence throughput
+- telemetry aggregation
+- cost projection
+
+Target label before verified deployment:
+
+TARGET_CAPACITY_10K
+
+---
+
+## Gate S5 — 100,000 NCA
+
+Required architecture qualification:
+
+- scheduler federation
+- runtime-domain partitioning
+- provider partitioning
+- task ownership consistency
+- distributed leases
+- split-brain resistance
+- failure-domain containment
+- evidence aggregation
+- observability sampling
+- memory partitioning
+- economic feasibility
+
+Required security tests:
+
+- compromised-NCA containment
+- credential-isolation test
+- runtime quarantine
+- provider isolation
+- privilege-escalation resistance
+- replay prevention
+
+Target label:
+
+TARGET_CAPACITY_100K
+
+---
+
+## Gate S6 — 1,000,000 NCA
+
+The one-million-NCA target is an architectural qualification objective.
+
+Before any LIVE_VERIFIED claim, VELION must demonstrate:
+
+### Infrastructure
+
+- sufficient compute
+- scheduler capacity
+- network capacity
+- memory capacity
+- persistent storage
+- evidence storage
+- telemetry infrastructure
+
+### Reliability
+
+- provider failure isolation
+- runtime-domain failover
+- retry-budget enforcement
+- duplicate prevention
+- split-brain prevention
+- backpressure
+- queue recovery
+
+### Security
+
+- Zero Trust enforcement
+- capability isolation
+- credential compartmentalization
+- quarantine
+- revocation propagation
+- audit integrity
+
+### Economics
+
+- projected compute cost
+- token cost
+- storage cost
+- networking cost
+- evidence cost
+- idle-capacity controls
+
+### Governance
+
+- authority separation
+- human approval boundaries
+- policy versioning
+- evidence verification
+- audit traceability
+
+Required label before full evidence:
+
+TARGET_CAPACITY_1M
+
+or
+
+SIMULATED_CAPACITY_1M
+
+Only verified live deployment evidence allows:
+
+LIVE_VERIFIED_CAPACITY_1M
+
+---
+
+## Evaluation Metrics
+
+Every scale experiment should capture:
+
+- registered_nca
+- allocated_nca
+- executing_nca
+- successful_nca
+- verified_nca
+- failed_nca
+- quarantined_nca
+- tasks_submitted
+- tasks_claimed
+- tasks_completed
+- tasks_failed
+- queue_latency_p50
+- queue_latency_p95
+- queue_latency_p99
+- execution_latency_p50
+- execution_latency_p95
+- evidence_rate
+- duplicate_rate
+- retry_rate
+- provider_failure_rate
+- recovery_time
+- estimated_cost
+
+---
+
+## Evidence Package
+
+Every evaluation should generate:
+
+- evaluation_id
+- timestamp
+- source_commit
+- environment
+- configuration hash
+- fleet target
+- actual registered fleet
+- actual executing fleet
+- duration
+- results
+- failures
+- evidence hashes
+- verifier
+- final status
+
+---
+
+## Final Rule
+
+A successful million-NCA simulation proves only:
+
+SIMULATED_CAPACITY
+
+It does not prove:
+
+DEPLOYED_CAPACITY
+
+and does not prove:
+
+LIVE_VERIFIED_CAPACITY
