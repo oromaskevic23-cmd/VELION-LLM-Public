@@ -529,3 +529,277 @@ is a scalability objective.
 Only independently evidenced runtime capacity may be labeled:
 
 LIVE_VERIFIED_CAPACITY
+# VELION NCA Execution Governance
+
+Status: SPECIFIED / PLANNED
+
+This specification defines the governance boundary for Nano Core Agent execution across VELION.
+
+NCA = Nano Core Agent.
+
+---
+
+## 1. Core Principle
+
+No NCA receives unrestricted autonomy.
+
+Every consequential execution must remain:
+
+- attributable
+- capability-scoped
+- policy-controlled
+- auditable
+- evidence-backed
+- revocable
+
+Canonical laws:
+
+Identity != Authority
+
+Capability != Approval
+
+Intelligence != Privilege
+
+Memory != Authority
+
+DENY BY DEFAULT
+
+---
+
+## 2. Execution Envelope
+
+Every executable task should have an execution envelope containing:
+
+- mission_id
+- task_id
+- nca_id
+- capability
+- requested_action
+- input_scope
+- output_scope
+- policy_profile
+- approval_requirement
+- allowed_runtime
+- allowed_provider
+- network_policy
+- resource_budget
+- timeout
+- evidence_requirement
+- expiration
+- revocation_state
+
+An NCA must not exceed its execution envelope.
+
+---
+
+## 3. High-Impact Actions
+
+The following categories require additional governance:
+
+- financial transactions
+- wallet signing
+- contract signing
+- irreversible data deletion
+- security-sensitive configuration changes
+- production deployment
+- credential operations
+- external public publication
+- high-impact communications
+- actions affecting third-party systems
+
+Human approval remains required where policy specifies it.
+
+---
+
+## 4. Capability Isolation
+
+Capabilities must be issued independently.
+
+Examples:
+
+READ_REPOSITORY
+
+WRITE_BRANCH
+
+CREATE_PULL_REQUEST
+
+DEPLOY_PREVIEW
+
+QUERY_DATABASE
+
+WRITE_DATABASE
+
+SEND_EMAIL
+
+CREATE_PAYMENT_INTENT
+
+A capability must never imply unrelated capabilities.
+
+Example:
+
+READ_REPOSITORY != WRITE_REPOSITORY
+
+WRITE_BRANCH != MERGE_MAIN
+
+CREATE_PAYMENT_INTENT != AUTHORIZE_PAYMENT
+
+---
+
+## 5. Fleet Governance
+
+At large scale, governance must be hierarchical.
+
+ARCHITECT  
+→ HANTER  
+→ ORCHESTRATOR-DIRECTORS  
+→ RUNTIME DOMAINS  
+→ FLEET CONTROLLERS  
+→ NCA
+
+HANTER is:
+
+Chief Systems
+
+AI Command Center / Deputy to the Architect
+
+HANTER does not become a global execution monopoly.
+
+Federated runtime domains preserve local failure isolation and policy enforcement.
+
+---
+
+## 6. Quarantine
+
+An NCA may be quarantined when:
+
+- policy violations occur
+- identity cannot be verified
+- evidence is inconsistent
+- duplicate execution is detected
+- unexpected privilege use occurs
+- abnormal network behavior appears
+- repeated execution failures occur
+- model output violates execution constraints
+
+Quarantined NCA must lose executable capabilities until reviewed.
+
+---
+
+## 7. Evidence Requirement
+
+Execution without evidence must not be treated as verified success.
+
+Evidence may include:
+
+- task ID
+- NCA ID
+- timestamp
+- runtime ID
+- provider
+- input hash
+- output hash
+- execution result
+- verification result
+- audit record
+- commit SHA
+- deployment ID
+- transaction simulation ID
+- HTTP response evidence
+
+Canonical rule:
+
+EXECUTED != VERIFIED
+
+---
+
+## 8. Anti-Phantom Fleet Rule
+
+Fleet size must always be categorized.
+
+Allowed categories:
+
+REGISTERED
+
+ALLOCATED
+
+EXECUTING
+
+SUCCEEDED
+
+VERIFIED
+
+FAILED
+
+BLOCKED
+
+QUARANTINED
+
+TARGET_CAPACITY
+
+SIMULATED_CAPACITY
+
+DEPLOYED_CAPACITY
+
+LIVE_VERIFIED_CAPACITY
+
+A target fleet number must never be shown as live fleet evidence.
+
+---
+
+## 9. Million-NCA Governance Boundary
+
+The long-term 1,000,000 NCA target introduces additional requirements:
+
+- federated policy distribution
+- hierarchical task ownership
+- regional/runtime isolation
+- local circuit breakers
+- distributed evidence collection
+- aggregate observability
+- rate-controlled telemetry
+- task deduplication
+- globally unique execution IDs
+- revocation propagation
+- policy version tracking
+
+Scaling must be evidence-gated.
+
+---
+
+## 10. Public / Private Boundary
+
+Public repositories may contain:
+
+- architecture
+- governance
+- public interfaces
+- testing strategy
+- evaluation methodology
+- non-sensitive evidence
+
+Private implementation includes:
+
+PRIVATE_IMPLEMENTATION_BOUNDARY
+
+Examples:
+
+- credentials
+- provider secrets
+- approval tokens
+- private runtime topology
+- internal operational memory
+- private datasets
+- model weights
+- wallet secrets
+- financial records
+- unreleased security findings
+
+---
+
+## 11. Final Governance Rule
+
+VELION may scale intelligence horizontally.
+
+Authority must never scale automatically with intelligence.
+
+Intelligence != Privilege
