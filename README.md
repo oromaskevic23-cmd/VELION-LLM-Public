@@ -2913,3 +2913,741 @@ EVIDENCE
 =
 
 VELION NETWORK
+# VELION Public Identity & Discoverability
+
+Status: PUBLIC / SPECIFIED
+
+This document establishes the canonical public technical identity of VELION, IMPERIAL Core, its Architect, HANTER, and Nano Core Agents.
+
+It also defines the public discoverability model for search engines and developer-facing systems.
+
+---
+
+# 1. Canonical Architect
+
+## Alexander Romaskevich
+
+Russian canonical name:
+
+**Александр Николаевич Ромаскевич**
+
+Public signature:
+
+**RomaskevicH**
+
+Canonical roles:
+
+**Founder • Owner • CEO of IMPERIAL Core**
+
+**Architect / Final Architectural Decision Authority**
+
+Alexander Romaskevich is the canonical author and Architect associated with the public VELION engineering architecture documented in this repository.
+
+The designation:
+
+**Chief Systems**
+
+must NOT be assigned to Alexander Romaskevich.
+
+---
+
+# 2. HANTER
+
+Canonical designation:
+
+**HANTER — Chief Systems**
+
+Canonical role:
+
+**AI Command Center / Deputy to the Architect**
+
+HANTER supports system-level coordination, engineering intelligence, state awareness, and governed execution architecture.
+
+HANTER is not:
+
+- Founder of IMPERIAL Core
+- Owner of IMPERIAL Core
+- CEO of IMPERIAL Core
+- the Architect
+- Final Architectural Decision Authority
+- a global execution orchestrator
+
+---
+
+# 3. IMPERIAL Core
+
+**IMPERIAL Core** is the parent system architecture under which VELION is being developed.
+
+Canonical authority:
+
+Alexander Romaskevich  
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO
+
+Architect / Final Architectural Decision Authority
+
+Public signature:
+
+RomaskevicH
+
+---
+
+# 4. VELION
+
+VELION is an agent-native distributed AI engineering program.
+
+The VELION system family includes architectural concepts such as:
+
+- VELION LLM
+- VELION Code
+- VELION Memory
+- VELION Network
+- VELION Council
+- VELION Forge
+
+These names describe system architecture and engineering directions.
+
+Their presence in documentation does not automatically mean every component is deployed or production-ready.
+
+---
+
+# 5. VELION LLM
+
+VELION LLM is the AI/model-system engineering layer of the VELION architecture.
+
+It is designed around:
+
+- model-provider independence
+- governed model routing
+- dynamic Nano Core Agent teams
+- task decomposition
+- verification
+- evidence
+- memory
+- distributed execution architecture
+
+VELION LLM must not be described as an independently trained proprietary foundation model unless such model weights and runtime are actually implemented and verified.
+
+Canonical truth:
+
+ARCHITECTURE != IMPLEMENTATION
+
+IMPLEMENTATION != TESTED
+
+TESTED != DEPLOYED
+
+DEPLOYED != LIVE_VERIFIED
+
+---
+
+# 6. Nano Core Agent
+
+Canonical definition:
+
+**NCA = Nano Core Agent**
+
+Plural:
+
+**Nano Core Agents**
+
+Nano Core Agents are governed, capability-scoped AI execution units within the VELION / IMPERIAL Core architecture.
+
+NCA are not granted unrestricted authority.
+
+Canonical rules:
+
+Identity != Authority
+
+Capability != Approval
+
+Intelligence != Privilege
+
+Memory != Authority
+
+---
+
+# 7. NCA Scale Vision
+
+VELION is architected toward progressively larger governed NCA fleets.
+
+Public target architecture:
+
+1,000 NCA  
+→ 10,000 NCA  
+→ 100,000 NCA  
+→ 1,000,000 NCA
+
+This represents:
+
+TARGET_CAPACITY
+
+and/or:
+
+DESIGN_CAPACITY
+
+unless supported by stronger evidence.
+
+It must not automatically be represented as:
+
+LIVE_VERIFIED_CAPACITY
+
+Canonical rule:
+
+TARGET_CAPACITY != LIVE_VERIFIED_CAPACITY
+
+---
+
+# 8. Canonical Public Entity Graph
+
+The canonical public relationship is:
+
+Alexander Romaskevich
+→ Founder • Owner • CEO of IMPERIAL Core
+→ Architect / Final Architectural Decision Authority
+→ VELION
+→ VELION LLM
+→ Nano Core Agent architecture
+
+Supporting system relationship:
+
+HANTER
+→ Chief Systems
+→ AI Command Center / Deputy to the Architect
+
+Coordination relationship:
+
+ORION
+→ advisory collective intelligence / coordination layer
+→ ADVISORY_ONLY
+
+---
+
+# 9. Canonical Search Names
+
+Public technical documentation should consistently use the following names where contextually appropriate:
+
+Alexander Romaskevich
+
+Александр Николаевич Ромаскевич
+
+RomaskevicH
+
+IMPERIAL Core
+
+VELION
+
+VELION LLM
+
+VELION Code
+
+VELION Memory
+
+VELION Network
+
+VELION Council
+
+VELION Forge
+
+HANTER
+
+Nano Core Agent
+
+Nano Core Agents
+
+NCA
+
+ORION
+
+These terms should be used naturally.
+
+Do not use artificial keyword stuffing.
+
+---
+
+# 10. Canonical Project Description
+
+Recommended public description:
+
+> VELION LLM is an agent-native distributed AI engineering program by Alexander Romaskevich (RomaskevicH), Founder • Owner • CEO of IMPERIAL Core and Architect / Final Architectural Decision Authority. VELION explores governed dynamic Nano Core Agent fleets, model routing, memory, evidence-based execution, and distributed AI architecture.
+
+This description is architectural.
+
+It does not claim:
+
+- AGI
+- superintelligence
+- universal benchmark superiority
+- production readiness
+- proprietary trained foundation-model weights
+- one million currently live NCA
+
+---
+
+# 11. Developer Discovery
+
+Public VELION repositories should make it straightforward for developers to discover:
+
+README
+→ ARCHITECTURE
+→ GOVERNANCE
+→ SECURITY
+→ ROADMAP
+→ EVALUATIONS
+→ AUTHORSHIP
+→ CONTRIBUTING
+
+Architecture documentation should cross-reference related specifications.
+
+Developer documentation should favor stable relative links.
+
+---
+
+# 12. Repository Metadata
+
+Recommended public repository metadata should identify:
+
+Project:
+
+VELION LLM
+
+Parent architecture:
+
+IMPERIAL Core
+
+Architect / Author:
+
+Alexander Romaskevich
+
+Public signature:
+
+RomaskevicH
+
+System role:
+
+HANTER — Chief Systems
+
+Primary technical topics:
+
+- distributed AI
+- agent-native architecture
+- multi-agent systems
+- Nano Core Agents
+- AI orchestration
+- AI governance
+- model routing
+- AI memory
+- evidence-based execution
+- Zero Trust AI
+
+Metadata must remain factually accurate.
+
+---
+
+# 13. Suggested GitHub Topics
+
+Where GitHub repository settings permit topics, appropriate public topics may include:
+
+velion
+
+velion-llm
+
+imperial-core
+
+nano-core-agent
+
+multi-agent-systems
+
+agentic-ai
+
+distributed-ai
+
+ai-orchestration
+
+ai-governance
+
+ai-agents
+
+zero-trust
+
+model-routing
+
+ai-memory
+
+These topics are discovery metadata.
+
+They are not evidence of implementation status.
+
+---
+
+# 14. Search Engine Discovery
+
+Public search discovery can proceed through:
+
+PUBLIC REPOSITORY
+→ CRAWL
+→ DISCOVERY
+→ INDEXING
+→ SEARCH RESULT
+
+These stages are distinct.
+
+Canonical truth:
+
+PUBLIC != CRAWLED
+
+CRAWLED != INDEXED
+
+INDEXED != RANKED
+
+RANKED != AUTHORITATIVE
+
+---
+
+# 15. Google Indexing State
+
+Google indexing must be evidence-based.
+
+Allowed states:
+
+GOOGLE_DISCOVERABILITY_PREPARED
+
+GOOGLE_CRAWL = NOT_VERIFIED
+
+GOOGLE_INDEXED = NOT_VERIFIED
+
+GOOGLE_RANKING = NOT_VERIFIED
+
+Do not change these states to VERIFIED without external evidence.
+
+---
+
+# 16. Future Canonical Website
+
+A future canonical VELION / IMPERIAL Core website should provide:
+
+- HTTPS
+- stable public URLs
+- descriptive titles
+- meta descriptions
+- canonical URL tags
+- robots.txt
+- sitemap.xml
+- structured data
+- mobile compatibility
+- internal navigation
+- author pages
+- project pages
+- technical documentation
+
+The site should avoid accidental:
+
+noindex
+
+or:
+
+nofollow
+
+directives on pages intended for public discovery.
+
+---
+
+# 17. Structured Data
+
+A public website may use schema.org-compatible structured data where appropriate.
+
+Possible entity classes:
+
+Person
+
+Organization
+
+SoftwareSourceCode
+
+CreativeWork
+
+WebSite
+
+WebPage
+
+Structured data must match visible public content.
+
+No hidden identity claims should be inserted solely for search engines.
+
+---
+
+# 18. Person Identity
+
+Canonical public Person:
+
+Name:
+
+Alexander Romaskevich
+
+Alternate name:
+
+Александр Николаевич Ромаскевич
+
+Public signature:
+
+RomaskevicH
+
+Affiliation:
+
+IMPERIAL Core
+
+Role:
+
+Founder • Owner • CEO
+
+Additional role:
+
+Architect / Final Architectural Decision Authority
+
+Only verified public profile references should be associated with this identity.
+
+---
+
+# 19. Organization Identity
+
+Canonical organization/system name:
+
+IMPERIAL Core
+
+Founder:
+
+Alexander Romaskevich
+
+Owner:
+
+Alexander Romaskevich
+
+CEO:
+
+Alexander Romaskevich
+
+Architect / Final Architectural Decision Authority:
+
+Alexander Romaskevich
+
+Chief Systems:
+
+HANTER
+
+These relationships must remain consistent across public technical documentation.
+
+---
+
+# 20. Authorship Evidence
+
+Canonical authorship should be represented consistently in:
+
+- README.md
+- AUTHORSHIP.md
+- repository description
+- architecture documents
+- public releases
+- public website
+- public developer documentation
+
+Conflicting role assignments should be corrected.
+
+---
+
+# 21. Search Console Workflow
+
+When a canonical public website is deployed and ownership is available:
+
+PUBLIC WEBSITE
+→ VERIFY OWNERSHIP
+→ REGISTER SEARCH CONSOLE PROPERTY
+→ SUBMIT SITEMAP
+→ INSPECT CANONICAL URLS
+→ REQUEST INDEXING WHERE APPROPRIATE
+→ MONITOR COVERAGE
+→ RECORD EVIDENCE
+
+Only then may indexing state be upgraded based on actual evidence.
+
+---
+
+# 22. Sitemap Strategy
+
+A future sitemap should prioritize public canonical pages such as:
+
+/
+
+/about
+
+/architect
+
+/velion
+
+/velion-llm
+
+/architecture
+
+/governance
+
+/security
+
+/research
+
+/evaluations
+
+/developers
+
+/docs
+
+Each URL must correspond to a real public page.
+
+Do not create sitemap entries for nonexistent content.
+
+---
+
+# 23. Canonical Author Page
+
+A future public author page should clearly state:
+
+Alexander Romaskevich
+
+Александр Николаевич Ромаскевич
+
+RomaskevicH
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Associated public engineering work:
+
+- IMPERIAL Core
+- VELION
+- VELION LLM
+
+Only publicly verifiable claims should be included.
+
+---
+
+# 24. Public / Private Boundary
+
+Search discoverability must never expose private engineering information.
+
+Remain private:
+
+PRIVATE_IMPLEMENTATION_BOUNDARY
+
+Including:
+
+- credentials
+- API keys
+- private keys
+- wallet secrets
+- approval tokens
+- private prompts
+- private memory
+- private datasets
+- private runtime topology
+- confidential provider configuration
+- unreleased vulnerabilities
+- internal financial information
+- sensitive logs
+
+Search optimization must never override security.
+
+---
+
+# 25. Security
+
+Public discoverability follows:
+
+SECURITY
+>
+SEO
+
+Never expose secrets to improve indexing.
+
+Never publish sensitive infrastructure merely to create searchable content.
+
+Never fabricate public activity.
+
+---
+
+# 26. Evidence
+
+Future search evidence may include:
+
+- repository URL
+- public website URL
+- canonical URL
+- sitemap URL
+- Search Console property verification
+- sitemap submission state
+- crawl state
+- URL Inspection state
+- indexed result
+- timestamp
+
+Evidence should be recorded before status promotion.
+
+---
+
+# 27. Public Status Vocabulary
+
+Recommended labels:
+
+SPECIFIED
+
+IMPLEMENTED
+
+TESTED
+
+DEPLOYED
+
+LIVE_VERIFIED
+
+TARGET_CAPACITY
+
+SIMULATED_CAPACITY
+
+NOT_VERIFIED
+
+BLOCKED
+
+These terms make public technical claims auditable.
+
+---
+
+# 28. Canonical Public Signature
+
+Public technical authorship:
+
+**Alexander Romaskevich**
+
+**Александр Николаевич Ромаскевич**
+
+Founder • Owner • CEO of **IMPERIAL Core**
+
+Architect / Final Architectural Decision Authority
+
+**RomaskevicH**
+
+HANTER — **Chief Systems**
+
+---
+
+# 29. Final Discoverability Principle
+
+VELION public discovery should follow:
+
+TECHNICAL WORK
+→ PUBLIC EVIDENCE
+→ CANONICAL AUTHORSHIP
+→ STRUCTURED DOCUMENTATION
+→ CRAWLABILITY
+→ INDEX DISCOVERY
+→ VERIFIED SEARCH PRESENCE
+
+Never reverse the chain by creating claims first and evidence later.
+
+EVIDENCE BEFORE CLAIM.
