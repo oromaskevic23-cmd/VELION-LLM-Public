@@ -1,0 +1,5 @@
+# CODEOWNERS
+
+# Default to the architect and HANTER for documentation changes
+/docs/ @oromaskevic23-cmd
+AUTHORSHIP.md @oromaskevic23-cmd
