@@ -19,6 +19,10 @@ Governance model (public):
 
 - Architect → HANTER → Federated Multi-Orchestrator Layer → Runtime Domains → governed agents/tools
 
+NCA scale documentation
+
+- See docs/architecture/NCA-SCALE-ARCHITECTURE.md for the VELION NCA scale taxonomy and evidence-gated roadmap. The 1,000 → 1,000,000 NCA range is a TARGET_CAPACITY and DESIGN_CAPACITY; it is not evidence of live deployment unless explicitly labeled LIVE_VERIFIED.
+
 Notes on claims
 
 - ARCHITECTURE != IMPLEMENTATION
