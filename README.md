@@ -1034,3 +1034,105 @@ DEPLOYED_CAPACITY
 and does not prove:
 
 LIVE_VERIFIED_CAPACITY
+## VELION LLM
+
+VELION is an agent-native distributed AI engineering program designed around governed dynamic fleets of Nano Core Agents.
+
+**NCA = Nano Core Agent**
+
+VELION is being architected to scale progressively across:
+
+**1,000 → 10,000 → 100,000 → 1,000,000 NCA**
+
+This range represents a long-term architectural scalability target.
+
+It does **not** claim that one million NCA are currently deployed or live-verified.
+
+### Capacity Truth Model
+
+VELION distinguishes:
+
+- TARGET_CAPACITY
+- DESIGN_CAPACITY
+- SIMULATED_CAPACITY
+- DEPLOYED_CAPACITY
+- LIVE_VERIFIED_CAPACITY
+
+These states must never be conflated.
+
+### Core Execution Model
+
+MISSION_INPUT  
+→ MEMORY_BOOTSTRAP  
+→ COMPLEXITY_ASSESSMENT  
+→ TASK_GRAPH  
+→ CAPACITY_ESTIMATION  
+→ NCA_SELECTION  
+→ CAPABILITY_ROUTING  
+→ EXECUTION  
+→ TEST  
+→ EVIDENCE  
+→ SCALE_DECISION  
+→ SYNTHESIS  
+→ MEMORY_COMMIT
+
+VELION follows the principle:
+
+**SMALLEST SUFFICIENT VERIFIED TEAM**
+
+The system should scale out only when mission complexity, parallelism, specialization, latency, resilience, or evaluation requirements justify additional NCA capacity.
+
+### Architecture
+
+Architect  
+→ HANTER  
+→ Federated Orchestrator-Directors  
+→ Runtime Domains  
+→ Fleet Controllers  
+→ NCA Groups  
+→ Nano Core Agents
+
+HANTER — **Chief Systems**
+
+HANTER is the AI Command Center / Deputy to the Architect.
+
+HANTER is not a global execution orchestrator.
+
+ORION remains **ADVISORY_ONLY**.
+
+### Zero Trust
+
+VELION preserves the following rules at every scale:
+
+**Identity != Authority**
+
+**Capability != Approval**
+
+**Intelligence != Privilege**
+
+**Memory != Authority**
+
+Default execution policy:
+
+**DENY BY DEFAULT**
+
+### Million-NCA Objective
+
+The S6 architecture targets governance of up to approximately **1,000,000 NCA** when sufficient verified infrastructure, compute, networking, storage, model capacity, observability, security, and economic feasibility exist.
+
+Until that capacity is demonstrated with runtime evidence, it remains:
+
+**TARGET_CAPACITY / DESIGN_CAPACITY**
+
+### Authorship
+
+Alexander Romaskevich  
+Александр Николаевич Ромаскевич
+
+Founder • Owner • CEO of IMPERIAL Core
+
+Architect / Final Architectural Decision Authority
+
+Public signature: **RomaskevicH**
+
+HANTER — **Chief Systems**
