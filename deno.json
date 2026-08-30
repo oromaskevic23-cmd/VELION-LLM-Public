@@ -1,0 +1,19 @@
+{
+  "tasks": {
+    "fmt": "deno fmt",
+    "fmt-check": "deno fmt --check",
+    "lint": "deno lint",
+    "check": "deno check",
+    "test": "deno test --allow-net --allow-read",
+    "truth-lint": "deno run --allow-read scripts/truth_lint.ts",
+    "demo": "deno run --allow-net examples/demo.ts",
+    "bench": "deno run --allow-net benchmarks/local_reference_benchmark.ts"
+  },
+  "imports": {
+    "std/": "https://deno.land/std@0.208.0/"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
