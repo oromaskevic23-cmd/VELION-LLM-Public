@@ -44,23 +44,9 @@ Sources, assessed Oct 2026:
 
 **Free-to-download weights are not free compute.** Electricity, hardware time, RAM/VRAM and Internet bandwidth still have real costs. `FREE_ONLY` means **no platform charges, no automatic payments and no paid cloud services**, not zero power consumption.
 
-## 3. Hardware-aware selection (OWNER-REPORTED, NOT MACHINE-MEASURED)
+## 3. Cloud-first owner correction — supersedes old workstation assumption
 
-Previously reported hardware: AMD Ryzen 5 5600, RAM 16GB, NVMe ~466GB, NVIDIA RTX 2070 SUPER (~8GB VRAM). Ollama supports RTX 2070 family (compute capability 7.5) and native Windows NVIDIA GPU drivers.
-
-**First trial:** `qwen3.5:4b`, quantized with installed model size roughly 3.3–4.0GB. Start with ONE concurrent request, `num_ctx=4096`, `num_predict=256`. Model weight download size alone is **not** peak VRAM; KV cache, context, image support and concurrent execution consume additional memory. If installation or CUDA compatibility fails, try `qwen3:4b` or `qwen3.5:2b`. Do not promise inference throughput until `ollama ps`, GPU/RAM usage and benchmark measured on the actual machine.
-
-Native Windows Ollama setup is supported; no Docker or enabled virtualization needed.
-
-To try on the owner's Windows machine (owner runs this locally, not an assistant claim):
-```powershell
-# Install Ollama from the official site: https://ollama.com/download
-ollama pull qwen3.5:4b
-ollama list
-ollama run qwen3.5:4b
-ollama ps
-```
-Local Ollama HTTP endpoint `127.0.0.1:11434` must remain loopback-only. Never expose it on a public Internet interface without external authentication, firewall and explicit owner approval.
+**2026-10-25 correction:** owner operates on **iPhone 12 and cloud services**. No Windows GPU workstation is available. The hardware-aware recommendation formerly in this section is **withdrawn** for this owner; local Ollama is an optional external reference, NOT the operational dependency. See [mobile-first cloud gateway architecture](VELEON_CLOUD_FIRST_20261025.md). Groq Free is the primary candidate only after official account confirmation; OpenRouter `:free` is optional and limited.
 
 ## 4. Implemented first engineering increment
 
