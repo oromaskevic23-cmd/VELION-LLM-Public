@@ -117,22 +117,22 @@ test('server errors expose no provider body',async()=>await rejectCode({
  fetchImpl:fake(()=>new Response('private raw server logs',{status:500}))
 },'PROVIDER_HTTP_FAILED'));
 test('malformed response JSON denied',async()=>await rejectCode({
- fetchImpl:fake(()=>new Response('this is not JSON'))
+ fetchImpl:fake(()=>new Response('this is not JSON',{headers:{'content-type':'application/json'}}))
 },'PROVIDER_RESPONSE_JSON'));
 test('content-type text instead of JSON denied',async()=>await rejectCode({
  fetchImpl:fake(()=>new Response('ok',{headers:{'content-type':'text/plain'}}))
 },'PROVIDER_CONTENT_TYPE_DENIED'));
 test('overlarge response rejected while reading stream',async()=>await rejectCode({
- fetchImpl:fake(()=>new Response('X'.repeat(131073)))
+ fetchImpl:fake(()=>new Response('X'.repeat(131073),{headers:{'content-type':'application/json'}}))
 },'PROVIDER_REPLY_TOO_LARGE'));
 test('overlarge declared content-length fails before streaming',async()=>await rejectCode({
- fetchImpl:fake(()=>new Response('ok',{headers:{'content-length':'9999999'}}))
+ fetchImpl:fake(()=>new Response('ok',{headers:{'content-type':'application/json','content-length':'9999999'}}))
 },'PROVIDER_REPLY_TOO_LARGE'));
 test('incomplete model output rejected as success',async()=>await rejectCode({
- fetchImpl:fake(()=>new Response(JSON.stringify({choices:[{finish_reason:'length',message:{content:'partial'}}]})))
+ fetchImpl:fake(()=>new Response(JSON.stringify({choices:[{finish_reason:'length',message:{content:'partial'}}]}),{headers:{'content-type':'application/json'}}))
 },'PROVIDER_PROPOSAL_REJECTED'));
 test('model tool-calls rejected, never executed',async()=>await rejectCode({
- fetchImpl:fake(()=>new Response(JSON.stringify({choices:[{finish_reason:'stop',message:{content:'run command',tool_calls:[{function:{name:'shell'}}]}}]})))
+ fetchImpl:fake(()=>new Response(JSON.stringify({choices:[{finish_reason:'stop',message:{content:'run command',tool_calls:[{function:{name:'shell'}}]}}]}),{headers:{'content-type':'application/json'}}))
 },'PROVIDER_PROPOSAL_REJECTED'));
 test('network errors are redacted, including secrets',async()=>{
  const key=props().apiKey;
