@@ -1,0 +1,16 @@
+{
+  "name": "veleon-free-llm-local-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Free-only, local, proposal-only VELEON inference gateway reference",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check": "node --check src/free-llm-gateway.mjs && node --check test/free-llm-gateway.test.mjs",
+    "test": "node --test test/*.test.mjs",
+    "verify": "npm run check && npm test"
+  },
+  "license": "UNLICENSED"
+}
