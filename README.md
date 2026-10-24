@@ -1,3 +1,7 @@
+> **Canonical name and verified status — 24 October 2026.** The intelligence component's correct current name is **VELEON**. The repository slug `VELION-LLM-Public` is a historical URL retained for link stability; spelling in older archived materials is not an official product renaming. This repository currently contains public design documents, **not a verified released LLM runtime or test suite**. No production capability should be inferred from this README. [Read the portfolio evidence audit](https://github.com/oromaskevic23-cmd/IMPERIAL-Core-US-HoldCo-Founder-Control-Blueprint/blob/main/docs/ENTERPRISE_PORTFOLIO_AUDIT.md).
+
+---
+
 # VELION-LLM-Public
 Public architecture, research, governance, evaluations and developer documentation for VELION LLM — an agent-native distributed AI system by Alexander Romaskevich (RomaskevicH), Founder • Owner • CEO of IMPERIAL Core. HANTER — Chief Systems.
 # VELION NCA Scale Architecture
