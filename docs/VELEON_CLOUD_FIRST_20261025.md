@@ -1,19 +1,19 @@
-# VELEON — CLOUD FIRST / IPHONE OPERATOR, FREE ONLY
+# VELION ⚡️ — CLOUD FIRST / IPHONE OPERATOR, FREE ONLY
 **Mission** IC-VELEON-CLOUD-FIRST-20261025-002  
 **Owner** RomaskevicH  
 **Stage** E2 adapter code; E3 CI pending per exact commit; real provider E4 **NOT VERIFIED**  
 **Security** Zero Trust • deny by default • fail closed • no delegated cash or tool authority  
-**Canonical name** VELEON (repository slug VELION-LLM-Public retained for existing links).
+**Canonical name** VELION ⚡️ (repository slug VELION-LLM-Public already matches the canonical spelling).
 
 ## Critical owner correction (25 October 2026)
-The owner **operates on an iPhone 12 and uses cloud services**, not a locally available Windows GPU workstation. A previous VELEON recommendation assumed local desktop availability; that assumption is **superseded and must not gate execution**. Do not ask the owner to install Ollama or locally host weights on an iPhone.
+The owner **operates on an iPhone 12 and uses cloud services**, not a locally available Windows GPU workstation. A previous VELION ⚡️ recommendation assumed local desktop availability; that assumption is **superseded and must not gate execution**. Do not ask the owner to install Ollama or locally host weights on an iPhone.
 
 **Deployment target (to be separately built):**
 ```
 iPhone 12: mobile browser / owner approval UI
    -> signed HTTPS API (NOT implemented)
    -> scoped jobs + quota + read-only allowed capabilities (NOT implemented)
-   -> VELEON cloud inference gateway (reference only; not deployed)
+   -> VELION ⚡️ cloud inference gateway (reference only; not deployed)
    -> selected verified free provider
    -> untrusted text proposal, independent QA, HANTER / LEGION dispatch
    -> proof + audit, no automatic production or payouts

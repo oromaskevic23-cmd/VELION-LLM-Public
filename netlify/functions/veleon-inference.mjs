@@ -1,5 +1,5 @@
 /**
- * VELEON owner-gated cloud inference API, E3 reference implementation.
+ * VELION ⚡️ owner-gated cloud inference API, E3 reference implementation.
  * Real provider transport is delegated to the existing bounded cloud gateway.
  * Public prompts ONLY. No payments, tools, background jobs or remote execution.
  * A passing mock test is NOT evidence of a live model deployment.
@@ -34,9 +34,10 @@ async function readBoundedRequestBody(request){
 const MISSION=/^[A-Za-z0-9_-]{8,80}$/;
 const TASKS=new Set(['GENERAL','CODE','ANALYSIS','RESEARCH_DRAFT']);
 
+// Legacy handler/export and VELEON_* environment variable names remain stable for integrations.
 export function createVeleonHandler({env=process.env,fetchImpl=globalThis.fetch}={}){
   return async function handler(request){
-    if(request.method==='GET')return safeJson({system:'VELEON',
+    if(request.method==='GET')return safeJson({system:'VELION',
       status:'GATEWAY_PRESENT_MODEL_INFERENCE_NOT_ATTESTED',
       training:'OWN_MODEL_WEIGHTS_NOT_VERIFIED',
       capability:'OWNER_AUTHENTICATED_PROPOSALS_ONLY'});
@@ -81,7 +82,7 @@ export function createVeleonHandler({env=process.env,fetchImpl=globalThis.fetch}
           freeEntitlementConfirmed:true,paidBillingDisabledConfirmed:true},
         fetchImpl,timeoutMs:20000
       });
-      return safeJson({system:'VELEON',mode:body.mode||null,
+      return safeJson({system:'VELION',mode:body.mode||null,
         result:{...result,evidenceLevel:'PROVIDER_RESPONSE_UNATTESTED',
           liveProviderVerification:'REQUIRES_REAL_SIGNED_RECEIPT_AND_OWNER_REVIEW'}});
     }catch(e){

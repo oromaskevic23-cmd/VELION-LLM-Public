@@ -1,10 +1,10 @@
-# VELEON — Verified Free LLM Discovery & Local Gateway v0.1
+# VELION ⚡️ — Verified Free LLM Discovery & Local Gateway v0.1
 
 **Mission:** IC-VELEON-FREE-LLM-20261025-001  
 **Date:** 2026-10-25  
 **Owner:** Alexander Romaskevich / RomaskevicH  
 **Classification:** PUBLIC engineering reference; proprietary mission logic/private prompts must remain in a PRIVATE repository  
-**Canonical system name:** VELEON. The GitHub slug `VELION-LLM-Public` is a legacy spelling retained for stable URLs.  
+**Canonical system name:** VELION ⚡️. The GitHub slug `VELION-LLM-Public` already uses the canonical spelling.  
 **Priority:** P0 / FREE_ONLY $0 / EVIDENCE FIRST / NO VAL TOWN / Zero Trust / Fail Closed.
 
 ## 1. Actual repository and ecosystem inspection
@@ -13,7 +13,7 @@ GitHub `oromaskevic23-cmd/VELION-LLM-Public` at main `ac164c3ebf3eeef43451c72f8c
 
 Related `CONSTRUCTOR-AI` contains an opt-in Groq draft gateway (`engineering/groq-gateway.mjs`), a mocked provider contract and a human-scoped local HMAC plan permit. It had no independently verified live Groq inference, operational sandbox or unrestricted actions. Do **not** duplicate provider credentials or treat a passing mock as remote inference proof. LEGION/NCA job dispatch is a separate governed layer.
 
-**Important deprecated option:** GitHub Models playground and inference API were **fully retired on 2026-07-30**. Do not base VELEON on GitHub Models API; GitHub remains a code repository and CI platform.
+**Important deprecated option:** GitHub Models playground and inference API were **fully retired on 2026-07-30**. Do not base VELION ⚡️ on GitHub Models API; GitHub remains a code repository and CI platform.
 Official evidence: https://github.blog/changelog/2026-07-30-github-models-is-now-retired/
 
 ## 2. Recommended model inventory, verified source pages (no vendor source copied)
@@ -63,15 +63,15 @@ npm run verify
 
 Proof ladder: implementation source = E2; verified tests on exact GitHub SHA = bounded E3; **real GPU-backed inference and resource benchmarking NOT VERIFIED**.
 
-## 5. VELEON integration acceptance programme
+## 5. VELION ⚡️ integration acceptance programme
 
 1. E3: GitHub Actions test gateway with unsafe config, wrong role/identity, malicious model inventory, invalid endpoint, tool-call response, oversized JSON, timeout, unsupported task and malformed payload.
 2. E4: owner workstation connects local Ollama using an explicitly authorized *actual* request, records model tag, digest, RAM/VRAM, latency and output hash. No credentials required for Ollama loopback.
 3. E4 cloud alternative: secure provider credential connected via official app; verify account's real free tier, privacy restrictions, server-side storage and actual response. Reject invalid old Groq keys. No spending permitted.
-4. E5: wire VELEON proposals to CONSTRUCTOR AI intent contract with distinct bounded task authority and LEGION job IDs. A model response never independently approves a task, release or code execution.
+4. E5: wire VELION ⚡️ proposals to CONSTRUCTOR AI intent contract with distinct bounded task authority and LEGION job IDs. A model response never independently approves a task, release or code execution.
 5. E5+: run independent quality benchmark on 30–100 representative cases (RU/UA/EN, coding, factuality, injection resistance, latency, tokens and failure rate), and compare free model variants to route by measured results rather than marketing claims.
 6. E6: production requires hardened persistent queues, audited key custody, authenticated authorization, sanctions/terms compliance, human release gates, monitoring, failover and positive unit economics.
 
 **Not yet implemented:** remote adapter, Groq/Gemini/OpenRouter login, actual LLM model hosting, 24/7 inference farm, live Universal NCA intelligence, business revenue, owned foundation model weights. No claims of tested hardware without owner-run proof.
 
-**Integration principle:** VELEON = intelligence/planning; LEGION = numbered free-team dispatcher; CONSTRUCTOR = verified engineering executor; CYBER HAK/Guardian Core = independent security gate; ASTRA/HANTER = governed coordination, not unrestricted authority.
+**Integration principle:** VELION ⚡️ = intelligence/planning; LEGION = numbered free-team dispatcher; CONSTRUCTOR = verified engineering executor; CYBER HAK/Guardian Core = independent security gate; ASTRA/HANTER = governed coordination, not unrestricted authority.

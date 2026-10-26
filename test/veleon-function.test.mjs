@@ -69,7 +69,7 @@ test('reject unknown request fields',async()=>{
 test('MAX is one named mode, never entire model identity',async()=>{
  const n=network();const h=createVeleonHandler({env,fetchImpl:n.fetchImpl});
  const r=await h(request());assert.equal(r.status,200);
- const v=await r.json();assert.equal(v.system,'VELEON');assert.equal(v.mode,'MAX');
+ const v=await r.json();assert.equal(v.system,'VELION');assert.equal(v.mode,'MAX');
  assert.equal(v.result.status,'UNTRUSTED_CLOUD_PROPOSAL_ONLY');
  assert.equal(v.result.release,'DENIED');assert.equal(v.result.execution,'NOT_RUN');
  assert.equal(v.result.evidenceLevel,'PROVIDER_RESPONSE_UNATTESTED');
