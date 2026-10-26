@@ -1,4 +1,4 @@
-name: VELEON Free Cloud Inference Gateway CI
+name: VELION Cloud Inference Gateway CI
 on:
   push:
     branches: [main]
