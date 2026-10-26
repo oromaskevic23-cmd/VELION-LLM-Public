@@ -1,0 +1,74 @@
+name: VELEON Real CPU Model Inference — FREE_ONLY
+on:
+  pull_request:
+    paths:
+      - 'scripts/veleon-real-cpu-inference.mjs'
+      - 'test/veleon-real-cpu-inference.test.mjs'
+      - '.github/workflows/veleon-real-cpu.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-open-model-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - name: Checkout source without credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Node 22
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Run gateway and policy unit tests
+        run: npm test
+      - name: Download pinned CPU llama.cpp release (no installer scripts)
+        run: |
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 180 \
+            --output /tmp/llama-b11896.tar.gz \
+            https://github.com/ggml-org/llama.cpp/releases/download/b11896/llama-b11896-bin-ubuntu-x64.tar.gz
+          echo 'b02ed815efe497c0e818aadaae1b2538309f25424034555dcc1b7211c783e25c  /tmp/llama-b11896.tar.gz' | sha256sum -c -
+          mkdir -p /tmp/llama-cpu
+          tar -xzf /tmp/llama-b11896.tar.gz -C /tmp/llama-cpu
+          find /tmp/llama-cpu -type f -name llama-server | head -5
+      - name: Download checksum-pinned open Qwen3-0.6B GGUF model
+        run: |
+          curl --fail --location --retry 3 --connect-timeout 25 --max-time 330 \
+            --output /tmp/qwen3-0.6b.gguf \
+            https://huggingface.co/ggml-org/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_0.gguf
+          echo 'da2572f16c06133561ce56accaa822216f2391ef4d37fba427801cd6736417d4  /tmp/qwen3-0.6b.gguf' | sha256sum -c -
+      - name: Start localhost-only CPU model service
+        run: |
+          BIN="$(find /tmp/llama-cpu -type f -name llama-server | head -1)"
+          test -n "$BIN"
+          chmod +x "$BIN"
+          BIN_DIR="$(dirname "$BIN")"
+          export LD_LIBRARY_PATH="$BIN_DIR:${LD_LIBRARY_PATH:-}"
+          "$BIN" --model /tmp/qwen3-0.6b.gguf --host 127.0.0.1 --port 8899 --ctx-size 1024 --threads 4 \
+            > "$RUNNER_TEMP/llama-server.log" 2>&1 &
+          for n in $(seq 1 75); do
+            if curl --fail --silent http://127.0.0.1:8899/health > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          tail -50 "$RUNNER_TEMP/llama-server.log"
+          exit 1
+      - name: "REAL inference: two local CPU generated responses"
+        env:
+          VELEON_CPU_INFERENCE_OPT_IN: '1'
+        run: node scripts/veleon-real-cpu-inference.mjs
+      - name: Strictly scoped LLM code proposal and real tests
+        env:
+          VELEON_CPU_INFERENCE_OPT_IN: '1'
+        run: |
+          node scripts/veleon-code-trial.mjs
+          node --check artifacts/veleon-inference/code-trial/generated.mjs
+          node --test artifacts/veleon-inference/code-trial/generated.test.mjs
+      - name: Retain small provenance receipt, not model weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: veleon-real-cpu-open-model-receipt
+          path: artifacts/veleon-inference/
+          if-no-files-found: warn
+          retention-days: 3
