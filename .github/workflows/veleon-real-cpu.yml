@@ -57,11 +57,18 @@ jobs:
         env:
           VELEON_CPU_INFERENCE_OPT_IN: '1'
         run: node scripts/veleon-real-cpu-inference.mjs
+      - name: Strictly scoped LLM code proposal and real tests
+        env:
+          VELEON_CPU_INFERENCE_OPT_IN: '1'
+        run: |
+          node scripts/veleon-code-trial.mjs
+          node --check artifacts/veleon-inference/code-trial/generated.mjs
+          node --test artifacts/veleon-inference/code-trial/generated.test.mjs
       - name: Retain small provenance receipt, not model weights
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: veleon-real-cpu-open-model-receipt
-          path: artifacts/veleon-inference/receipt.json
+          path: artifacts/veleon-inference/
           if-no-files-found: warn
           retention-days: 3
