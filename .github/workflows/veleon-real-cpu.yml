@@ -53,7 +53,7 @@ jobs:
           done
           tail -50 "$RUNNER_TEMP/llama-server.log"
           exit 1
-      - name: REAL inference: two local CPU generated responses
+      - name: "REAL inference: two local CPU generated responses"
         env:
           VELEON_CPU_INFERENCE_OPT_IN: '1'
         run: node scripts/veleon-real-cpu-inference.mjs
