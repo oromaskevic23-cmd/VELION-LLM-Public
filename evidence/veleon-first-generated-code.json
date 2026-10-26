@@ -1,0 +1,17 @@
+{
+  "schema": "veleon_public_generated_code_evidence_v1",
+  "mission": "VELEON_REAL_CPU_INFERENCE_20261026",
+  "model": "ggml-org/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_0.gguf",
+  "model_sha256": "da2572f16c06133561ce56accaa822216f2391ef4d37fba427801cd6736417d4",
+  "real_inference_run": "https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40362166437",
+  "source_artifact": "veleon-real-cpu-open-model-receipt",
+  "generator_output_sha256": "bcfcad23d84b1797a21408db2c02461af73b5eccd37a7723117fa5ad1dce58e8",
+  "candidate_sha256": "60c888675e461172178d627f8d1a122bbff2b6f12db40cf5bbfc573af7d386a6",
+  "candidate_js": "export function doubleValue(x) {\n  return x * 2;\n}\n",
+  "real_tests": "model-generated code Node 22 1/1 PASS",
+  "source_classification": "PUBLIC_SYNTHETIC_TASK_ONLY",
+  "proof_limit": "This file is a copy of verified CI artifact. The SHA-256 and run link support reproducibility, not cryptographic attestation of the CI system.",
+  "proprietary_veleon_weights": false,
+  "private_nca_source_included": false,
+  "production_release": "DENIED"
+}
