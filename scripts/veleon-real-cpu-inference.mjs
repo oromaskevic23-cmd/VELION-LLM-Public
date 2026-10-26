@@ -4,12 +4,13 @@
 import {createHash} from "node:crypto";
 import {writeFile,mkdir} from "node:fs/promises";
 import {performance} from "node:perf_hooks";
+import {pathToFileURL} from "node:url";
 
 export const MISSION="VELEON_REAL_CPU_INFERENCE_20261026";
 export const MODEL="ggml-org/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_0.gguf";
 export const MODEL_SHA256="da2572f16c06133561ce56accaa822216f2391ef4d37fba427801cd6736417d4";
 export const LLAMA_BINARY_SHA256="b02ed815efe497c0e818aadaae1b2538309f25424034555dcc1b7211c783e25c";
-const URL="http://127.0.0.1:8899/completion";
+const ENDPOINT="http://127.0.0.1:8899/completion";
 const hash=s=>createHash("sha256").update(s,"utf8").digest("hex");
 const PREFIX="<|im_start|>system\nYou are a careful AI engineering assistant. Provide a concise answer, without falsely claiming a deployment.<|im_end|>\n<|im_start|>user\n";
 const SUFFIX="<|im_end|>\n<|im_start|>assistant\n";
@@ -26,7 +27,7 @@ export async function infer({prompt,fetcher=fetch}={}){
  const request={prompt:PREFIX+prompt+SUFFIX,n_predict:130,temperature:0.1,stop:["<|im_end|>"],stream:false};
  const start=performance.now();
  let response;
- try{response=await fetcher(URL,{method:"POST",redirect:"error",headers:{"Content-Type":"application/json"},
+ try{response=await fetcher(ENDPOINT,{method:"POST",redirect:"error",headers:{"Content-Type":"application/json"},
   body:JSON.stringify(request),signal:AbortSignal.timeout(90000)})}
  catch{throw Error("LOCAL_CPU_TRANSPORT_FAILED")}
  if(!response.ok)throw Error("LOCAL_CPU_HTTP_"+response.status);
@@ -75,5 +76,5 @@ async function main(){
   "Live source testing: PASS only if job succeeds. No NCA arbitrary-code execution or owner authority.\n",{flag:"a"});
  }
 }
-if(process.argv[1]&&import.meta.url===new URL("file://"+process.argv[1]).href)
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
  main().catch(e=>{console.error("VELEON_INFERENCE_BLOCKED: "+e.message);process.exitCode=1});
