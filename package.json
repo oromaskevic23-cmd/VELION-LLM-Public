@@ -1,14 +1,14 @@
 {
   "name": "veleon-free-llm-local-gateway",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Cloud-first iPhone operator: strictly free remote LLM proposal gateway plus optional local reference; not deployed",
+  "description": "VELEON strictly free provider adapters and guarded cloud function; not deployed",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "check": "node --check src/free-llm-gateway.mjs && node --check test/free-llm-gateway.test.mjs && node --check src/cloud-free-gateway.mjs && node --check test/cloud-free-gateway.test.mjs",
+    "check": "node --check src/free-llm-gateway.mjs && node --check src/cloud-free-gateway.mjs && node --check netlify/functions/veleon-inference.mjs && node --check test/free-llm-gateway.test.mjs && node --check test/cloud-free-gateway.test.mjs && node --check test/veleon-function.test.mjs",
     "test": "node --test test/*.test.mjs",
     "verify": "npm run check && npm test"
   },
