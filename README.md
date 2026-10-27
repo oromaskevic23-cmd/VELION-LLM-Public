@@ -1,4 +1,4 @@
-# VELEON
+# VELION ⚡️
 
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
@@ -30,7 +30,7 @@ This is tested reference scope, not a merged release or verified production depl
 
 ## Canonical name
 
-The current source-confirmed name is **VELEON**. The historical URL `VELION-LLM-Public` is retained. The reference PR includes a cloud-first proposal gateway; no local workstation or live cloud inference is implied by its mocked test results.
+The canonical product name is **VELION ⚡️** (owner-approved). **MAX** is an operating mode, not a separate product name. The historical URL `VELION-LLM-Public` is retained. The reference PR includes a cloud-first proposal gateway; no local workstation or live cloud inference is implied by its mocked test results.
 
 ## Architecture and governance
 
