@@ -27,6 +27,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tests -p test_nemotron3_cpu_probe.py -v
           python3 -m unittest discover -s tests -p test_nemotron3_work_tasks.py -v
+          python3 -m unittest discover -s tests -p test_unique_in_order.py -v
 
       - name: Isolate official Ollama CPU service on localhost
         run: |
