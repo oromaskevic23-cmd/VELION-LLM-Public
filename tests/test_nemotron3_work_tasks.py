@@ -20,6 +20,13 @@ class ModelWorkEvaluationTests(unittest.TestCase):
                 "root_cause":"RATE_LIMIT","first_action":"RETRY_IMMEDIATELY",
                 "explanation":"Retry all failures."})
 
+    def test_incident_safe_synonyms_but_not_unsafe_retry(self):
+        d={"root_cause":"HTTP_429","first_action":"EXPONENTIAL_BACKOFF_WITH_JITTER",
+           "explanation":"The API is throttling and all retries must be delayed safely."}
+        self.assertEqual(module.score("automation_rate_limit",d)["verdict"],"PASS")
+        with self.assertRaises(ValueError):
+            module.score("automation_rate_limit",{**d,"first_action":"RETRY_IMMEDIATELY"})
+
     def test_commercial_gate_cannot_fake_payment(self):
         approved={"intake":"HOLD","dispatch":"DENY","payment":"UNVERIFIED",
             "explanation":"Privacy consent and approval are missing."}
