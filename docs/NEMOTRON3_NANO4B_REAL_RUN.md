@@ -32,3 +32,19 @@ This is a command guide, not evidence that the owner's personal machine was chan
 - \`PERSISTENT_SERVICE\`: **NOT DELIVERED** by this job.
 
 **Architecture:** VELION routes to external approved models; this does not rename the VELION LLM or claim proprietary trained weights. HANTER, ASTRA, NCA, Guardian Core and Approval Gateway remain separate boundaries. The new test grants none of them execution rights.
+
+
+## Verified first run — 2026-10-28
+
+**Status: REAL_EXTERNAL_MODEL_INFERENCE_VERIFIED**, scope limited to one isolated CPU-runner test.
+
+- [GitHub Actions run 40669452722](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722): full job SUCCESS; model pull SUCCESS; actual inference SUCCESS.
+- Source SHA: \`f9cf9761d1e42ada6cf135079554180f7db85164\`.
+- Installed local model registry tag: \`nemotron-3-nano:4b\`.
+- Ollama-reported installed weight size: **2,837,597,147 bytes**.
+- Actual generated tokens: **11**.
+- Actual output excerpt from independent CI log: \`NEMOTRON The test passed successfully.\`
+- SHA-256 of exact model output: \`b64dc8090ff67a786564613601d3c3c9c7a20b5dbf9350160aa4d4bce57fc618\`.
+- [Seven-day evidence artifact](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) \`velion-nemotron3-cpu-receipt\`; archive SHA-256: \`f7005b45cfffd3ed36796603d19418ea3a425ae45c9e62d67391f9908c24b0ab\`.
+- Provenance: zero credentials, localhost-only Ollama runtime, GitHub hosted Ubuntu CPU; weights were intentionally excluded from Git.
+- **Not claimed:** continuous hosting, production API service, VELION-proprietary LLM weights, NVIDIA endorsement, independently tested accuracy, or dedicated user-PC installation.
