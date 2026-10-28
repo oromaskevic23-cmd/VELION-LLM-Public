@@ -6,6 +6,8 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 **Earlier 25 October checkpoint:** proposal gateway reference in open PR #1; those provider/model endpoints were mocked; main then contained documentation only.
 
+**Verified applied model work (28 October 2026):** NVIDIA Nemotron 3 Nano 4B independently completed **3/3 bounded tasks** (rate-limit incident diagnosis, a Python order-preserving deduplication fix, and consent/approval/payment safety classification). The actual generated Python utility is [source controlled](src/unique_in_order.py) with six repeatable repository tests. [CI results](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40672971410) · [task evidence and truth limits](docs/NEMOTRON3_VERIFIED_WORK_TASKS_20261028.md). **Synthetic offline cases only: no live customer delivery, payments or persistent model hosting.**
+
 ## Official IMPERIAL Core web identity
 
 **[Alexander Romaskevich — official founder site](https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/)** · **[IMPERIAL Core — official ecosystem site](https://oromaskevic23-cmd.github.io/IMPERIAL-Core-Public/)**
