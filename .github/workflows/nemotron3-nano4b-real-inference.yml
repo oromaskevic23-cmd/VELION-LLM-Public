@@ -1,0 +1,77 @@
+name: VELION — NVIDIA Nemotron 3 Nano 4B REAL CPU inference
+
+on:
+  push:
+    branches:
+      - feat/velion-nemotron3-nano4b-real-run-20261028
+    paths:
+      - .github/workflows/nemotron3-nano4b-real-inference.yml
+      - scripts/nemotron3_cpu_probe.py
+      - tests/test_nemotron3_cpu_probe.py
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  nemotron3-real-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout source with no persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Verify the evidence code without model or network
+        run: python3 -m unittest discover -s tests -p test_nemotron3_cpu_probe.py -v
+
+      - name: Install isolated official Ollama container (CPU; zero credentials)
+        run: |
+          docker pull ollama/ollama:latest
+          docker run -d --name velion-nemotron3 \
+            --cpus=4 \
+            --pids-limit=256 \
+            -p 127.0.0.1:11434:11434 \
+            -e OLLAMA_HOST=0.0.0.0:11434 \
+            -e OLLAMA_NUM_PARALLEL=1 \
+            -e OLLAMA_MAX_LOADED_MODELS=1 \
+            -e OLLAMA_CONTEXT_LENGTH=2048 \
+            ollama/ollama:latest
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --show-error http://127.0.0.1:11434/api/version >/dev/null 2>&1; then
+              echo "Ollama local runtime ready"; exit 0
+            fi
+            sleep 2
+          done
+          docker logs velion-nemotron3 --tail 40
+          exit 1
+
+      - name: Install NVIDIA Nemotron 3 Nano 4B official Ollama weights (2.8 GB)
+        run: |
+          curl --fail --show-error --silent --max-time 780 \
+            -H 'Content-Type: application/json' \
+            -X POST -d '{"model":"nemotron-3-nano:4b","stream":false}' \
+            http://127.0.0.1:11434/api/pull > /tmp/nemotron3_pull_result.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/nemotron3_pull_result.json',encoding='utf-8'))
+          assert data.get('status') == 'success', 'Model pull incomplete: '+str(data.get('error',data.get('status')))
+          print('PASS: model downloaded locally, no key or paid provider')
+          PY
+
+      - name: REAL inference on local CPU with receipt and output hash
+        run: python3 scripts/nemotron3_cpu_probe.py
+
+      - name: Preserve bounded inference evidence (never model weights)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: velion-nemotron3-cpu-receipt
+          path: artifacts/nemotron3/nemotron3_cpu_receipt.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Stop ephemeral runner container
+        if: always()
+        run: docker rm -f velion-nemotron3 2>/dev/null || true
