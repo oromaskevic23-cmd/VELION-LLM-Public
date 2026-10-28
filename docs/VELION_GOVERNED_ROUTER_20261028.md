@@ -46,3 +46,16 @@ The initial code and offline tests are already source-controlled. Real execution
 - `PASS` only when **both** task routes succeeded. No inference from unit tests to production readiness.
 
 This is an integration step toward CONSTRUCTOR AI and Nano Core Agents. **It does not mean that their separate deployed applications or NCA fleet have been connected, authorized or activated.**
+
+
+## Verified real-model result — 28 October 2026
+
+**Second real run: PASS.** [GitHub Actions run 40682366852](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40682366852) completed successfully with **24/24 offline tests** and **2/2 actual model-routed proposals**.
+
+- `IC-CONSTRUCTOR-ORDER-001` (`CONSTRUCTOR_AI`): `ORDER_LOSS` → `PRESERVE_INSERTION_ORDER`; **38** genuine generated tokens. Exact output SHA-256: `538cd7582027c2eb9735c886662ef90e7dc7f6f4e79bfa803768bc9c48fcc86a`.
+- `IC-NCA-HTTP429-001` (`NCA`): `RATE_LIMIT` → `BACKOFF_WITH_JITTER`; **39** genuine generated tokens. Exact output SHA-256: `12323b443e8d6b607e99045c802390becbe07d123a410aaf00ce5d7f45704500`.
+- Saved evidence artifact: `velion-governed-nemotron-router-evidence`, [run attachment](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40682366852), artifact archive SHA-256 `0e4a895ea013cbf222503a87e34bc312e450be9bf2255c32375b6b0987f70062`. Artifact retention through 4 November 2026.
+- Initial live run [40682044177](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40682044177) correctly **FAILED CLOSED 0/2** because Nemotron did not return the exact required JSON keys. The task prompt was revised to show the exact JSON example; independent schema enforcement was **not relaxed**.
+- Verified environment: official model weights installed; local-only Ollama CPU container; explicit job cleanup. No private data and no paid provider.
+
+**Truth boundary:** This confirms VELION can safely *route two reviewed task fixtures* to an external NVIDIA model and independently validate non-executable proposals. It **does not** prove that existing deployed CONSTRUCTOR AI or NCA clients can submit arbitrary authenticated tasks, or that an always-on API and full production model router have been launched.
