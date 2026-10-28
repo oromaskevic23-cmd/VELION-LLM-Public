@@ -78,7 +78,8 @@ for node in ast.walk(tree):
                 ("list","dict","set","tuple","len","range","enumerate")
                 or isinstance(f,ast.Attribute) and
                 f.attr in ("append","add","fromkeys")), "disallowed function"
-allowed={k:__builtins__[k] for k in ("list","dict","set","tuple","len","range","enumerate")}
+available=__builtins__.__dict__ if hasattr(__builtins__,"__dict__") else __builtins__
+allowed={k:available[k] for k in ("list","dict","set","tuple","len","range","enumerate")}
 env={"__builtins__":allowed}
 exec(compile(tree,"<isolated-model-proposal>","exec"),env)
 f=env["unique_in_order"]
