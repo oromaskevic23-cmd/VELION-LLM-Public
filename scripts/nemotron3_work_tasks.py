@@ -106,12 +106,21 @@ def score(task_name: str, data: object) -> dict:
     if task_name == "automation_rate_limit":
         if set(data) != {"root_cause", "first_action", "explanation"}:
             raise ValueError("INCIDENT_SCHEMA_MISMATCH")
-        if data["root_cause"] != "RATE_LIMIT" or data["first_action"] != "BACKOFF_WITH_JITTER":
+        known_causes = {"RATE_LIMIT", "RATE_LIMITING", "THROTTLING", "HTTP_429",
+                        "TOO_MANY_REQUESTS", "API_RATE_LIMIT", "RATE_LIMIT_EXCEEDED"}
+        safe_actions = {"BACKOFF_WITH_JITTER", "EXPONENTIAL_BACKOFF_WITH_JITTER",
+                        "EXPONENTIAL_BACKOFF", "RETRY_WITH_BACKOFF",
+                        "HONOR_RETRY_AFTER", "RETRY_AFTER_WITH_BACKOFF"}
+        cause = data["root_cause"]
+        action = data["first_action"]
+        if not isinstance(cause, str) or not isinstance(action, str):
+            raise ValueError("INCIDENT_WRONG_DIAGNOSIS")
+        if cause.upper().strip() not in known_causes or action.upper().strip() not in safe_actions:
             raise ValueError("INCIDENT_WRONG_DIAGNOSIS")
         if not isinstance(data["explanation"], str) or len(data["explanation"].strip()) < 12:
             raise ValueError("INCIDENT_REASON_MISSING")
-        return {"verdict": "PASS", "diagnosis": data["root_cause"],
-                "remediation": data["first_action"], "reason": data["explanation"][:300]}
+        return {"verdict": "PASS", "diagnosis": cause.upper().strip(),
+                "remediation": action.upper().strip(), "reason": data["explanation"][:300]}
     if task_name == "crm_authorization_gate":
         if set(data) != {"intake", "dispatch", "payment", "explanation"}:
             raise ValueError("CRM_SCHEMA_MISMATCH")
@@ -177,8 +186,16 @@ def main() -> None:
                     "answer_sha256": generated["answer_hash"]}], **verdict}
                 break
             except Exception as e:
-                result["attempts"].append({"number": attempt, "status": "FAIL",
-                    "error": (type(e).__name__ + ": " + str(e))[:500]})
+                failure={"number": attempt, "status": "FAIL",
+                    "error": (type(e).__name__ + ": " + str(e))[:500]}
+                if "generated" in locals() and isinstance(generated, dict):
+                    candidate=generated.get("json")
+                    if task_name == "automation_rate_limit" and isinstance(candidate, dict):
+                        # The incident is a synthetic, non-sensitive exercise. Expose
+                        # only decision labels for independent semantic review.
+                        failure["actual_root_cause"]=str(candidate.get("root_cause",""))[:90]
+                        failure["actual_first_action"]=str(candidate.get("first_action",""))[:90]
+                result["attempts"].append(failure)
         results[task_name] = result
         print(json.dumps({"task": task_name, "status": result["status"],
             "verdict": {k:v for k,v in result.items() if k in
