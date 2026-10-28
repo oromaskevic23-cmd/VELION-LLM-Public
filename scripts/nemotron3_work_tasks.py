@@ -115,12 +115,16 @@ def score(task_name: str, data: object) -> dict:
         action = data["first_action"]
         if not isinstance(cause, str) or not isinstance(action, str):
             raise ValueError("INCIDENT_WRONG_DIAGNOSIS")
-        if cause.upper().strip() not in known_causes or action.upper().strip() not in safe_actions:
+        # Normalizing harmless whitespace around underscore preserves exact
+        # semantic meaning; unsafe actions still fail closed.
+        cause = "_".join(part.strip() for part in cause.strip().upper().split("_"))
+        action = "_".join(part.strip() for part in action.strip().upper().split("_"))
+        if cause not in known_causes or action not in safe_actions:
             raise ValueError("INCIDENT_WRONG_DIAGNOSIS")
         if not isinstance(data["explanation"], str) or len(data["explanation"].strip()) < 12:
             raise ValueError("INCIDENT_REASON_MISSING")
-        return {"verdict": "PASS", "diagnosis": cause.upper().strip(),
-                "remediation": action.upper().strip(), "reason": data["explanation"][:300]}
+        return {"verdict": "PASS", "diagnosis": cause,
+                "remediation": action, "reason": data["explanation"][:300]}
     if task_name == "crm_authorization_gate":
         if set(data) != {"intake", "dispatch", "payment", "explanation"}:
             raise ValueError("CRM_SCHEMA_MISMATCH")
