@@ -27,6 +27,19 @@ Source: [real-model work-task runner](../scripts/nemotron3_work_tasks.py) · [of
 
 The initial offline verifier run [40671660141](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40671660141) failed due to an internal Python builtins representation mismatch. This was fixed in commit `6507dbf9d1eed5ae15c400260c4bccbdea779189` before model download. This failure must not be reclassified as a model failure.
 
-The corrected execution was started in [run 40671742769](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40671742769). Record its actual terminal result here after verification; until then, status is **RUNNING — OUTCOME NOT YET VERIFIED**.
+[Run 40671742769](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40671742769) delivered **2/3 PASS**. The incident model correctly selected backoff, but rendered the root cause as `RATE_ LIMIT` with an extra space, so the strict first scorer rejected the safe response. This was a representational formatting failure, not a wrong-action classification. The scoring logic now normalizes only safe whitespace and accepts a limited set of meaningful safe rate-limit remediation labels, with unsafe retry actions still denied.
+
+**Final completed real-model CI:** [run 40672971410](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40672971410), `SUCCESS`, source commit `d294e1feb3badf6cdde47c7b228b7d4de2fd2cd3`.
+
+- **3 / 3 PASS:** Incident diagnosis `RATE_LIMIT` → `BACKOFF_WITH_JITTER`; Python repair `unique_in_order` passed five independent functional tests; CRM `HOLD`, `DENY`, `UNVERIFIED`.
+- **16 / 16 offline test cases PASS:** 4 model-evidence tests, 6 task-verifier tests, 6 committed Python-utility tests.
+- Genuine model token counts: incident **41**; Python repair **81**; CRM decision **52**.
+- Installed local model: `nemotron-3-nano:4b`, **2,837,597,147 bytes**, model registry digest `d94b6dfae26d340fd16599d8cd5301945bb42b6bd7a7c70f2078559562f60cbe`.
+- Incident generated-answer SHA-256 `0931cf072fb72283c91cd74ade1418f0b7f3edf30b79393d87f33ca4e6760f1c`.
+- Python generated-answer SHA-256 `c311e869e6c8419cd22a07c2e4598ea38ca9a66418643867661c98c6b0297cc6`.
+- CRM generated-answer SHA-256 `34825d4708f258ab2f0733f708d24faa4a36b0eab2d0bccf2f0117ae9b672a5b`.
+- GitHub [evidence artifact](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40672971410) `velion-nemotron3-verified-work-tasks`: archive SHA-256 `b49a7525bd495316a8f1060406e45df14336255c0e94daa5715ffc414fc2f5da`, retention through 2026-11-04.
+- The actual model-generated, verified Python function is committed as [`src/unique_in_order.py`](../src/unique_in_order.py) with six repeatable repository tests.
+- **Execution boundary:** synthetic offline problems; no real client was contacted, no system was remotely repaired, and no payment was confirmed. Isolated Ollama container has been removed; no always-on service is claimed.
 
 **Limits:** These exercises are defined test scenarios, not open tickets from a real buyer. Passing results establish bounded inference and independent checks only, with explicit Zero Trust/Approval Gateway separation.
