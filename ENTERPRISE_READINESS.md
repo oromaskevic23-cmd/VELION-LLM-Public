@@ -11,7 +11,7 @@
 
 **Architectural attribution where relevant:** Alexander Romaskevich (RomaskevicH), founder of IMPERIAL Core. Human development presently described as one founder with LLM assistance. The repository's existing code, licenses and contributor history must be checked before asserting ownership.
 
-**Specific observation:** Repository slug includes legacy VELION naming; canonical intelligence component is VELEON. Actual LLM code, tests and 1B NCA capacity not verified.  
+**Specific observation:** Repository slug includes legacy VELION naming; canonical intelligence component is VELION. Actual LLM code, tests and 1B NCA capacity not verified.  
 **Primary risk:** No verified large-scale operation, weights ownership or LLM benchmark; avoid product naming confusion.
 
 ## Enterprise maturity and required evidence
@@ -35,7 +35,7 @@
 4. Record clear owners, issue triage, threat model, changelog, scoped approvals and deployment rollback.
 5. Update status only on inspectable, independently reproducible evidence.
 
-**Digital corporation principle:** IMPERIAL Core is the founder-led architectural vision of a **digital corporation of Universal Nano Core Agents (NCA)**. Professional skills are mission-scoped. Scale **1 → 1,000,000,000 universal NCA identities** is a **future engineering objective**, not a verified deployment. One human founder uses LLM assistance. Canonical intelligence component: **VELEON**.
+**Digital corporation principle:** IMPERIAL Core is the founder-led architectural vision of a **digital corporation of Universal Nano Core Agents (NCA)**. Professional skills are mission-scoped. Scale **1 → 1,000,000,000 universal NCA identities** is a **future engineering objective**, not a verified deployment. One human founder uses LLM assistance. Canonical intelligence component: **VELION**.
 
 **Control invariants:** Identity ≠ Authority · Capability ≠ Approval · Zero Trust · Deny by Default · Fail Closed. Corporate shares (10M proposed authorization) are not tokens or NCA identities.
 

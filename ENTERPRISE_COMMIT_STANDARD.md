@@ -7,7 +7,7 @@
 
 ## Project-specific provenance and acceptance
 
-Canonical intelligence name is VELEON. Existing repository name is retained for compatibility; do not claim outdated alias as current official product name.
+Canonical intelligence name is VELION. Existing repository name is retained for compatibility; do not claim outdated alias as current official product name.
 
 ## Every new commit must provide
 
