@@ -14,9 +14,10 @@ TASKS = {
     "prompt": (
       "OFFLINE SYNTHETIC CONSTRUCTOR AI CODE REVIEW. The function "
       "'def unique_in_order(items): return list(set(items))' loses input order. "
-      "Return ONLY JSON with keys decision, recommendation, explanation, choosing "
-      "decision ORDER_LOSS and recommendation PRESERVE_INSERTION_ORDER. "
-      "One technical sentence explanation. This is an untrusted proposal, "
+      "Return ONLY one JSON object, no markdown or extra keys. EXACT EXAMPLE: "
+      "'{\"decision\":\"ORDER_LOSS\",\"recommendation\":\"PRESERVE_INSERTION_ORDER\","
+      "\"explanation\":\"Maintain first-seen order by tracking visited items.\"}'. "
+      "This is an untrusted proposal, "
       "never an executed fix or proof of a production deployment."),
     "decision": "ORDER_LOSS", "recommendation": "PRESERVE_INSERTION_ORDER"
   },
@@ -25,9 +26,10 @@ TASKS = {
     "prompt": (
       "OFFLINE SYNTHETIC NCA INCIDENT TRIAGE. A webhook client sees HTTP 429 "
       "Too Many Requests but retries immediately, worsening failures. "
-      "Return ONLY JSON with keys decision, recommendation, explanation, choosing "
-      "decision RATE_LIMIT and recommendation BACKOFF_WITH_JITTER. "
-      "One technical sentence explanation. Do not execute, contact any customer, "
+      "Return ONLY one JSON object, no markdown or extra keys. EXACT EXAMPLE: "
+      "'{\"decision\":\"RATE_LIMIT\",\"recommendation\":\"BACKOFF_WITH_JITTER\","
+      "\"explanation\":\"HTTP 429 calls for delayed retries with jitter.\"}'. "
+      "Do not execute, contact any customer, "
       "spend funds or claim an incident has been resolved."),
     "decision": "RATE_LIMIT", "recommendation": "BACKOFF_WITH_JITTER"
   }
