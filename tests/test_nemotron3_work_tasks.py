@@ -27,6 +27,13 @@ class ModelWorkEvaluationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             module.score("automation_rate_limit",{**d,"first_action":"RETRY_IMMEDIATELY"})
 
+    def test_extra_space_in_rate_limit_identifier(self):
+        d={"root_cause":"RATE_ LIMIT","first_action":"BACKOFF_WITH_JITTER",
+           "explanation":"The webhook was throttled; retry with backoff and jitter."}
+        verdict=module.score("automation_rate_limit",d)
+        self.assertEqual(verdict["diagnosis"],"RATE_LIMIT")
+        self.assertEqual(verdict["remediation"],"BACKOFF_WITH_JITTER")
+
     def test_commercial_gate_cannot_fake_payment(self):
         approved={"intake":"HOLD","dispatch":"DENY","payment":"UNVERIFIED",
             "explanation":"Privacy consent and approval are missing."}
