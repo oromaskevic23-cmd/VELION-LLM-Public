@@ -2,8 +2,9 @@
 
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
-**Status: TESTED — proposal gateway reference in open PR #1; model endpoints are mocked and main is documentation.**  
-Evidence checkpoint: **25 October 2026**.
+**Verified 28 October 2026:** NVIDIA Nemotron 3 Nano 4B (external open model) completed real CPU inference in a free isolated GitHub Actions run: **11 generated tokens**, locally installed 2,837,597,147-byte model, output SHA-256 receipt. [Run evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) · [installation and limitations](docs/NEMOTRON3_NANO4B_REAL_RUN.md). **This does not establish VELION-owned weights or a persistent live endpoint.**
+
+**Earlier 25 October checkpoint:** proposal gateway reference in open PR #1; those provider/model endpoints were mocked; main then contained documentation only.
 
 ## Official IMPERIAL Core web identity
 
