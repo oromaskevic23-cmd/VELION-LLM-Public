@@ -8,6 +8,8 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 **Verified applied model work (28 October 2026):** NVIDIA Nemotron 3 Nano 4B independently completed **3/3 bounded tasks** (rate-limit incident diagnosis, a Python order-preserving deduplication fix, and consent/approval/payment safety classification). The actual generated Python utility is [source controlled](src/unique_in_order.py) with six repeatable repository tests. [CI results](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40672971410) · [task evidence and truth limits](docs/NEMOTRON3_VERIFIED_WORK_TASKS_20261028.md). **Synthetic offline cases only: no live customer delivery, payments or persistent model hosting.**
 
+**Verified VELION Model Router (28 October 2026):** two source-reviewed synthetic task envelopes (CONSTRUCTOR AI code review and NCA HTTP 429 incident triage) were routed to *real* NVIDIA Nemotron 3 Nano 4B CPU inference: **2/2 independently validated non-executable proposals, 24/24 offline regression tests**. [Real inference evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40682366852) · [Router source](src/velion_model_router.py) · [Review and operating boundaries](docs/VELION_GOVERNED_ROUTER_20261028.md). **Not a persistent public API and not production Constructor/NCA activation.**
+
 ## Official IMPERIAL Core web identity
 
 **[Alexander Romaskevich — official founder site](https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/)** · **[IMPERIAL Core — official ecosystem site](https://oromaskevic23-cmd.github.io/IMPERIAL-Core-Public/)**

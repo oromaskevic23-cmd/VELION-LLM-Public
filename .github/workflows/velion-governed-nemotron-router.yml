@@ -1,0 +1,77 @@
+name: VELION — Verified On-Demand Nemotron Model Router
+
+on:
+  push:
+    branches:
+      - feat/velion-governed-model-router-20261028
+    paths:
+      - '.github/workflows/velion-governed-nemotron-router.yml'
+      - 'src/velion_model_router.py'
+      - 'scripts/velion_router_demo.py'
+      - 'tests/test_velion_model_router.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verified-router-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout trusted reviewed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: All offline contract tests (no secrets, no network)
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+
+      - name: Start local-only Ollama with CPU resource bounds
+        run: |
+          docker pull ollama/ollama:latest
+          docker run -d --name velion-governed-router \
+            --cpus=4 --pids-limit=256 \
+            -p 127.0.0.1:11434:11434 \
+            -e OLLAMA_HOST=0.0.0.0:11434 \
+            -e OLLAMA_NUM_PARALLEL=1 \
+            -e OLLAMA_MAX_LOADED_MODELS=1 \
+            -e OLLAMA_CONTEXT_LENGTH=3072 \
+            ollama/ollama:latest
+          for i in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:11434/api/version >/dev/null; then
+              echo "Local CPU Ollama ready"; exit 0
+            fi
+            sleep 2
+          done
+          docker logs velion-governed-router --tail 30
+          exit 1
+
+      - name: Pull real NVIDIA Nemotron 3 Nano 4B weights
+        run: |
+          curl --fail --silent --show-error --max-time 780 \
+            -H 'Content-Type: application/json' \
+            -X POST -d '{"model":"nemotron-3-nano:4b","stream":false}' \
+            http://127.0.0.1:11434/api/pull > /tmp/velion-router-pull.json
+          python3 - <<'PY'
+          import json
+          data=json.load(open('/tmp/velion-router-pull.json',encoding='utf8'))
+          assert data.get('status')=='success', 'Real model pull failed'
+          print("PASS: official NVIDIA model installed locally")
+          PY
+
+      - name: Run two real model requests through VELION router
+        run: python3 scripts/velion_router_demo.py
+
+      - name: Retain only bounded route evidence without weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: velion-governed-nemotron-router-evidence
+          path: artifacts/nemotron3/velion_router_receipt.json
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Remove temporary local model container
+        if: always()
+        run: docker rm -f velion-governed-router 2>/dev/null || true
