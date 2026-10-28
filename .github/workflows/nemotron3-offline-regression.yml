@@ -11,6 +11,9 @@ on:
       - 'tests/test_nemotron3_work_tasks.py'
       - 'tests/test_unique_in_order.py'
       - 'src/unique_in_order.py'
+      - 'src/velion_model_router.py'
+      - 'scripts/velion_router_demo.py'
+      - 'tests/test_velion_model_router.py'
   pull_request:
     paths:
       - '.github/workflows/nemotron3-offline-regression.yml'
@@ -20,6 +23,9 @@ on:
       - 'tests/test_nemotron3_work_tasks.py'
       - 'tests/test_unique_in_order.py'
       - 'src/unique_in_order.py'
+      - 'src/velion_model_router.py'
+      - 'scripts/velion_router_demo.py'
+      - 'tests/test_velion_model_router.py'
   workflow_dispatch:
 
 permissions:
