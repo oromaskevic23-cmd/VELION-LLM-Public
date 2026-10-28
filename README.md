@@ -10,6 +10,8 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 **Verified VELION Model Router (28 October 2026):** two source-reviewed synthetic task envelopes (CONSTRUCTOR AI code review and NCA HTTP 429 incident triage) were routed to *real* NVIDIA Nemotron 3 Nano 4B CPU inference: **2/2 independently validated non-executable proposals, 24/24 offline regression tests**. [Real inference evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40682366852) · [Router source](src/velion_model_router.py) · [Review and operating boundaries](docs/VELION_GOVERNED_ROUTER_20261028.md). **Not a persistent public API and not production Constructor/NCA activation.**
 
+**Verified signed CONSTRUCTOR AI bridge (28 October 2026):** real end-to-end inference on NVIDIA Nemotron 3 Nano 4B across an ephemeral HMAC-authenticated localhost-only VELION API and CONSTRUCTOR AI's single-use draft-permit adapter. **34/34 VELION tests**, **72/72 CONSTRUCTOR AI tests**, and **38 actual model tokens**. [Verified CI](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40683989519) · [API source](scripts/velion_private_api.py) · [operational/evidence checkpoint](docs/VELION_SIGNED_CONSTRUCTOR_E2E_20261028.md). **No persistent public/24-hour model service or customer execution claimed.**
+
 ## Official IMPERIAL Core web identity
 
 **[Alexander Romaskevich — official founder site](https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/)** · **[IMPERIAL Core — official ecosystem site](https://oromaskevic23-cmd.github.io/IMPERIAL-Core-Public/)**

@@ -1,0 +1,124 @@
+name: VELION — Signed Local API to CONSTRUCTOR AI — Real Nemotron
+on:
+  push:
+    branches: [feat/velion-local-signed-api-20261028]
+    paths:
+      - '.github/workflows/velion-signed-constructor-e2e.yml'
+      - 'scripts/velion_private_api.py'
+      - 'tests/test_velion_private_api.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: velion-private-constructor-20261028
+  cancel-in-progress: true
+jobs:
+  offline-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: All current and private API tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Compile reviewed API
+        run: python3 -m py_compile scripts/velion_private_api.py
+  real-model-cross-repo:
+    needs: offline-security
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout VELION
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Read public merged CONSTRUCTOR AI adapter
+        run: |
+          git clone --depth=1 --branch main \
+            https://github.com/oromaskevic23-cmd/CONSTRUCTOR-AI.git /tmp/imperial-constructor
+          test -f /tmp/imperial-constructor/tools/velion-bridge-smoke.mjs
+      - name: Generate two independent ephemeral runtime HMAC secrets
+        run: |
+          BRIDGE="$(openssl rand -hex 32)"
+          PERMIT="$(openssl rand -hex 32)"
+          echo "::add-mask::$BRIDGE"
+          echo "::add-mask::$PERMIT"
+          echo "VELION_LOCAL_HMAC_SECRET=$BRIDGE" >> "$GITHUB_ENV"
+          echo "VELION_LOCAL_PERMIT_SECRET=$PERMIT" >> "$GITHUB_ENV"
+          echo "Temporary test secrets generated; no persistent credentials."
+      - name: Start real local CPU Ollama model service
+        run: |
+          docker pull ollama/ollama:latest
+          docker run -d --name velion-private-nemotron \
+            --cpus=4 --pids-limit=256 \
+            -p 127.0.0.1:11434:11434 \
+            -e OLLAMA_HOST=0.0.0.0:11434 \
+            -e OLLAMA_NUM_PARALLEL=1 \
+            -e OLLAMA_MAX_LOADED_MODELS=1 \
+            -e OLLAMA_CONTEXT_LENGTH=3072 \
+            ollama/ollama:latest
+          for i in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:11434/api/version >/dev/null; then
+              echo "Local CPU model available"; exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Install actual NVIDIA Nemotron 3 Nano 4B weights
+        run: |
+          curl --fail --show-error --silent --max-time 780 \
+            -H 'Content-Type: application/json' \
+            -X POST -d '{"model":"nemotron-3-nano:4b","stream":false}' \
+            http://127.0.0.1:11434/api/pull > /tmp/velion-model-pull.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/velion-model-pull.json'))
+          assert d.get('status')=='success', 'Original model pull failed'
+          print('PASS: NVIDIA model weights installed')
+          PY
+      - name: Start HMAC-signed local-only VELION API
+        run: |
+          python3 scripts/velion_private_api.py > /tmp/velion-private-api-log.txt 2>&1 &
+          echo $! > /tmp/velion-private-api.pid
+          for i in $(seq 1 50); do
+            if curl --fail --silent http://127.0.0.1:8765/health > /tmp/velion-health.json; then
+              python3 -c "import json; x=json.load(open('/tmp/velion-health.json')); assert x['status']=='API_READY' and x['model_status']=='NOT_CHECKED_BY_HEALTH'"
+              echo "PASS: protected API responds without fake inference claim"
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: Verify actual CONSTRUCTOR AI signed model request
+        run: |
+          mkdir -p artifacts/velion
+          node /tmp/imperial-constructor/tools/velion-bridge-smoke.mjs \
+            | tee artifacts/velion/signed-real-inference.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('artifacts/velion/signed-real-inference.json'))
+          assert d['status']=='REAL_VELION_TO_CONSTRUCTOR_BRIDGE_PASS'
+          assert d['release']=='DENIED' and d['execution']=='NOT_RUN'
+          assert d['generated_tokens']>0
+          print('PASS: genuine Nemotron inference through signed CONSTRUCTOR AI API')
+          PY
+      - name: Retain bounded receipt only, never tokens or weights
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: velion-signed-constructor-real-model-proof
+          path: artifacts/velion/signed-real-inference.json
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Remove temporary API and Ollama
+        if: always()
+        run: |
+          if [ -f /tmp/velion-private-api.pid ]; then
+            kill "$(cat /tmp/velion-private-api.pid)" 2>/dev/null || true
+          fi
+          docker rm -f velion-private-nemotron 2>/dev/null || true
