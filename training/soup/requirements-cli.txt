@@ -1,0 +1,2 @@
+# Lightweight CLI only; upstream release Oct 26, 2026. No PyTorch or model weights.
+soup-cli==0.77.0
