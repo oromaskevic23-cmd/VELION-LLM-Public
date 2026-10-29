@@ -1,0 +1,2 @@
+# Explicit OPT-IN: heavyweight local training dependencies, not installed by CI.
+soup-cli[train]==0.77.0
