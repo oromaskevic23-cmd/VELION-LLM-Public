@@ -1,0 +1,9 @@
+# Never commit model weights, private customer data, generated adapters or local environments.
+/.venv/
+/datasets-private/
+/runs/
+/checkpoints/
+/adapters/
+/soup.yaml
+/*.log
+/__pycache__/
