@@ -1,4 +1,13 @@
+<p align="center">
+  <img src="assets/IMPERIAL_ENTERPRISE_HEADER.svg" alt="IMPERIAL Core — Enterprise Engineering" width="100%" />
+</p>
+
 # VELION ⚡️
+
+**Governed model intelligence · Verified engineering · Federated architecture**
+
+[English Enterprise migration candidate](docs/ENTERPRISE_MIGRATION_CANDIDATE.md) · [IMPERIAL Core source and provenance](https://github.com/oromaskevic23-cmd/IMPERIAL-Core-Public/blob/main/PROVENANCE.md)
+
 
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
