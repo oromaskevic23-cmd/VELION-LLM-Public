@@ -12,7 +12,7 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 **Verified signed CONSTRUCTOR AI bridge (28 October 2026):** real end-to-end inference on NVIDIA Nemotron 3 Nano 4B across an ephemeral HMAC-authenticated localhost-only VELION API and CONSTRUCTOR AI's single-use draft-permit adapter. **34/34 VELION tests**, **72/72 CONSTRUCTOR AI tests**, and **38 actual model tokens**. [Verified CI](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40683989519) · [API source](scripts/velion_private_api.py) · [operational/evidence checkpoint](docs/VELION_SIGNED_CONSTRUCTOR_E2E_20261028.md). **No persistent public/24-hour model service or customer execution claimed.**
 
-**Synthetic training lab:** [reproducible offline intent-classifier experiment](training/intent_lab/README.md) for VELION/NCA research. It trains a small classifier, not LLM weights. Its held-out tests reveal errors on ambiguous and negated cases; it has no routing or approval authority.
+**Synthetic training lab:** [reproducible offline intent-classifier experiment](training/intent_lab/README.md) for VELION/NCA research. It trains a small classifier, not LLM weights. Its held-out tests reveal errors on ambiguous and negated cases; it has no routing or approval authority. A [separate CPU LoRA pilot](docs/VELION_CPU_LORA_PILOT_20261030.md) trained temporary adapter parameters on a third-party model; it was not retained or deployed.
 
 ## Official IMPERIAL Core web identity
 

@@ -67,8 +67,7 @@ quality or a robust safety benchmark. The script reports failures as well as
 successes; it does not retain or deploy adapter weights. A completed run would
 demonstrate only a bounded experiment on an external foundation model, not
 VELION-owned foundation weights, live agents or production readiness. Check
-the workflow run logs for actual execution and results; this text alone does
-not establish that training occurred.
+the [executed pilot record](../../docs/VELION_CPU_LORA_PILOT_20261030.md) and workflow logs for the actual result and its limitations.
 
 ## Next evidence gates
 
