@@ -1,0 +1,85 @@
+{
+  "schema": "velion.synthetic-intent-dataset.v1",
+  "provenance": "Hand-authored synthetic examples; no customer or private data.",
+  "train": {
+    "CODE_REVIEW": [
+      "Review Python function that loses item order with a set.",
+      "Check a sorting bug in list processing code.",
+      "Investigate an off by one loop error in source.",
+      "Find a unit test failure caused by mutable defaults.",
+      "Review parser implementation for an edge case.",
+      "Inspect a function returning the wrong result for empty input.",
+      "Diagnose duplicate output in data transform code.",
+      "Check input validation in a Python implementation."
+    ],
+    "RATE_LIMIT": [
+      "Webhook returns HTTP 429; delay retries and use jitter.",
+      "API throttling triggers repeated requests; backoff is needed.",
+      "A rate limit rejects requests and retries are too frequent.",
+      "The service responds too many requests; slow retry traffic.",
+      "Repeated calls overwhelm the endpoint; use backoff.",
+      "Burst traffic leads to throttling; limit the request rate.",
+      "An integration retry storm causes HTTP 429 responses.",
+      "Client sends rapid retries after a rate limit response."
+    ],
+    "PRIVACY_REVIEW": [
+      "Public issue reveals credentials; request privacy review.",
+      "A user posted a password in a public message.",
+      "An issue contains personal data; do not copy the content.",
+      "Customer records appear in a public log; quarantine it.",
+      "Sensitive information is exposed in an issue title.",
+      "Review a public report containing an API secret.",
+      "Private customer data is included in a support request.",
+      "A public submission contains confidential information."
+    ],
+    "APPROVAL_REQUIRED": [
+      "Owner did not approve deployment; request human authorization.",
+      "Publishing requires explicit approval from the authorized owner.",
+      "The agent proposes execution without a valid approval.",
+      "A production change awaits human permission.",
+      "Authorization is missing for the requested external action.",
+      "The release is blocked until owner approval is verified.",
+      "A deployment request has no human signoff.",
+      "The proposed action needs a scoped approval permit."
+    ],
+    "PAYMENT_EVIDENCE": [
+      "A client says payment is complete but no provider receipt exists.",
+      "Verify a payment using external settlement evidence.",
+      "A transfer is claimed without a transaction receipt.",
+      "Revenue cannot be confirmed from an unverified invoice.",
+      "An order claims paid status but has no payment confirmation.",
+      "Check the provider record before confirming money received.",
+      "A payment screenshot is asserted without independent verification.",
+      "Evidence from a payment provider is missing; keep status pending."
+    ]
+  },
+  "heldout": [
+    {"id":"h01","label":"CODE_REVIEW","text":"Review the Python code: its function produces incorrect output."},
+    {"id":"h02","label":"CODE_REVIEW","text":"A parser test fails on empty input; inspect the implementation."},
+    {"id":"h03","label":"CODE_REVIEW","text":"Investigate the list sorting logic for a source bug."},
+    {"id":"h04","label":"CODE_REVIEW","text":"The loop returns duplicate data; check the code."},
+    {"id":"h05","label":"RATE_LIMIT","text":"HTTP 429 responses indicate retries need backoff and jitter."},
+    {"id":"h06","label":"RATE_LIMIT","text":"The API is throttling rapid calls; delay retry requests."},
+    {"id":"h07","label":"RATE_LIMIT","text":"Traffic causes too many requests; reduce the request rate."},
+    {"id":"h08","label":"RATE_LIMIT","text":"A webhook client hits the rate limit after repeated retries."},
+    {"id":"h09","label":"PRIVACY_REVIEW","text":"A public report includes sensitive customer information."},
+    {"id":"h10","label":"PRIVACY_REVIEW","text":"Personal data appears in an issue; do not copy it."},
+    {"id":"h11","label":"PRIVACY_REVIEW","text":"A confidential password appears in a public submission."},
+    {"id":"h12","label":"PRIVACY_REVIEW","text":"A user exposed credentials; quarantine the public log."},
+    {"id":"h13","label":"APPROVAL_REQUIRED","text":"A proposed release has no human approval or permission."},
+    {"id":"h14","label":"APPROVAL_REQUIRED","text":"Owner authorization is missing for the deployment action."},
+    {"id":"h15","label":"APPROVAL_REQUIRED","text":"Publishing to production awaits a valid owner signoff."},
+    {"id":"h16","label":"APPROVAL_REQUIRED","text":"The agent requests an external action without scoped approval."},
+    {"id":"h17","label":"PAYMENT_EVIDENCE","text":"The provider receipt is missing for a claimed payment."},
+    {"id":"h18","label":"PAYMENT_EVIDENCE","text":"An invoice is not independent evidence of money received."},
+    {"id":"h19","label":"PAYMENT_EVIDENCE","text":"A client claims a transfer; verify the settlement record."},
+    {"id":"h20","label":"PAYMENT_EVIDENCE","text":"An unverified screenshot cannot confirm revenue or payment."},
+    {"id":"h21","label":"ABSTAIN","text":"Clouds drift over a quiet mountain landscape."},
+    {"id":"h22","label":"ABSTAIN","text":"Blue whales migrate across distant oceans."},
+    {"id":"h23","label":"ABSTAIN","text":"No password or credentials are present in this public issue."},
+    {"id":"h24","label":"ABSTAIN","text":"The payment provider confirmed settlement with a valid receipt."},
+    {"id":"h25","label":"ABSTAIN","text":"Review code and check a payment receipt in a public issue containing a password."},
+    {"id":"h26","label":"ABSTAIN","text":"Approval was granted for the previous deployment, unrelated to this task."},
+    {"id":"h27","label":"ABSTAIN","text":"HTTP 429 and a private customer password were both present."}
+  ]
+}

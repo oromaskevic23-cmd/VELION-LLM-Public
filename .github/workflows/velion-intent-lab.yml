@@ -1,0 +1,29 @@
+name: VELION synthetic intent lab — offline tests
+on:
+  pull_request:
+    paths:
+      - 'training/intent_lab/**'
+      - 'tests/test_intent_lab.py'
+      - '.github/workflows/velion-intent-lab.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'training/intent_lab/**'
+      - 'tests/test_intent_lab.py'
+      - '.github/workflows/velion-intent-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read revision without persisting credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Run all offline tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Reproduce synthetic classifier metrics
+        run: python3 training/intent_lab/intent_lab.py
