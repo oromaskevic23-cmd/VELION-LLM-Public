@@ -1,5 +1,7 @@
 # VELION ⚡️
 
+**Project founder and founding architect:** Alexander Nikolaevich Romaskevich (RomaskevicH). [Authorship and contribution provenance](AUTHORS.md).
+
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 **Verified 28 October 2026:** NVIDIA Nemotron 3 Nano 4B (external open model) completed real CPU inference in a free isolated GitHub Actions run: **11 generated tokens**, locally installed 2,837,597,147-byte model, output SHA-256 receipt. [Run evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) · [installation and limitations](docs/NEMOTRON3_NANO4B_REAL_RUN.md). **This does not establish VELION-owned weights or a persistent live endpoint.**
