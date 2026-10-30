@@ -48,6 +48,28 @@ consent is valid. Its threshold and scores are not calibrated probabilities.
 The word features, weights and dataset belong to a small classifier: **no
 VELION LLM foundation weights or adapter were trained** in this experiment.
 
+## Separate CPU LoRA pilot
+
+[`lora_pilot.py`](lora_pilot.py) is a separate, opt-in research experiment on
+the third-party [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct/tree/8065371cb317383b7a3ea72b72ab5affe24bd30f)
+base model, published under Apache 2.0. It downloads model and package files,
+trains only a small LoRA adapter on CPU, then compares forced-choice label
+scores before and after on the same 27 synthetic held-out cases. Unlike the
+standard-library classifier above, this pilot requires PyTorch, Transformers,
+PEFT and network access. The repository workflow fixes direct package versions
+and model revision but does not hash-lock transitive dependencies; it is an
+ephemeral research environment, not a production supply-chain guarantee.
+
+The pilot uses 48 synthetic training examples, including eight abstention
+examples. Its evaluation data was authored alongside training data and has
+been inspected repeatedly. Forced-choice likelihood is not free-form response
+quality or a robust safety benchmark. The script reports failures as well as
+successes; it does not retain or deploy adapter weights. A completed run would
+demonstrate only a bounded experiment on an external foundation model, not
+VELION-owned foundation weights, live agents or production readiness. Check
+the workflow run logs for actual execution and results; this text alone does
+not establish that training occurred.
+
 ## Next evidence gates
 
 Build a rights-cleared and privacy-reviewed training corpus, obtain an
