@@ -22,9 +22,11 @@ class LandingTests(unittest.TestCase):
     def setUpClass(cls):
         cls.html = PATH.read_text(encoding="utf-8")
         cls.parser = Parser(); cls.parser.feed(cls.html)
-        found = re.search(r'<script type="application/ld\\+json">\\s*(.*?)\\s*</script>',cls.html,re.S)
-        if not found: raise ValueError("JSON-LD script missing")
-        cls.data = json.loads(found.group(1))
+        marker = '<script type="application/ld+json">'
+        start = cls.html.find(marker)
+        end = cls.html.find("</script>", start) if start >= 0 else -1
+        if start < 0 or end < 0: raise ValueError("JSON-LD script missing")
+        cls.data = json.loads(cls.html[start + len(marker):end])
     def test_two_structured_entities(self):
         self.assertEqual({n["@type"] for n in self.data["@graph"]},{"Person","SoftwareSourceCode"})
     def test_visible_person_matches_structured_person(self):
@@ -49,5 +51,5 @@ class LandingTests(unittest.TestCase):
         self.assertTrue(robots)
         self.assertNotIn("noindex",",".join(robots))
     def test_no_fabricated_canonical_before_deploy(self):
-        self.assertNotRegex(self.html,r'<link\\s+rel="canonical"')
+        self.assertNotIn('<link rel="canonical"',self.html)
 if __name__=="__main__":unittest.main()
