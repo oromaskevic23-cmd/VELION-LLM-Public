@@ -1,7 +1,7 @@
 # VELION — Enterprise Modular Intelligence Fabric v2.0
 
 **2026-10-31 · Architectural milestone V2-001.**
-**Architecture authority:** Alexander Nikolaevich Romaskevich (Александр Николаевич Ромаскевич), RomaskevicH; Founder · Owner · CEO of IMPERIAL Core; Architect / Final Architectural Decision Authority.
+**Architecture authority:** Alexander Nikolaevich Romaskevich, RomaskevicH; Founder · Owner · CEO of IMPERIAL Core; Architect / Final Architectural Decision Authority.
 **Maturity:** v2 source-level modules implemented; real v1 bounded inference verified previously; NO production v2 endpoint, proprietary foundation weights, production autonomous workforce or benchmark superiority claimed.
 
 ## Architecture decision
