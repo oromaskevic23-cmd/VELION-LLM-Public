@@ -1,0 +1,20 @@
+name: VELION Landing Page Identity and Metadata CI
+on:
+  push:
+    branches: [main]
+    paths: ['docs/index.html','tests/test_velion_landing.py','.github/workflows/velion-landing-ci.yml']
+  pull_request:
+    paths: ['docs/index.html','tests/test_velion_landing.py','.github/workflows/velion-landing-ci.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-site-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Validate founder attribution, JSON-LD and public links
+        run: python3 -m unittest discover -s tests -p 'test_velion_landing.py' -v
