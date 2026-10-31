@@ -1,21 +1,23 @@
-# Public Search Discovery — VELION Status Ledger
+# VELION — Search Discovery and Authorship Evidence
 
-Date: 2026-10-31
+**Updated 2026-10-31.** Founder / original architecture: Alexander Nikolaevich Romaskevich (RomaskevicH), Founder, Owner and CEO of IMPERIAL Core.
 
-| Checkpoint | Status | Evidence requirement |
+| Checkpoint | Verified state | Evidence |
 | --- | --- | --- |
-| Founder-owned public GitHub repository exists | VERIFIED | Connected GitHub repository metadata |
-| VELION architecture docs added | SOURCE_PUBLISHED | Current GitHub commit and file URLs |
-| VELION modular regression suite | CI_VERIFIED_ON_CODE_REVISION | GitHub Actions job summary |
-| Founder/project cross-links | SOURCE_PUBLISHED | Public README and verified catalog |
-| Independent project landing on a public HTTPS domain | NOT_VERIFIED | Actual 200 and page content |
-| Canonical and JSON-LD on deployed page | NOT_VERIFIED | HTTP page body, structured-data validation |
-| Accessible sitemap of real website pages | NOT_VERIFIED | HTTP URL 200, valid XML, canonical URLs |
-| Google Search Console ownership | NOT_VERIFIED | Owner-authorized property verification |
-| Sitemap submitted to Google | NOT_VERIFIED | Authenticated Search Console response |
-| URL crawled or indexed by Google | NOT_VERIFIED | URL Inspection or Search Console evidence |
-| Google Knowledge Graph identity recognized | NOT_VERIFIED | Verified external result |
+| VELION v2 modular code | SOURCE_PUBLISHED | https://github.com/oromaskevic23-cmd/VELION-LLM-Public/tree/main/src/velion_fabric |
+| 32 modular contract/security tests | CI_PASS | https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/41213361918 |
+| Canonical 12-module architecture | SOURCE_PUBLISHED | https://github.com/oromaskevic23-cmd/VELION-LLM-Public/blob/main/docs/VELION_ENTERPRISE_MODULAR_ARCHITECTURE_V2.md |
+| Dedicated VELION project site | PAGES_DEPLOY_SUCCESS | https://oromaskevic23-cmd.github.io/Capital-Core-Public/reference/velion/ |
+| Source-level VELION SoftwareSourceCode JSON-LD | PRESENT | https://github.com/oromaskevic23-cmd/Capital-Core-Public/tree/gh-pages/reference/velion |
+| Linked founder identity and public portfolio | SOURCE_PUBLISHED | https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/projects/ |
+| Parent company sitemap | PUBLISHED_SOURCE, CI_VALIDATED | https://oromaskevic23-cmd.github.io/Capital-Core-Public/sitemap.xml |
+| Separate external HTTP probe of new page | NOT_VERIFIED | No direct HTTP response established |
+| Google Search Console authenticated sitemap submission | NOT_VERIFIED | Authorized property access needed |
+| Google crawled or indexed this page | NOT_VERIFIED | Actual Google URL Inspection required |
+| Google Knowledge Graph entity recognition / search ranking | NOT_VERIFIED | Independent Google evidence needed |
 
-**Rule:** No progress metric can be inferred by counting planned files. Evidence must be externally attributable to the relevant stage. Public GitHub files may be found by a crawler but are not automatically website pages or search-indexed.
+VELION MAX remains a mode, not an independent LLM. V2's model router code is a bounded non-executing planner; real previous CPU inference used third-party model weights. This does not establish proprietary foundation weights, live production AI, globally operating agents, comparative technological superiority or 24/7 runtime.
 
-Project technical attribution: Alexander Nikolaevich Romaskevich (RomaskevicH) — IMPERIAL Core Founder, Owner, CEO and Architect. Upstream model and tool intellectual property belongs to its respective owners.
+Third-party models and libraries retain their own copyright, contributors and licenses. IMPERIAL Core's founder attribution is restricted to original protectable architecture and account source contributions.
+
+Google may discover these pages through indexed hyperlinks and robots/sitemaps; indexing is not guaranteed. The only completed task in Google integration so far is public-source preparation and deployment, **not** Google authorization or indexed search placement.
