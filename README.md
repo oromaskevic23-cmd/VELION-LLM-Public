@@ -62,3 +62,16 @@ Start non-confidential collaboration through the [founder profile](https://githu
 **Authorship: Alexander Romaskevich — RomaskevicH.** Third-party rights, existing notices and licenses remain unchanged. Public visibility does not grant an additional license. No private source or private test logs are imported here.
 
 **Build software. Verify everything.**
+
+
+---
+
+## VELION v2 — Enterprise Modular Intelligence Fabric (31 October 2026)
+
+**Founder / Architect:** Alexander Nikolaevich Romaskevich (**RomaskevicH**), Founder · Owner · CEO of IMPERIAL Core; Final Architectural Decision Authority. **VELION MAX is a mode**, not a second model. HANTER remains the AI Command Center, federated domain orchestrators retain independent scoped execution, and ORION is advisory.
+
+VELION v2 introduces [immutable module contracts and source-level routing](src/velion_fabric/): tenant- and NCA-scoped policy gates, a deterministic free-only Model Registry, STANDARD/MAX bounded route selection and SHA-256 evidence receipts. The v2 reference is deliberately **non-executing**; it never calls a model, a browser, a financial tool or a customer platform. The earlier v1 real CPU Nemotron model integration and CONSTRUCTOR AI bridge remain intact.
+
+**Read the canonical architecture:** [12-module design](docs/VELION_ENTERPRISE_MODULAR_ARCHITECTURE_V2.md) · [interface contracts](docs/VELION_MODULE_CONTRACTS_V2.md) · [engineering gates](docs/VELION_IMPLEMENTATION_ROADMAP_V2.md) · [fair competitive evaluation](docs/VELION_COMPETITIVE_BENCHMARK_PROTOCOL.md) · [founder and Google discoverability plan](docs/GOOGLE_FOUNDER_TECHNOLOGY_INDEXING.md).
+
+The project is original IMPERIAL Core **systems architecture**, not a claim that third-party NVIDIA, Qwen, SmolLM or Ollama weights, trademarks or their source belong to the founder. New code-level CI tests must be checked in GitHub Actions; they are not evidence of production-ready AGI, live commercial NCA operations, or indexed Google Search results.
