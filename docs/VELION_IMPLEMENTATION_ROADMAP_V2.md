@@ -19,3 +19,10 @@
 **No implied PASS:** document=design; source=implementation; CI=tests; E2E=actual model; deploy=live service. These are separate events.
 
 Owner Kill Switch, IntentLock, Enterprise Skills, Zero Trust, Audit Ledger, Guardian Core, Approval Gateway, Public/Private and CRYPTO IMPERIAL Ecosystem boundaries remain mandatory. FREE_ONLY by default.
+
+
+## V2-012 — Optional LLaMA-Factory fine-tuning backend (1 November 2026)
+
+The external training backend is now represented by a **source-level tested offline adapter** in the separate IMPERIAL-Plugins repository: pinned reference model/source, synthetic-only licensing guards, SFT LoRA/QLoRA configs and dataset split hashes. [VELION integration design](VELION_LLAMAFACTORY_CONNECTOR_20261101.md).
+
+Release remains BLOCKED until real Owner-signed authorization, isolated zero-cost measured training hardware, independent rights clearance, a training-run evidence receipt, sealed blind model benchmark, signed adapter provenance and rollback. No claim that VELION weights have been trained or deployed by the new adapter.

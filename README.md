@@ -82,3 +82,10 @@ The project is original IMPERIAL Core **systems architecture**, not a claim that
 ### Canonical founder and public project identity
 
 This public repository is part of the [IMPERIAL Core source portfolio maintained by Alexander Nikolaevich Romaskevich (RomaskevicH)](https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/projects/), Founder, Owner and CEO of IMPERIAL Core and its final architectural decision authority. See the [canonical public project registry](https://oromaskevic23-cmd.github.io/Capital-Core-Public/reference/projects/) and original commit/contributor history for evidence and provenance. This reference does **not** imply exclusive rights in third-party models, libraries, trademarks or other contributors' work, or certify live production status. Project-specific licensing and security restrictions remain unchanged.
+
+
+## VELION Training Adapter × LLaMA-Factory — source-level integration (1 November 2026)
+
+A safe optional third-party training backend has been prepared in [IMPERIAL-Plugins](https://github.com/oromaskevic23-cmd/IMPERIAL-Plugins): synthetic-only data validation, pinned upstream/Qwen revisions, LoRA/QLoRA draft files, SHA-256 receipts and private local file preparation. The [architecture and release gates](docs/VELION_LLAMAFACTORY_CONNECTOR_20261101.md) explicitly preserve the canonical VELION fabric, HANTER/federated orchestration, independent NCA exams, Guardian Core and the protected Owner Approval Gateway.
+
+**Status:** code and CI tests only; no new trained model weights, GPU run, model benchmark superiority or production deployment is claimed. This work does not replace the documented 30 October SmolLM2 CPU LoRA experiment.
