@@ -46,7 +46,7 @@ jobs:
           persist-credentials: false
 
       - name: Verify all model scoring, safety, and generated-code regressions
-        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+        run: PYTHONPATH=src python3 -m unittest discover -s tests -p 'test_*.py' -v
 
       - name: Verify source files can be compiled without runtime dependencies
         run: |
