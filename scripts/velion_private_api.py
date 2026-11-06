@@ -52,6 +52,8 @@ class PrivateServer(ThreadingHTTPServer):
         self.clock=clock
         self.nonces={}
         self.guard=threading.Lock()
+        # At most one in-flight CPU inference: never queue unbounded model work.
+        self.model_slots=threading.BoundedSemaphore(1)
         super().__init__((host,port),PrivateHandler)
     def authorize(self,handler,body):
         timestamp=handler.headers.get("X-Velion-Timestamp","")
@@ -98,6 +100,11 @@ class PrivateHandler(BaseHTTPRequestHandler):
             task=canonical_task(request["task_id"])
             if request["schema"]!=VERSION or request["origin"]!=task["origin"]:
                 raise RoutingDenied("ORIGIN_SCOPE_DENIED")
+        except (RoutingDenied,ValueError,KeyError,TypeError):
+            return reply(self,422,{"error":"TASK_REJECTED_FAIL_CLOSED"})
+        if not self.server.model_slots.acquire(blocking=False):
+            return reply(self,429,{"error":"MODEL_AT_CAPACITY"})
+        try:
             tags=self.server.model_call("/api/tags")
             result=route(task,tags=tags,
                 generate=lambda args:self.server.model_call("/api/generate",args))
@@ -105,6 +112,8 @@ class PrivateHandler(BaseHTTPRequestHandler):
             return reply(self,422,{"error":"TASK_REJECTED_FAIL_CLOSED"})
         except Exception:
             return reply(self,503,{"error":"MODEL_UNAVAILABLE"})
+        finally:
+            self.server.model_slots.release()
         return reply(self,200,result)
 def main():
     port=int(os.environ.get("VELION_LOCAL_PORT","8765"))
