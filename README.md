@@ -1,5 +1,7 @@
 # VELION ⚡️
 
+<img src="https://raw.githubusercontent.com/oromaskevic23-cmd/oromaskevic23-cmd/main/assets/alexander-romaskevich-portrait-20261110.jpg" alt="Alexander Nikolaevich Romaskevich, Founder, Owner and CEO of IMPERIAL Core" width="160" />
+
 **Project founder and founding architect:** Alexander Nikolaevich Romaskevich (RomaskevicH). [Authorship and contribution provenance](AUTHORS.md).
 
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
@@ -29,7 +31,7 @@ Alexander Romaskevich · RomaskevicH — founder-declared Architect, Owner and C
 Founder • Owner • CEO of IMPERIAL Core  
 Architect / Final Architectural Decision Authority
 
-**HANTER — AI Command Center / Chief Systems** operates under the founder's architectural decisions. This role does not imply a single unrestricted global orchestrator.
+**HANTER — AI Command Center** operates under the founder's architectural decisions. This role does not imply a single unrestricted global orchestrator.
 
 ## Public technical evidence
 

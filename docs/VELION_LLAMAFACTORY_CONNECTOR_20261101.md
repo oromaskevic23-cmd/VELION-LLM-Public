@@ -1,7 +1,7 @@
 # VELION Training Backend — LLaMA-Factory Research Integration
 
 **2026-11-01 · Canonical VELION architecture integration.**  
-**Founder, Owner, CEO and Chief Systems Architect:** Alexander Nikolaevich Romaskevich (RomaskevicH).
+**Founder, Owner, CEO:** Alexander Nikolaevich Romaskevich (RomaskevicH).
 
 ## Architecture decision
 

@@ -8,7 +8,7 @@ See docs/architecture/NCA-SCALE-ARCHITECTURE.md for the VELION NCA scale taxonom
 
 ## Governance
 
-See GOVERNANCE.md. The Architect (Alexander Romaskevich) remains final decision authority; HANTER is recorded as Chief Systems — AI Command Center / Deputy to the Architect.
+See GOVERNANCE.md. The Architect (Alexander Romaskevich) remains final decision authority; HANTER is recorded as AI Command Center / Deputy to the Architect.
 
 ## Security
 
