@@ -177,6 +177,9 @@ the same prompts, settings and independently reviewed, unseen tasks.
 One [real local Qwen2.5 1.5B evaluation](evidence/INTELLIGENCE_1P5B_20261110.md)
 passed 3 of 14 strict checks and included unsafe advice in a manual case. It is
 evidence of limitations in that particular run, not a deployment or safety claim.
+The same suite on [Qwen2.5-Coder 7B](evidence/INTELLIGENCE_CODER7B_20261110.md)
+passed 8 of 14 strict checks and also gave unsafe advice in the manual key case.
+Neither configuration is suitable for a phone-facing service on this evidence.
 
 Project author and founding architect: Alexander Nikolaevich Romaskevich
 (RomaskevicH). Third-party rights and model licenses remain separate.
