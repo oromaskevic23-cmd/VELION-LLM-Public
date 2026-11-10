@@ -429,6 +429,34 @@ button:disabled {
   color: #a6b3c2;
   padding: 0 3px 6px;
 }
+.failed-message {
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  border: 1px solid #c4ab7260;
+  border-radius: 12px;
+  background: #192332;
+  color: #edf0f4;
+  font-size: 12px;
+}
+.failed-message[hidden] { display: none; }
+.failed-message p { margin: 0 0 7px; line-height: 1.45; }
+.failed-message pre {
+  margin: 0 0 7px;
+  max-height: 80px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+}
+.failed-message-hint { color: #a6b3c2; }
+.failed-message-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.failed-message-actions button {
+  border: 1px solid #53607199;
+  border-radius: 7px;
+  background: #263547;
+  color: #f5f5f2;
+  padding: 6px 9px;
+}
 .composer {
   background: #1b2634;
   border: 1px solid #53607166;

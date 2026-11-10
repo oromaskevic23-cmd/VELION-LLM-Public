@@ -47,6 +47,10 @@ the page is refreshed, closed or a conversation is deleted.
 Assistant responses display fenced code blocks with an individual copy button.
 All response content is inserted as text: HTML is not interpreted and code is
 not executed. This is limited code-fence formatting, not full Markdown support.
+If a request fails or is stopped while another draft is being typed, both texts
+remain available in the current tab. Resolve the failed request before sending
+another message in that conversation. Failed requests and unsent drafts are
+not persisted and disappear when the page is refreshed or closed.
 
 ## Run with a local GGUF model (optional)
 

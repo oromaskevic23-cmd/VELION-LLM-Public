@@ -292,10 +292,34 @@ Object.assign(translations['uk-UA'], { confirmDelete: 'Видалити цю р�
 Object.assign(translations['ru-RU'], { code: 'Код', copyCode: 'Копировать код', codeCopied: 'Код скопирован.' });
 Object.assign(translations['en-US'], { code: 'Code', copyCode: 'Copy code', codeCopied: 'Code copied.' });
 Object.assign(translations['uk-UA'], { code: 'Код', copyCode: 'Копіювати код', codeCopied: 'Код скопійовано.' });
+Object.assign(translations['ru-RU'], {
+  failedMessage: 'Предыдущий запрос не выполнен. Ваш новый черновик сохранён в поле ниже.',
+  failedMessageHint: 'Чтобы восстановить запрос, сначала очистите поле ввода. Или скопируйте его и закройте это сообщение.',
+  restoreFailed: 'Восстановить запрос', copyFailed: 'Копировать запрос', dismissFailed: 'Закрыть',
+  resolveFailed: 'Сначала восстановите предыдущий запрос или закройте сообщение.',
+  failedCopied: 'Предыдущий запрос скопирован.',
+});
+Object.assign(translations['en-US'], {
+  failedMessage: 'The previous request did not finish. Your new draft remains in the field below.',
+  failedMessageHint: 'Clear the input to restore the request, or copy it and dismiss this message.',
+  restoreFailed: 'Restore request', copyFailed: 'Copy request', dismissFailed: 'Dismiss',
+  resolveFailed: 'Restore the previous request or dismiss its message first.',
+  failedCopied: 'Previous request copied.',
+});
+Object.assign(translations['uk-UA'], {
+  failedMessage: 'Попередній запит не виконано. Ваша нова чернетка залишилася в полі нижче.',
+  failedMessageHint: 'Щоб відновити запит, спочатку очистьте поле введення. Або скопіюйте його і закрийте це повідомлення.',
+  restoreFailed: 'Відновити запит', copyFailed: 'Копіювати запит', dismissFailed: 'Закрити',
+  resolveFailed: 'Спочатку відновіть попередній запит або закрийте повідомлення.',
+  failedCopied: 'Попередній запит скопійовано.',
+});
 const setStatus = (key) => {
   status.textContent = tr(key);
 };
 const freshChat = () => ({ id: crypto.randomUUID(), title: '', messages: [] });
+// A failed request and a subsequently typed draft must never overwrite each other.
+// Recoveries are deliberately kept only in this page's memory.
+const failedRequests = new Map();
 let chats = [freshChat()],
   current = chats[0].id,
   controller = null,
@@ -471,7 +495,34 @@ function renderMessages() {
     } else row.textContent = item.content;
     messagesBox.append(row);
   }
+  renderFailedRequest();
 }
+function renderFailedRequest() {
+  const failed = failedRequests.get(current);
+  $('#failed-message').hidden = failed === undefined;
+  $('#failed-message-text').textContent = failed ?? '';
+  $('#restore-failed').disabled = failed === undefined || prompt.value.length > 0;
+}
+prompt.addEventListener('input', renderFailedRequest);
+$('#restore-failed').addEventListener('click', () => {
+  const failed = failedRequests.get(current);
+  if (failed === undefined || prompt.value.length) return;
+  prompt.value = failed;
+  failedRequests.delete(current);
+  renderFailedRequest();
+  prompt.focus();
+});
+$('#copy-failed').addEventListener('click', async () => {
+  const failed = failedRequests.get(current);
+  if (failed === undefined) return;
+  try { await navigator.clipboard.writeText(failed); setStatus('failedCopied'); }
+  catch { setStatus('copyError'); }
+});
+$('#dismiss-failed').addEventListener('click', () => {
+  failedRequests.delete(current);
+  renderFailedRequest();
+  prompt.focus();
+});
 function render() {
   renderList();
   renderMessages();
@@ -531,6 +582,7 @@ $('#new-chat').addEventListener('click', () => {
 });
 $('#delete-chat').addEventListener('click', () => {
   if (controller || !window.confirm(tr('confirmDelete'))) return;
+  failedRequests.delete(current);
   chats = chats.filter((chat) => chat.id !== current);
   if (!chats.length) chats = [freshChat()];
   current = chats[0].id;
@@ -556,6 +608,7 @@ saveHistory.addEventListener('change', () => {
 for (const button of document.querySelectorAll('[data-suggestion]'))
   button.addEventListener('click', () => {
     prompt.value = tr(button.dataset.suggestion + 'Prompt');
+    renderFailedRequest();
     prompt.focus();
   });
 const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -592,6 +645,7 @@ mic.addEventListener('click', () => {
       .trim();
     if (text) {
       prompt.value = (prompt.value.trim() + ' ' + text).trim().slice(0, 4000);
+      renderFailedRequest();
       setStatus('dictated');
       prompt.focus();
     }
@@ -632,6 +686,10 @@ prompt.addEventListener('keydown', (event) => {
 $('#chat-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   if (controller) return;
+  if (failedRequests.has(current)) {
+    setStatus('resolveFailed');
+    return;
+  }
   const endpoint = localEndpoint(),
     value = prompt.value.trim();
   if (!endpoint) {
@@ -709,8 +767,9 @@ $('#chat-form').addEventListener('submit', async (event) => {
     if (autoSpeak.checked) speakText(data.answer);
   } catch (cause) {
     chat.messages.pop();
+    if (prompt.value.length) failedRequests.set(chat.id, value);
+    else prompt.value = value;
     renderMessages();
-    prompt.value = value;
     setStatus(active.signal.aborted ? 'cancelled' : cause.display || 'failed');
   } finally {
     controller = null;

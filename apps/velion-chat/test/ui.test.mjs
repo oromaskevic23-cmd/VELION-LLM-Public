@@ -187,6 +187,68 @@ test('emulated conversation shows copyable code without interpreting model HTML'
   assert.equal(copied,code);
 });
 
+test('failed chat preserves both the submitted text and a newly typed draft', async (t) => {
+  let release;
+  const pending = new Promise((resolve) => { release = resolve; });
+  let calls = 0, copied;
+  const model = createLocalChatService({
+    accessToken: TOKEN, model: MODEL,
+    fetchImpl: async () => {
+      calls++;
+      if (calls === 1) { await pending; return new Response('', { status: 503 }); }
+      return new Response(JSON.stringify({ model: MODEL, done: true,
+        message: { role: 'assistant', content: 'Recovered answer' } }));
+    },
+  });
+  const server = createAppServer({ localChatService: model });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const origin = 'http://127.0.0.1:' + server.address().port;
+  const browser = new Browser({ settings: { enableJavaScriptEvaluation: true,
+    suppressInsecureJavaScriptEnvironmentWarning: true, navigation: { beforeContentCallback(window) {
+      window.fetch = (url, options) => fetch(url, { ...options, signal: undefined,
+        headers: { ...options.headers, Origin: origin } });
+      Object.defineProperty(window.navigator, 'clipboard', { value: { writeText: async text => { copied = text; } } });
+    } } } });
+  t.after(async () => { release(); await browser.close(); server.close(); });
+  const page = browser.newPage();
+  await page.goto(origin + '/');
+  await page.waitUntilComplete();
+  const d = page.mainFrame.document, w = page.mainFrame.window;
+  const submit = () => d.querySelector('#chat-form').dispatchEvent(new w.Event('submit', { cancelable: true }));
+  const input = (text) => {
+    d.querySelector('#prompt').value = text;
+    d.querySelector('#prompt').dispatchEvent(new w.Event('input'));
+  };
+  d.querySelector('#token').value = TOKEN;
+  input('First question <img src=x onerror=alert(1)>');
+  submit();
+  for (let i = 0; i < 100 && !calls; i++) await delay(10);
+  assert.equal(calls, 1);
+  input('A separate new draft');
+  release();
+  for (let i = 0; i < 100 && d.querySelector('#send').disabled; i++) await delay(10);
+  assert.equal(d.querySelector('#prompt').value, 'A separate new draft');
+  assert.equal(d.querySelector('#failed-message').hidden, false);
+  assert.equal(d.querySelector('#failed-message-text').textContent, 'First question <img src=x onerror=alert(1)>');
+  assert.equal(d.querySelector('#failed-message').querySelectorAll('img').length, 0);
+  assert.equal(d.querySelector('#restore-failed').disabled, true);
+  submit();
+  assert.equal(calls, 1);
+  d.querySelector('#copy-failed').click();
+  for (let i = 0; i < 20 && copied === undefined; i++) await delay(5);
+  assert.equal(copied, 'First question <img src=x onerror=alert(1)>');
+  input('');
+  assert.equal(d.querySelector('#restore-failed').disabled, false);
+  d.querySelector('#restore-failed').click();
+  assert.equal(d.querySelector('#prompt').value, copied);
+  assert.equal(d.querySelector('#failed-message').hidden, true);
+  submit();
+  for (let i = 0; i < 100 && d.querySelector('#send').disabled; i++) await delay(10);
+  assert.equal(calls, 2);
+  assert.match(d.querySelector('.message.assistant').textContent, /Recovered answer/);
+});
+
 test('desktop navigation toggles accessibly and a new chat clears search', async (t) => {
   const server = createAppServer();
   server.listen(0, '127.0.0.1');

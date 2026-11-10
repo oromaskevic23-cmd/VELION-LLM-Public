@@ -123,6 +123,16 @@
           <div id="status" class="status" role="status" aria-live="polite" data-i18n="ready">
             Подключите локальную модель в настройках.
           </div>
+          <section id="failed-message" class="failed-message" aria-labelledby="failed-message-label" hidden>
+            <p id="failed-message-label" data-i18n="failedMessage">Предыдущий запрос не выполнен. Ваш новый черновик сохранён в поле ниже.</p>
+            <pre id="failed-message-text"></pre>
+            <p class="failed-message-hint" data-i18n="failedMessageHint">Чтобы восстановить запрос, сначала очистите поле ввода. Или скопируйте его и закройте это сообщение.</p>
+            <div class="failed-message-actions">
+              <button id="restore-failed" type="button" data-i18n="restoreFailed">Восстановить запрос</button>
+              <button id="copy-failed" type="button" data-i18n="copyFailed">Копировать запрос</button>
+              <button id="dismiss-failed" type="button" data-i18n="dismissFailed">Закрыть</button>
+            </div>
+          </section>
           <form id="chat-form" class="composer">
             <label for="prompt" class="sr-only" data-i18n="message">Сообщение</label
             ><textarea
