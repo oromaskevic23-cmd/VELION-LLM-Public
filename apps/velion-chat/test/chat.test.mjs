@@ -154,7 +154,7 @@ test('only one request may run; abort is propagated and permits a later request'
 
 test('HTTP server serves only allowed assets and refuses unconfigured model calls', async (t) => {
   const origin = await setup(null, t);
-  for (const path of ['/', '/index.html', '/styles.css', '/app.mjs', '/manifest.webmanifest', '/app-icon-180.png', '/app-icon-192.png', '/app-icon-512.png']) {
+  for (const path of ['/', '/index.html', '/styles.css', '/app.mjs', '/answer-renderer.mjs', '/manifest.webmanifest', '/app-icon-180.png', '/app-icon-192.png', '/app-icon-512.png']) {
     const response = await fetch(origin + path);
     assert.equal(response.status, 200, path);
     assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);

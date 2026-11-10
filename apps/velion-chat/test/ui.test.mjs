@@ -156,6 +156,37 @@ test('emulated UI disables voice recognition when browser support is missing', a
   assert.equal(page.mainFrame.document.querySelector('#mic').disabled, true);
 });
 
+test('emulated conversation shows copyable code without interpreting model HTML', async (t) => {
+  const code = 'console.log("<img src=x onerror=alert(1)>");';
+  const model = createLocalChatService({accessToken:TOKEN, model:MODEL,
+    fetchImpl:async()=>new Response(JSON.stringify({model:MODEL,done:true,
+      message:{role:'assistant',content:'Example\n```js\n'+code+'\n```'}}))});
+  const server = createAppServer({localChatService:model});
+  server.listen(0,'127.0.0.1');
+  await once(server,'listening');
+  const origin='http://127.0.0.1:'+server.address().port;
+  let copied;
+  const browser = new Browser({settings:{enableJavaScriptEvaluation:true,
+    suppressInsecureJavaScriptEnvironmentWarning:true,navigation:{beforeContentCallback(window){
+      window.fetch=(url,options)=>fetch(url,{...options,signal:undefined,headers:{...options.headers,Origin:origin}});
+      Object.defineProperty(window.navigator,'clipboard',{value:{writeText:async text=>{copied=text;}}});
+    }}}});
+  t.after(async()=>{await browser.close();server.close();});
+  const page=browser.newPage();
+  await page.goto(origin+'/');
+  await page.waitUntilComplete();
+  const d=page.mainFrame.document,w=page.mainFrame.window;
+  d.querySelector('#token').value=TOKEN;
+  d.querySelector('#prompt').value='Show code';
+  d.querySelector('#chat-form').dispatchEvent(new w.Event('submit',{cancelable:true}));
+  for(let i=0;i<100&&d.querySelector('#send').disabled;i++)await delay(20);
+  assert.equal(d.querySelector('.answer-code code').textContent,code);
+  assert.equal(d.querySelectorAll('.answer-code img, .answer-code script').length,0);
+  d.querySelector('.answer-code button').click();
+  for(let i=0;i<20&&copied===undefined;i++)await delay(5);
+  assert.equal(copied,code);
+});
+
 test('desktop navigation toggles accessibly and a new chat clears search', async (t) => {
   const server = createAppServer();
   server.listen(0, '127.0.0.1');

@@ -44,6 +44,10 @@ the session token is not saved. Turning that option off removes the saved copy.
 Storage failures are reported. Existing conversations remain in memory until
 the page is refreshed, closed or a conversation is deleted.
 
+Assistant responses display fenced code blocks with an individual copy button.
+All response content is inserted as text: HTML is not interpreted and code is
+not executed. This is limited code-fence formatting, not full Markdown support.
+
 ## Run with a local GGUF model (optional)
 
 This alternative uses the separately installed `node-llama-cpp` package and a

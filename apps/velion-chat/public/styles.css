@@ -362,6 +362,45 @@ button:disabled {
 .answer-body {
   min-width: 0;
   color: #e1e7ec;
+  flex: 1;
+  background: #121d2d;
+  border: 1px solid #ffffff12;
+  border-radius: 15px;
+  padding: 15px 17px 9px;
+}
+.answer-code {
+  margin: 12px 0;
+  border: 1px solid #c4ab7238;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #080f19;
+  white-space: normal;
+}
+.answer-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 10px;
+  color: #d9bf87;
+  background: #182232;
+  font-size: 11px;
+}
+.answer-code-header button {
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #d5deeb;
+  padding: 5px 7px;
+}
+.answer-code-header button:hover { background: #ffffff12; }
+.answer-code pre {
+  margin: 0;
+  padding: 12px;
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+  font: 12px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 .message-actions {
   display: flex;

@@ -1,5 +1,6 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
 // Local, single-browser conversation. No model output is executed.
+import {renderAnswer} from './answer-renderer.mjs';
 const translations = {
   'ru-RU': {
     sidebar: 'Панель разговоров',
@@ -288,6 +289,9 @@ Object.assign(translations['ru-RU'], {
 });
 Object.assign(translations['en-US'], { confirmDelete: 'Delete this conversation? It cannot be recovered.' });
 Object.assign(translations['uk-UA'], { confirmDelete: 'Видалити цю розмову? Відновити її буде неможливо.' });
+Object.assign(translations['ru-RU'], { code: 'Код', copyCode: 'Копировать код', codeCopied: 'Код скопирован.' });
+Object.assign(translations['en-US'], { code: 'Code', copyCode: 'Copy code', codeCopied: 'Code copied.' });
+Object.assign(translations['uk-UA'], { code: 'Код', copyCode: 'Копіювати код', codeCopied: 'Код скопійовано.' });
 const setStatus = (key) => {
   status.textContent = tr(key);
 };
@@ -436,7 +440,13 @@ function renderMessages() {
       const body = document.createElement('div');
       body.className = 'answer-body';
       const content = document.createElement('div');
-      content.textContent = item.content;
+      renderAnswer(content, item.content, {
+        codeLabel: tr('code'), copyLabel: tr('copyCode'),
+        copyCode: async (code) => {
+          try { await navigator.clipboard.writeText(code); setStatus('codeCopied'); }
+          catch { setStatus('copyError'); }
+        },
+      });
       body.append(content);
       const actions = document.createElement('div');
       actions.className = 'message-actions';
