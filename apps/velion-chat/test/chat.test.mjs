@@ -71,6 +71,8 @@ test('local model receives bounded chat history and response has a truthful rece
   assert.equal(payload.messages[0].role, 'system');
   assert.deepEqual(payload.messages.slice(1), MESSAGE);
   assert.match(payload.messages[0].content, /cannot access tools/i);
+  assert.match(payload.messages[0].content, /check arithmetic and key constraints/i);
+  assert.match(payload.messages[0].content, /cannot be verified/i);
   assert.doesNotMatch(payload.messages[0].content, /CONSTRUCTOR/i);
   assert.equal(receipt.answer, 'Hello, Architect.');
   assert.equal(receipt.receipt.provider, 'ollama-local');
