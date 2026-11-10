@@ -122,6 +122,13 @@ is limited to those cases and is not a broad model-quality benchmark.
 One [bounded real-model run](evidence/LOCAL_GGUF_SMOKE_20261110.md) is recorded
 with its model hash, exact scope and warning.
 
+For additional explicitly configured local inference, `npm run evaluate:gguf`
+checks four synthetic arithmetic or format-following cases and records one
+unscored response for manual review. It exits unsuccessfully if any scored case
+fails. Its one-run score is not a model comparison or an enterprise evaluation;
+generated answers may differ between runs. One [quality probe](evidence/LOCAL_GGUF_QUALITY_20261110.md)
+records a failed check and the exact limitations.
+
 The default Ollama adapter uses Node.js built-ins only. The separately installed
 GGUF option uses `node-llama-cpp` and its dependencies; `happy-dom` is a
 test-only dependency for DOM emulation. The repository's automated tests use
