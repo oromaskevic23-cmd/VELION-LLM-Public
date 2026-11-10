@@ -262,6 +262,9 @@ Object.assign(translations['uk-UA'], { answered: 'Відповідь отрим�
 Object.assign(translations['ru-RU'], {
   search: 'Поиск разговоров',
   noResults: 'Разговоры не найдены',
+  code: 'Код',
+  copyCode: 'Копировать код',
+  codeCopied: 'Код скопирован.',
   tokenHint:
     'Ключ не сохраняется в браузере и отправляется только локальному серверу. Ответ формирует отдельно подключённая локальная модель.',
   historyHint:
@@ -270,6 +273,9 @@ Object.assign(translations['ru-RU'], {
 Object.assign(translations['en-US'], {
   search: 'Search conversations',
   noResults: 'No conversations found',
+  code: 'Code',
+  copyCode: 'Copy code',
+  codeCopied: 'Code copied.',
   tokenHint:
     'The token is not saved in the browser and is sent only to the local server. Responses come from a separately configured local model.',
   historyHint:
@@ -278,6 +284,9 @@ Object.assign(translations['en-US'], {
 Object.assign(translations['uk-UA'], {
   search: 'Пошук розмов',
   noResults: 'Розмов не знайдено',
+  code: 'Код',
+  copyCode: 'Копіювати код',
+  codeCopied: 'Код скопійовано.',
   tokenHint:
     'Ключ не зберігається в браузері та надсилається лише локальному серверу. Відповідь формує окремо підключена локальна модель.',
   historyHint:
@@ -420,6 +429,41 @@ function speakText(text) {
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
 }
+// Model output is untrusted. Render only fenced code as elements; everything
+// else remains text. Never interpret HTML or execute a model-generated script.
+function renderAnswerText(container, text) {
+  const fence = /^```([A-Za-z0-9_+.#-]{0,32})[ \t]*\r?\n([\s\S]*?)^```[ \t]*(?:\r?$|\n)/gm;
+  let previous = 0;
+  for (const match of text.matchAll(fence)) {
+    container.append(document.createTextNode(text.slice(previous, match.index)));
+    const block = document.createElement('div');
+    block.className = 'code-block';
+    const header = document.createElement('div');
+    header.className = 'code-block-header';
+    const label = document.createElement('span');
+    label.textContent = match[1] || tr('code');
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.textContent = tr('copyCode');
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(match[2]);
+        setStatus('codeCopied');
+      } catch {
+        setStatus('copyError');
+      }
+    });
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.textContent = match[2];
+    pre.append(code);
+    header.append(label, copy);
+    block.append(header, pre);
+    container.append(block);
+    previous = match.index + match[0].length;
+  }
+  container.append(document.createTextNode(text.slice(previous)));
+}
 function renderMessages() {
   const chat = selected();
   welcome.hidden = chat.messages.length > 0;
@@ -436,7 +480,8 @@ function renderMessages() {
       const body = document.createElement('div');
       body.className = 'answer-body';
       const content = document.createElement('div');
-      content.textContent = item.content;
+      content.className = 'answer-content';
+      renderAnswerText(content, item.content);
       body.append(content);
       const actions = document.createElement('div');
       actions.className = 'message-actions';

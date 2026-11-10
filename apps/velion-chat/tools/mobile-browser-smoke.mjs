@@ -12,7 +12,7 @@ const model = 'example-local:1b';
 const service = createLocalChatService({
   accessToken: token, model,
   fetchImpl: async () => new Response(JSON.stringify({
-    model, done: true, message: {role: 'assistant', content: 'Здравствуйте! Готова помочь.'},
+    model, done: true, message: {role: 'assistant', content: 'Здравствуйте! Готова помочь.\n```html\n<img src=x onerror=alert(1)>\n```'},
   })),
 });
 const executablePath = process.env.VELION_CHROMIUM_EXECUTABLE;
@@ -53,6 +53,10 @@ try {
       await page.locator('#send').tap();
       await page.locator('.message.assistant').waitFor();
       assert.match(await page.locator('.message.assistant').innerText(), /Готова помочь/);
+      assert.equal(await page.locator('.code-block code').textContent(), '<img src=x onerror=alert(1)>\n');
+      assert.equal(await page.locator('.answer-content img').count(), 0);
+      const copyCode = await page.locator('.code-block-header button').boundingBox();
+      assert.ok(copyCode && copyCode.height >= 44);
       await page.locator('#open-sidebar').tap();
       assert.equal(await page.locator('#sidebar').evaluate(el => el.classList.contains('open')), true);
       assert.equal(await page.locator('#open-sidebar').getAttribute('aria-expanded'), 'true');

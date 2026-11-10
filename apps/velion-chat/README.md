@@ -3,7 +3,8 @@
 VELION is a standalone IMPERIAL Core product. This increment provides a local
 conversation interface with a searchable conversation sidebar, multilingual controls,
 multi-turn text, optional browser speech recognition, response playback, and
-optional device-local chat history. It is a prototype, not a hosted service or
+optional device-local chat history. Fenced code in responses is displayed in
+copyable code blocks without interpreting model output as HTML. It is a prototype, not a hosted service or
 a claim that VELION owns model weights. No third-party model is downloaded or
 activated by this repository.
 
@@ -109,7 +110,8 @@ and is not evidence of security isolation.
   loopback Host and Origin, JSON, bounded request/response sizes and one active
   model request. Ollama requests use only `127.0.0.1:11434` and reject redirects;
   the optional GGUF backend runs the selected local file in the server process.
-- Generated text is rendered as text. The chat does not execute model output,
+- Generated text is rendered as text, with fenced code placed in inert code
+  elements. The chat does not execute model output,
   invoke tools, authorize payments, approve changes or launch agents.
 - The token and local-origin checks are narrow development controls, not
   production authentication, distributed AI Passport, Guardian Core,
