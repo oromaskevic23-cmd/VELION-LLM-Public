@@ -83,6 +83,26 @@ not expose its speech recognition API. Speech output is opt-in and may require
 a user gesture or an installed voice. This is turn-based dictation and speech
 playback, not a full-duplex real-time voice service.
 
+## Phone-ready web app shell
+
+The standalone interface includes a local web app manifest, the existing
+VELION wordmark as Home Screen icons, and safe-area spacing for phone screens.
+This is a web app shell, not a native iOS/Android app or an App Store release.
+The current development server only binds to the same computer's loopback and
+cannot be reached from a separate phone. Installing and using the web app on a
+phone requires a separately engineered, authenticated HTTPS deployment; no such
+deployment is provided here. There is no service worker or offline chat cache.
+An actual iPhone, Safari, microphone and Home Screen installation require
+separate device testing.
+
+An optional local Chromium test, `npm run smoke:mobile`, requires a separately
+installed Playwright and compatible Chromium. It uses synthetic chat data at
+two phone-sized viewports; it is not an iOS or native-installation test. For a
+development environment with an existing Chromium executable, set the absolute
+path in `VELION_CHROMIUM_EXECUTABLE`. Set `VELION_BROWSER_NO_SANDBOX=YES`
+only when that local environment requires it; this disables Chromium's sandbox
+and is not evidence of security isolation.
+
 ## Security and evidence boundaries
 
 - The service requires explicit opt-in, a nontrivial session token, fixed

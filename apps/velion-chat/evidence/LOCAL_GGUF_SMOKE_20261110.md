@@ -33,7 +33,9 @@ the recorded responses. This warning has not been independently resolved.
 
 ## Source binding
 
-The local smoke used these SHA-256 source bytes:
+The local smoke used these SHA-256 source bytes at
+[commit 733c77d](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/tree/733c77dcc9cb6008252b8b7f521a6b49c73425d0/apps/velion-chat).
+Later revisions may change these files:
 
 | File | SHA-256 |
 | --- | --- |

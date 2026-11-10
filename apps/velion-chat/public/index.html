@@ -2,13 +2,19 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101722" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="VELION" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="referrer" content="no-referrer" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'"
     />
     <title>VELION — IMPERIAL Core</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/app-icon-180.png" />
     <link rel="stylesheet" href="/styles.css" />
     <script type="module" src="/app.mjs"></script>
   </head>
@@ -33,7 +39,7 @@
         </div>
         <button id="new-chat" class="new-chat" type="button">
           <span class="plus" aria-hidden="true">+</span><span data-i18n="newChat">Новый разговор</span
-          ><span class="new-arrow" aria-hidden="true">↗</span>
+          ><span class="new-arrow" aria-hidden="true">›</span>
         </button>
         <label class="search-wrap"
           ><span class="sr-only" data-i18n="search">Поиск разговоров</span
@@ -51,8 +57,8 @@
             <span class="session-dot"></span><span data-i18n="localSession">Локальная сессия</span>
           </div>
           <button id="open-settings" class="settings-button" type="button">
-            <span class="settings-icon" aria-hidden="true">⚙</span><span data-i18n="settings">Настройки</span
-            ><span class="settings-arrow" aria-hidden="true">↗</span>
+            <svg class="settings-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 17h16M8 4v6M16 14v6" /></svg><span data-i18n="settings">Настройки</span
+            ><span class="settings-arrow" aria-hidden="true">›</span>
           </button>
           <div class="sidebar-footnote">VELION · IMPERIAL CORE</div>
         </div>
@@ -80,7 +86,7 @@
               aria-label="Настройки"
               data-i18n-aria="settings"
             >
-              ⚙
+              <svg class="settings-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 17h16M8 4v6M16 14v6" /></svg>
             </button>
           </div>
         </header>
