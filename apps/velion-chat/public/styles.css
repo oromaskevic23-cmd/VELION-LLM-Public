@@ -254,6 +254,7 @@ button:disabled {
   width: min(730px, calc(100% - 50px));
   margin: auto;
   padding: 45px 0 28px;
+  text-align: center;
 }
 .overline {
   font-size: 10px;
@@ -360,9 +361,45 @@ button:disabled {
   margin-top: 1px;
 }
 .answer-body {
+  width: 100%;
   min-width: 0;
   color: #e1e7ec;
 }
+.code-block {
+  margin: 12px 0;
+  overflow: hidden;
+  border: 1px solid #ffffff16;
+  border-radius: 12px;
+  background: #0b111a;
+  white-space: normal;
+}
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: #182330;
+  color: #bdcad7;
+  font: 12px ui-monospace, monospace;
+}
+.code-block-header button {
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 8px;
+  background: transparent;
+  color: #e3eaf0;
+  font: inherit;
+}
+.code-block-header button:hover { background: #ffffff12; }
+.code-block pre {
+  margin: 0;
+  padding: 14px;
+  overflow-x: auto;
+  font: 13px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre;
+}
+.code-block code { color: #e8edf2; }
 .message-actions {
   display: flex;
   gap: 6px;
@@ -655,6 +692,9 @@ dialog::backdrop {
     flex: none;
   }
   .tool-button {
+    min-height: 44px;
+  }
+  .code-block-header button {
     min-height: 44px;
   }
   .tool-button span {

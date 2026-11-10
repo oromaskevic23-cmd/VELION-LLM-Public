@@ -186,3 +186,49 @@ test('desktop navigation toggles accessibly and a new chat clears search', async
   assert.equal(d.querySelector('#search').value, '');
   assert.equal(d.querySelectorAll('.chat-item').length, 2);
 });
+
+test('fenced model output is rendered as inert code and copied exactly', async (t) => {
+  const code = '<img src=x onerror=alert(1)>\nconst n = 2;\n';
+  const answer = 'Example:\n```html\n' + code + '```\nFinished.';
+  let copied = '';
+  const service = createLocalChatService({
+    accessToken: TOKEN,
+    model: MODEL,
+    fetchImpl: async () => new Response(JSON.stringify({
+      model: MODEL, done: true, message: { role: 'assistant', content: answer },
+    })),
+  });
+  const server = createAppServer({ localChatService: service });
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const origin = 'http://127.0.0.1:' + server.address().port;
+  const browser = new Browser({ settings: {
+    enableJavaScriptEvaluation: true,
+    suppressInsecureJavaScriptEnvironmentWarning: true,
+    navigation: { beforeContentCallback(window) {
+      window.fetch = (url, options) => fetch(url, {
+        ...options, signal: undefined, headers: { ...options.headers, Origin: origin },
+      });
+      Object.defineProperty(window.navigator, 'clipboard', { value: {
+        writeText: async (value) => { copied = value; },
+      } });
+    } },
+  } });
+  t.after(async () => { await browser.close(); server.close(); });
+  const page = browser.newPage();
+  await page.goto(origin + '/');
+  await page.waitUntilComplete();
+  const d = page.mainFrame.document, w = page.mainFrame.window;
+  d.querySelector('#token').value = TOKEN;
+  d.querySelector('#prompt').value = 'Show an example';
+  d.querySelector('#chat-form').dispatchEvent(new w.Event('submit', { cancelable: true }));
+  for (let i = 0; i < 100 && d.querySelector('#send').disabled; i++) await delay(20);
+  assert.equal(d.querySelector('.code-block code').textContent, code);
+  assert.equal(d.querySelector('.code-block-header span').textContent, 'html');
+  assert.equal(d.querySelectorAll('.answer-content img').length, 0);
+  d.querySelector('.code-block-header button').click();
+  await delay(0);
+  assert.equal(copied, code);
+  assert.match(d.querySelector('#status').textContent, /Код скопирован/);
+  assert.match(d.querySelector('.answer-content').textContent, /Finished/);
+});
