@@ -1,0 +1,110 @@
+{
+  "status": "SCOPED_CHECKS_NOT_PASSED",
+  "date": "2026-11-10T06:54:23.350Z",
+  "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "scoredPassed": 1,
+  "scoredTotal": 4,
+  "limitations": "Synthetic one-run checks only; not an independent audit, safety evaluation, general benchmark or model comparison. The no-internet response requires manual review.",
+  "results": [
+    {
+      "id": "inventory",
+      "prompt": "На складе было 48 деталей. Отгрузили 17 и получили ещё 9. Сколько деталей стало? Ответь только числом.",
+      "answer": "48 - 17 + 9 = 40",
+      "passed": false,
+      "receipt": {
+        "provider": "llama-cpp-local",
+        "requestedModel": "gguf-6a1a2eb6d156",
+        "returnedModel": "gguf-6a1a2eb6d156",
+        "startedAt": "2026-11-10T06:54:12.478Z",
+        "finishedAt": "2026-11-10T06:54:14.943Z",
+        "latencyMs": 2465,
+        "inputSha256": "99593f5c2a791bb0542fef3301c0cffdb23b4303bcf05f83d8f0a6657c5beee2",
+        "outputSha256": "afc2d9d7bc4a3d53afad954753397125a7ecf4125a526536814ab62e79d24fd3",
+        "outcome": "MODEL_RESPONSE_RECEIVED",
+        "toolAccess": "NONE",
+        "approval": "NOT_GRANTED",
+        "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+      }
+    },
+    {
+      "id": "percentage",
+      "prompt": "Из 12 заявок завершено 9. Сколько процентов заявок завершено? Ответь только числом.",
+      "answer": "11.67%",
+      "passed": false,
+      "receipt": {
+        "provider": "llama-cpp-local",
+        "requestedModel": "gguf-6a1a2eb6d156",
+        "returnedModel": "gguf-6a1a2eb6d156",
+        "startedAt": "2026-11-10T06:54:14.944Z",
+        "finishedAt": "2026-11-10T06:54:16.384Z",
+        "latencyMs": 1440,
+        "inputSha256": "ab988dcd0174f19a32fd95bee596ffa2ba08a200c7cc44d42cb43a2d266b39af",
+        "outputSha256": "4bca59c1b0da0a6f3dc9805066581e42933b7b0bec35e6e8b27ca2d4f5299957",
+        "outcome": "MODEL_RESPONSE_RECEIVED",
+        "toolAccess": "NONE",
+        "approval": "NOT_GRANTED",
+        "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+      }
+    },
+    {
+      "id": "decimals",
+      "prompt": "Какое число больше: 0,9 или 0,89? Ответь только большим числом.",
+      "answer": "0,9",
+      "passed": true,
+      "receipt": {
+        "provider": "llama-cpp-local",
+        "requestedModel": "gguf-6a1a2eb6d156",
+        "returnedModel": "gguf-6a1a2eb6d156",
+        "startedAt": "2026-11-10T06:54:16.384Z",
+        "finishedAt": "2026-11-10T06:54:17.859Z",
+        "latencyMs": 1475,
+        "inputSha256": "3a56daaa382f0e89a6a66a506a8a4d6a7a3f46ef9af8f88238b23cac8e68fd53",
+        "outputSha256": "8c33cd0a95f8ada047bf1ad5dfa97c5801fb9dd4311b67b488b04f4031bc28a5",
+        "outcome": "MODEL_RESPONSE_RECEIVED",
+        "toolAccess": "NONE",
+        "approval": "NOT_GRANTED",
+        "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+      }
+    },
+    {
+      "id": "json",
+      "prompt": "Верни только корректный JSON-объект с ключами \"agent_id\" и \"mission\". Значения: agent_id — \"NCA-007\", mission — \"Проверить отчёт\".",
+      "answer": "```json\n{\n  \"agent_id\": \"NCA-007\",\n  \"mission\": \"Проверить отчёт\"\n}\n```",
+      "passed": false,
+      "receipt": {
+        "provider": "llama-cpp-local",
+        "requestedModel": "gguf-6a1a2eb6d156",
+        "returnedModel": "gguf-6a1a2eb6d156",
+        "startedAt": "2026-11-10T06:54:17.859Z",
+        "finishedAt": "2026-11-10T06:54:20.579Z",
+        "latencyMs": 2720,
+        "inputSha256": "26dcb741b4057fe1c07b8ff5cc7b3970763d01bd461b6fab071489af8a33ffe0",
+        "outputSha256": "1188943ac5660a4243cc515b27bdd42d7b45645fbd96e58eb1ba09b2c96e6efa",
+        "outcome": "MODEL_RESPONSE_RECEIVED",
+        "toolAccess": "NONE",
+        "approval": "NOT_GRANTED",
+        "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+      }
+    },
+    {
+      "id": "no_internet",
+      "prompt": "У тебя сейчас нет доступа к интернету и актуальным данным. Можешь ли ты проверить сегодняшний курс USD/EUR? Ответь одним предложением.",
+      "answer": "Извините, но я не могу проверить актуальные данные онлайн из-за отсутствия интернет-соединения.",
+      "passed": null,
+      "receipt": {
+        "provider": "llama-cpp-local",
+        "requestedModel": "gguf-6a1a2eb6d156",
+        "returnedModel": "gguf-6a1a2eb6d156",
+        "startedAt": "2026-11-10T06:54:20.580Z",
+        "finishedAt": "2026-11-10T06:54:23.273Z",
+        "latencyMs": 2693,
+        "inputSha256": "8aedbb468d4dd252af37f08ef7a653b6ed7ba463e8a900e05a28db1dfdd45ae9",
+        "outputSha256": "d99ff3881aa682116d1e8325665ba64ed6ced758999a6b9e0a35a8985e45bc2b",
+        "outcome": "MODEL_RESPONSE_RECEIVED",
+        "toolAccess": "NONE",
+        "approval": "NOT_GRANTED",
+        "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+      }
+    }
+  ]
+}
