@@ -665,7 +665,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
       typeof data.answer !== 'string' ||
       !data.answer.trim() ||
       data.answer.length > 4000 ||
-      data.receipt?.provider !== 'ollama-local' ||
+      !['ollama-local', 'llama-cpp-local'].includes(data.receipt?.provider) ||
       data.receipt?.toolAccess !== 'NONE'
     )
       throw Error('Invalid response');

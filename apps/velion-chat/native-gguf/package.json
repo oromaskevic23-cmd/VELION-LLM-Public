@@ -1,0 +1,8 @@
+{
+  "name": "velion-local-gguf-runtime",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Optional CPU-only GGUF runtime for the local VELION chat prototype.",
+  "engines": {"node": ">=22"},
+  "dependencies": {"node-llama-cpp": "3.22.3"}
+}
