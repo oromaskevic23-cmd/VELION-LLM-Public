@@ -155,3 +155,34 @@ test('emulated UI disables voice recognition when browser support is missing', a
   await page.waitUntilComplete();
   assert.equal(page.mainFrame.document.querySelector('#mic').disabled, true);
 });
+
+test('desktop navigation toggles accessibly and a new chat clears search', async (t) => {
+  const server = createAppServer();
+  server.listen(0, '127.0.0.1');
+  await once(server, 'listening');
+  const browser = new Browser({
+    settings: { enableJavaScriptEvaluation: true, suppressInsecureJavaScriptEnvironmentWarning: true },
+  });
+  t.after(async () => {
+    await browser.close();
+    server.close();
+  });
+  const page = browser.newPage();
+  await page.goto('http://127.0.0.1:' + server.address().port + '/');
+  await page.waitUntilComplete();
+  const d = page.mainFrame.document, w = page.mainFrame.window;
+  const menu = d.querySelector('#open-sidebar'), sidebar = d.querySelector('#sidebar');
+  assert.equal(menu.getAttribute('aria-expanded'), 'true');
+  menu.click();
+  assert.equal(menu.getAttribute('aria-expanded'), 'false');
+  assert.equal(sidebar.inert, true);
+  menu.click();
+  assert.equal(menu.getAttribute('aria-expanded'), 'true');
+  assert.equal(sidebar.inert, false);
+  d.querySelector('#search').value = 'not found';
+  d.querySelector('#search').dispatchEvent(new w.Event('input'));
+  assert.equal(d.querySelectorAll('.chat-item').length, 0);
+  d.querySelector('#new-chat').click();
+  assert.equal(d.querySelector('#search').value, '');
+  assert.equal(d.querySelectorAll('.chat-item').length, 2);
+});
