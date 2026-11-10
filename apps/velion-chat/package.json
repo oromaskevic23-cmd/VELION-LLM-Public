@@ -10,10 +10,11 @@
   },
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check chat-service.mjs && node --check native-gguf/gguf-chat.mjs && node --check tools/gguf-live-smoke.mjs && node --check tools/gguf-quality-cases.mjs && node --check tools/gguf-quality-eval.mjs && node --check public/app.mjs",
+    "check": "node --check server.mjs && node --check chat-service.mjs && node --check native-gguf/gguf-chat.mjs && node --check tools/gguf-live-smoke.mjs && node --check tools/gguf-quality-cases.mjs && node --check tools/gguf-quality-eval.mjs && node --check tools/mobile-browser-smoke.mjs && node --check public/app.mjs",
     "test": "node --test test/*.test.mjs",
     "smoke:gguf": "node tools/gguf-live-smoke.mjs",
-    "evaluate:gguf": "node tools/gguf-quality-eval.mjs"
+    "evaluate:gguf": "node tools/gguf-quality-eval.mjs",
+    "smoke:mobile": "node tools/mobile-browser-smoke.mjs"
   },
   "devDependencies": {
     "happy-dom": "21.0.4"

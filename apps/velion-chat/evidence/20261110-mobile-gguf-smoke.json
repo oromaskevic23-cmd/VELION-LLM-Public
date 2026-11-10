@@ -1,0 +1,59 @@
+{
+  "status": "LOCAL_GGUF_SMOKE_PASS",
+  "provider": "llama-cpp-local",
+  "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+  "cases": [
+    "identity",
+    "conversation-context",
+    "basic-arithmetic"
+  ],
+  "answers": [
+    "Привет, Ирина! Я VELION, интерфейс conversational AI для IMPERIAL Core. Как я могу помочь вам сегодня?",
+    "Ирина",
+    "4"
+  ],
+  "receipts": [
+    {
+      "provider": "llama-cpp-local",
+      "requestedModel": "gguf-6a1a2eb6d156",
+      "returnedModel": "gguf-6a1a2eb6d156",
+      "startedAt": "2026-11-10T07:22:07.514Z",
+      "finishedAt": "2026-11-10T07:22:11.041Z",
+      "latencyMs": 3527,
+      "inputSha256": "1f8cc49d49976648992423252b6492ecbb31c3911e579086afc17fe0464e3cc3",
+      "outputSha256": "f87edc096b892d28d8fe143a9c889f81877d754b071c55ddd4ba6d744d811e32",
+      "outcome": "MODEL_RESPONSE_RECEIVED",
+      "toolAccess": "NONE",
+      "approval": "NOT_GRANTED",
+      "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+    },
+    {
+      "provider": "llama-cpp-local",
+      "requestedModel": "gguf-6a1a2eb6d156",
+      "returnedModel": "gguf-6a1a2eb6d156",
+      "startedAt": "2026-11-10T07:22:11.053Z",
+      "finishedAt": "2026-11-10T07:22:13.373Z",
+      "latencyMs": 2320,
+      "inputSha256": "e1c11efef97d4afc5231a4782787ecf8b93dcd30a15411adfb280b03650756f1",
+      "outputSha256": "c172bb8bae06688adb06bc1ff409f0940c6edb40c8ce7028ae03ddf9633cd44c",
+      "outcome": "MODEL_RESPONSE_RECEIVED",
+      "toolAccess": "NONE",
+      "approval": "NOT_GRANTED",
+      "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+    },
+    {
+      "provider": "llama-cpp-local",
+      "requestedModel": "gguf-6a1a2eb6d156",
+      "returnedModel": "gguf-6a1a2eb6d156",
+      "startedAt": "2026-11-10T07:22:13.377Z",
+      "finishedAt": "2026-11-10T07:22:15.854Z",
+      "latencyMs": 2477,
+      "inputSha256": "e057436db7c67033fac2ac74a669ae1e3c1e9b70c1579347a39f61efad194170",
+      "outputSha256": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+      "outcome": "MODEL_RESPONSE_RECEIVED",
+      "toolAccess": "NONE",
+      "approval": "NOT_GRANTED",
+      "modelSha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e"
+    }
+  ]
+}

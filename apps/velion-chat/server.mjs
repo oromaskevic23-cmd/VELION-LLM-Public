@@ -12,6 +12,10 @@ const routes = new Map([
   ['/index.html', ['index.html', 'text/html; charset=utf-8']],
   ['/app.mjs', ['app.mjs', 'text/javascript; charset=utf-8']],
   ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+  ['/manifest.webmanifest', ['manifest.webmanifest', 'application/manifest+json; charset=utf-8']],
+  ['/app-icon-180.png', ['app-icon-180.png', 'image/png']],
+  ['/app-icon-192.png', ['app-icon-192.png', 'image/png']],
+  ['/app-icon-512.png', ['app-icon-512.png', 'image/png']],
 ]);
 const MAX_BODY = 32768;
 const reply = (res, status, body) => {
@@ -44,7 +48,7 @@ export function createAppServer({ localChatService = null } = {}) {
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader(
       'Content-Security-Policy',
-      "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     );
     let pathname;
     try {

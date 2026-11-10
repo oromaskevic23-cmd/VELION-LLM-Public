@@ -152,13 +152,31 @@ test('only one request may run; abort is propagated and permits a later request'
 
 test('HTTP server serves only allowed assets and refuses unconfigured model calls', async (t) => {
   const origin = await setup(null, t);
-  for (const path of ['/', '/index.html', '/styles.css', '/app.mjs']) {
+  for (const path of ['/', '/index.html', '/styles.css', '/app.mjs', '/manifest.webmanifest', '/app-icon-180.png', '/app-icon-192.png', '/app-icon-512.png']) {
     const response = await fetch(origin + path);
     assert.equal(response.status, 200, path);
     assert.match(response.headers.get('content-security-policy'), /frame-ancestors 'none'/);
   }
   assert.equal((await fetch(origin + '/.env')).status, 404);
   assert.equal((await post(origin)).status, 503);
+});
+
+test('mobile web app manifest and local wordmark icons are served with safe scope', async (t) => {
+  const origin = await setup(null, t);
+  const response = await fetch(origin + '/manifest.webmanifest');
+  assert.match(response.headers.get('content-type'), /^application\/manifest\+json/);
+  assert.match(response.headers.get('content-security-policy'), /manifest-src 'self'/);
+  const manifest = await response.json();
+  assert.equal(manifest.name, 'VELION — IMPERIAL Core');
+  assert.equal(manifest.start_url, '/');
+  assert.equal(manifest.scope, '/');
+  assert.equal(manifest.display, 'standalone');
+  assert.deepEqual(manifest.icons.map(icon => icon.sizes), ['192x192', '512x512']);
+  for (const path of ['/app-icon-180.png', ...manifest.icons.map(icon => icon.src)]) {
+    const icon = await fetch(origin + path);
+    assert.equal(icon.headers.get('content-type'), 'image/png');
+    assert.deepEqual([...new Uint8Array(await icon.arrayBuffer()).slice(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10]);
+  }
 });
 
 test('HTTP chat enforces origin, authentication, content type and validated messages', async (t) => {
