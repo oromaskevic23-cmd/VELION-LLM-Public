@@ -1,0 +1,32 @@
+name: VELION local conversation checks
+on:
+  push:
+    branches: [main]
+    paths: ['apps/velion-chat/**', '.github/workflows/velion-chat-ci.yml']
+  pull_request:
+    paths: ['apps/velion-chat/**', '.github/workflows/velion-chat-ci.yml']
+permissions:
+  contents: read
+concurrency:
+  group: velion-chat-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/velion-chat
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Install locked test-only dependencies
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Check syntax
+        run: npm run check
+      - name: Test local gateway and emulated user interface
+        run: npm test

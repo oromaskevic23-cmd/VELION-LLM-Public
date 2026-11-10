@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'"
+    />
+    <title>VELION — IMPERIAL Core</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.mjs"></script>
+  </head>
+  <body>
+    <div class="app">
+      <div id="sidebar-scrim" class="scrim" hidden></div>
+      <aside id="sidebar" class="sidebar" aria-label="Панель разговоров" data-i18n-aria="sidebar">
+        <div class="sidebar-top">
+          <div>
+            <div class="wordmark">VELION<span class="wordmark-dot">.</span></div>
+            <div class="brand-caption">IMPERIAL CORE</div>
+          </div>
+          <button
+            id="close-sidebar"
+            class="icon-button sidebar-close"
+            type="button"
+            aria-label="Закрыть меню"
+            data-i18n-aria="closeMenu"
+          >
+            ×
+          </button>
+        </div>
+        <button id="new-chat" class="new-chat" type="button">
+          <span class="plus" aria-hidden="true">+</span><span data-i18n="newChat">Новый разговор</span
+          ><span class="new-arrow" aria-hidden="true">↗</span>
+        </button>
+        <label class="search-wrap"
+          ><span class="sr-only" data-i18n="search">Поиск разговоров</span
+          ><input
+            id="search"
+            type="search"
+            maxlength="120"
+            placeholder="Поиск разговоров"
+            data-i18n-placeholder="search"
+        /></label>
+        <div class="sidebar-label" data-i18n="recent">ВАШИ РАЗГОВОРЫ</div>
+        <nav id="chat-list" class="chat-list" data-i18n-aria="chats" aria-label="Разговоры"></nav>
+        <div class="sidebar-bottom">
+          <div class="session-indicator">
+            <span class="session-dot"></span><span data-i18n="localSession">Локальная сессия</span>
+          </div>
+          <button id="open-settings" class="settings-button" type="button">
+            <span class="settings-icon" aria-hidden="true">⚙</span><span data-i18n="settings">Настройки</span
+            ><span class="settings-arrow" aria-hidden="true">↗</span>
+          </button>
+          <div class="sidebar-footnote">VELION · IMPERIAL CORE</div>
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button
+              id="open-sidebar"
+              class="icon-button mobile-menu"
+              type="button"
+              aria-label="Открыть меню"
+              data-i18n-aria="openMenu"
+            >
+              ☰
+            </button>
+            <div class="top-title">VELION <span data-i18n="assistant">Ассистент</span></div>
+          </div>
+          <div class="topbar-right">
+            <span class="mode-pill" data-i18n="privateSession">ЛОКАЛЬНЫЙ РЕЖИМ</span
+            ><button
+              id="settings-top"
+              class="icon-button settings-top"
+              type="button"
+              aria-label="Настройки"
+              data-i18n-aria="settings"
+            >
+              ⚙
+            </button>
+          </div>
+        </header>
+        <section class="chat-area" aria-label="Чат" data-i18n-aria="chat">
+          <div id="welcome" class="welcome">
+            <div class="overline">IMPERIAL CORE <span>✦</span> CONVERSATIONAL INTELLIGENCE</div>
+            <h1 data-i18n="greeting">Здравствуйте,<br /><em>Архитектор.</em></h1>
+            <p data-i18n="intro">Я VELION. Чем займёмся сегодня?</p>
+            <div class="suggestions">
+              <button type="button" data-suggestion="plan">
+                <strong data-i18n="planTitle">Создать план</strong
+                ><span data-i18n="planSub">Превратить идею в шаги ↗</span></button
+              ><button type="button" data-suggestion="ideas">
+                <strong data-i18n="ideasTitle">Обсудить идею</strong
+                ><span data-i18n="ideasSub">Посмотреть шире ↗</span></button
+              ><button type="button" data-suggestion="learn">
+                <strong data-i18n="learnTitle">Узнать новое</strong
+                ><span data-i18n="learnSub">Разобраться в теме ↗</span>
+              </button>
+            </div>
+          </div>
+          <div
+            id="messages"
+            class="messages"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions"
+            data-i18n-aria="conversation"
+            aria-label="Диалог"
+          ></div>
+        </section>
+        <div class="composer-wrap">
+          <div id="status" class="status" role="status" aria-live="polite" data-i18n="ready">
+            Подключите локальную модель в настройках.
+          </div>
+          <form id="chat-form" class="composer">
+            <label for="prompt" class="sr-only" data-i18n="message">Сообщение</label
+            ><textarea
+              id="prompt"
+              rows="2"
+              maxlength="4000"
+              required
+              placeholder="Спросите VELION о чём угодно…"
+              data-i18n-placeholder="placeholder"
+            ></textarea>
+            <div class="composer-bottom">
+              <div class="composer-tools">
+                <button
+                  id="mic"
+                  class="tool-button"
+                  type="button"
+                  data-i18n-title="dictate"
+                  title="Диктовать"
+                  aria-label="Диктовать"
+                  data-i18n-aria="dictate"
+                >
+                  <svg
+                    class="tool-icon"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <rect x="9" y="3" width="6" height="12" rx="3" />
+                    <path d="M6 11a6 6 0 0 0 12 0M12 17v4m-3 0h6" /></svg
+                  ><span data-i18n="voice">Голос</span></button
+                ><button
+                  id="speak"
+                  class="tool-button"
+                  type="button"
+                  data-i18n-title="readAnswer"
+                  title="Озвучить ответ"
+                  aria-label="Озвучить ответ"
+                  data-i18n-aria="readAnswer"
+                >
+                  <svg
+                    class="tool-icon"
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <path d="M4 9v6h4l5 4V5L8 9H4zm12-.5a5 5 0 0 1 0 7m2.5-9.5a8.5 8.5 0 0 1 0 12" /></svg
+                  ><span data-i18n="listen">Слушать</span></button
+                ><button id="stop" class="tool-button" type="button" disabled data-i18n="stop">
+                  Остановить
+                </button>
+              </div>
+              <button
+                id="send"
+                class="send-button"
+                type="submit"
+                data-i18n-aria="send"
+                aria-label="Отправить"
+              >
+                ↑
+              </button>
+            </div>
+          </form>
+          <div class="composer-caption" data-i18n="caption">
+            VELION может ошибаться. Проверяйте важную информацию.
+          </div>
+        </div>
+      </main>
+    </div>
+    <dialog id="settings-dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="dialog-kicker">VELION</p>
+          <h2 data-i18n="settings">Настройки</h2>
+        </div>
+        <button
+          id="close-settings"
+          type="button"
+          class="icon-button"
+          aria-label="Закрыть"
+          data-i18n-aria="close"
+        >
+          ×
+        </button>
+      </div>
+      <div class="dialog-content">
+        <label for="language" data-i18n="language">Язык</label
+        ><select id="language">
+          <option value="ru-RU">Русский</option>
+          <option value="en-US">English</option>
+          <option value="uk-UA">Українська</option></select
+        ><label for="token" data-i18n="token">Ключ локальной сессии</label
+        ><input
+          id="token"
+          type="password"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="128"
+          data-i18n-placeholder="tokenPlaceholder"
+          placeholder="Введите токен локального сервера"
+        />
+        <p class="hint" data-i18n="tokenHint">
+          Ключ хранится только в этой вкладке. Ответ формирует отдельно подключённая локальная модель.
+        </p>
+        <label class="check"
+          ><input id="auto-speak" type="checkbox" /><span data-i18n="autoSpeak"
+            >Озвучивать ответы</span
+          ></label
+        ><label class="check"
+          ><input id="save-history" type="checkbox" /><span data-i18n="saveHistory"
+            >Сохранять диалоги в этом браузере</span
+          ></label
+        >
+        <p class="hint" data-i18n="historyHint">
+          Без сохранения диалоги исчезнут при закрытии страницы. Не включайте сохранение на общем устройстве.
+        </p>
+        <div class="notice" data-i18n="voiceNotice">
+          Микрофон включается по нажатию. Голос зависит от браузера: он может передавать аудио своему сервису
+          распознавания. Проверьте текст перед отправкой.
+        </div>
+        <button id="delete-chat" class="delete-button" type="button" data-i18n="deleteChat">
+          Удалить текущий разговор
+        </button>
+      </div>
+    </dialog>
+  </body>
+</html>

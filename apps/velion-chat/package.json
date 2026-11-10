@@ -1,0 +1,19 @@
+{
+  "name": "velion-local-conversation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local standalone VELION conversation interface and opt-in model adapter.",
+  "author": "Alexander Nikolaevich Romaskevich (RomaskevicH)",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check chat-service.mjs && node --check public/app.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "happy-dom": "21.0.4"
+  }
+}
