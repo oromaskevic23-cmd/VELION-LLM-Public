@@ -18,6 +18,8 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 This image is a design concept for the desktop and mobile experience, not a screenshot of the current application or evidence of a deployed service.
 
+**Local model quality warning:** an external Qwen2.5 1.5B model passed 3 of 14 strict synthetic checks and gave unsafe advice in one manually reviewed case. This configuration is not ready for a phone-facing service. [Exact scope and evidence](apps/velion-chat/evidence/INTELLIGENCE_1P5B_20261110.md).
+
 **Verified 28 October 2026:** NVIDIA Nemotron 3 Nano 4B (external open model) completed real CPU inference in a free isolated GitHub Actions run: **11 generated tokens**, locally installed 2,837,597,147-byte model, output SHA-256 receipt. [Run evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) · [installation and limitations](docs/NEMOTRON3_NANO4B_REAL_RUN.md). **This does not establish VELION-owned weights or a persistent live endpoint.**
 
 **Earlier 25 October checkpoint:** proposal gateway reference in open PR #1; those provider/model endpoints were mocked; main then contained documentation only.

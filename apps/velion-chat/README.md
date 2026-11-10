@@ -174,5 +174,9 @@ This small public suite is useful for spotting regressions, not for claiming a
 general intelligence ranking or superiority over Astra. Comparison requires
 the same prompts, settings and independently reviewed, unseen tasks.
 
+One [real local Qwen2.5 1.5B evaluation](evidence/INTELLIGENCE_1P5B_20261110.md)
+passed 3 of 14 strict checks and included unsafe advice in a manual case. It is
+evidence of limitations in that particular run, not a deployment or safety claim.
+
 Project author and founding architect: Alexander Nikolaevich Romaskevich
 (RomaskevicH). Third-party rights and model licenses remain separate.
