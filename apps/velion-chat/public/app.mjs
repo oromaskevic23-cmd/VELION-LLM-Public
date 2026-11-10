@@ -229,6 +229,9 @@ const chatList = $('#chat-list'),
   dialog = $('#settings-dialog');
 const sidebar = $('#sidebar'),
   scrim = $('#sidebar-scrim'),
+  menu = $('#open-sidebar'),
+  app = document.querySelector('.app'),
+  mobileLayout = window.matchMedia('(max-width: 760px)'),
   mic = $('#mic'),
   stop = $('#stop'),
   send = $('#send');
@@ -370,6 +373,7 @@ function translate() {
     node.setAttribute('aria-label', tr(node.dataset.i18nAria));
   for (const node of document.querySelectorAll('[data-i18n-title]')) node.title = tr(node.dataset.i18nTitle);
   updateMic();
+  updateMenuLabel();
   renderList();
   renderMessages();
 }
@@ -463,14 +467,31 @@ function render() {
   renderMessages();
   return save();
 }
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  scrim.hidden = true;
+function updateMenuLabel() {
+  const isOpen = menu.getAttribute('aria-expanded') === 'true';
+  menu.setAttribute('aria-label', tr(isOpen ? 'closeMenu' : 'openMenu'));
+  menu.title = tr(isOpen ? 'closeMenu' : 'openMenu');
 }
-$('#open-sidebar').addEventListener('click', () => {
-  sidebar.classList.add('open');
-  scrim.hidden = false;
+function setSidebar(open) {
+  sidebar.classList.toggle('open', mobileLayout.matches && open);
+  app.classList.toggle('sidebar-collapsed', !mobileLayout.matches && !open);
+  sidebar.inert = !open;
+  scrim.hidden = !mobileLayout.matches || !open;
+  menu.setAttribute('aria-expanded', String(open));
+  updateMenuLabel();
+}
+function closeSidebar() {
+  if (!mobileLayout.matches || !sidebar.classList.contains('open')) return;
+  const hadFocus = sidebar.contains(document.activeElement);
+  setSidebar(false);
+  if (hadFocus) menu.focus();
+}
+menu.addEventListener('click', () => {
+  const open = menu.getAttribute('aria-expanded') !== 'true';
+  setSidebar(open);
+  if (open && mobileLayout.matches) $('#close-sidebar').focus();
 });
+mobileLayout.addEventListener('change', () => setSidebar(!mobileLayout.matches));
 $('#close-sidebar').addEventListener('click', closeSidebar);
 scrim.addEventListener('click', closeSidebar);
 document.addEventListener('keydown', (event) => {
@@ -492,6 +513,7 @@ $('#new-chat').addEventListener('click', () => {
   chats.unshift(chat);
   current = chat.id;
   prompt.value = '';
+  $('#search').value = '';
   const saved = render();
   closeSidebar();
   if (saved) setStatus('ready');
@@ -693,5 +715,6 @@ window.addEventListener('pagehide', () => {
   token.value = '';
 });
 restore();
+setSidebar(!mobileLayout.matches);
 translate();
 setStatus('ready');

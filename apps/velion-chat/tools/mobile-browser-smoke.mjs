@@ -35,6 +35,8 @@ try {
       const page = await context.newPage(), errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto(origin, {waitUntil: 'load'});
+      assert.equal(await page.locator('#open-sidebar').getAttribute('aria-expanded'), 'false');
+      assert.equal(await page.locator('#sidebar').evaluate(el => el.inert), true);
       const cdp = await context.newCDPSession(page);
       const manifest = await cdp.send('Page.getAppManifest');
       assert.equal(new URL(manifest.url).pathname, '/manifest.webmanifest');
@@ -53,6 +55,20 @@ try {
       assert.match(await page.locator('.message.assistant').innerText(), /Готова помочь/);
       await page.locator('#open-sidebar').tap();
       assert.equal(await page.locator('#sidebar').evaluate(el => el.classList.contains('open')), true);
+      assert.equal(await page.locator('#open-sidebar').getAttribute('aria-expanded'), 'true');
+      assert.equal(await page.locator('#sidebar').evaluate(el => el.inert), false);
+      assert.equal(await page.evaluate(() => document.activeElement.id), 'close-sidebar');
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#open-sidebar').getAttribute('aria-expanded'), 'false');
+      assert.equal(await page.evaluate(() => document.activeElement.id), 'open-sidebar');
+      await page.locator('#open-sidebar').tap();
+      await page.locator('#search').fill('no matching chat');
+      assert.equal(await page.locator('.chat-item').count(), 0);
+      await page.locator('#new-chat').tap();
+      assert.equal(await page.locator('#search').inputValue(), '');
+      assert.equal(await page.locator('#sidebar').evaluate(el => el.inert), true);
+      await page.locator('#open-sidebar').tap();
+      assert.equal(await page.locator('.chat-item').count(), 2);
       await page.locator('#close-sidebar').tap();
       assert.equal(await page.locator('#sidebar').evaluate(el => el.classList.contains('open')), false);
       assert.deepEqual(errors, []);
@@ -61,6 +77,24 @@ try {
       await context.close();
     }
   }
+  const desktop = await browser.newPage({viewport: {width: 1200, height: 800}});
+  await desktop.goto(origin, {waitUntil: 'load'});
+  assert.equal(await desktop.locator('#open-sidebar').getAttribute('aria-expanded'), 'true');
+  await desktop.locator('#open-sidebar').click();
+  assert.equal(await desktop.locator('#sidebar').isVisible(), false);
+  assert.equal(await desktop.locator('#sidebar').evaluate(el => el.inert), true);
+  await desktop.locator('#open-sidebar').click();
+  assert.equal(await desktop.locator('#sidebar').isVisible(), true);
+  await desktop.setViewportSize({width: 375, height: 812});
+  await desktop.waitForFunction(() => document.querySelector('#open-sidebar').getAttribute('aria-expanded') === 'false');
+  assert.equal(await desktop.locator('#open-sidebar').getAttribute('aria-expanded'), 'false');
+  assert.equal(await desktop.locator('#sidebar').evaluate(el => el.inert), true);
+  await desktop.setViewportSize({width: 1200, height: 800});
+  await desktop.waitForFunction(() => document.querySelector('#open-sidebar').getAttribute('aria-expanded') === 'true');
+  assert.equal(await desktop.locator('#open-sidebar').getAttribute('aria-expanded'), 'true');
+  assert.equal(await desktop.locator('#sidebar').isVisible(), true);
+  await desktop.close();
+  checks.push({viewport: {width: 1200, height: 800}, sidebar: 'COLLAPSE_AND_RESIZE_PASS'});
   console.log(JSON.stringify({browser: browser.version(), checks, device: 'CHROMIUM_EMULATION_ONLY', iosInstall: 'NOT_TESTED'}));
 } finally {
   if (browser) await browser.close();

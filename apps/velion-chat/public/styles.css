@@ -234,10 +234,14 @@ button:disabled {
   background: #ffffff0c;
   color: #fff;
 }
-.mobile-menu,
 .sidebar-close,
 .settings-top {
   display: none;
+}
+@media (min-width: 761px) {
+  .app.sidebar-collapsed .sidebar {
+    display: none;
+  }
 }
 .chat-area {
   flex: 1;
