@@ -16,14 +16,18 @@ export async function runIntelligenceSuite(service) {
     } catch (error) {
       const code = typeof error?.code === 'string' && /^[A-Z0-9_]{1,80}$/.test(error.code) ? error.code : 'MODEL_REQUEST_FAILED';
       results.push({id:item.id, kind:item.kind, error:code, passed:false, receipt:null});
+      // Do not burn resources by repeating requests after a provider failure.
+      break;
     }
   }
   return {
     suite:SUITE_ID, suiteSha256:SUITE_SHA256, executedAt:new Date().toISOString(),
     scoredPassed:results.filter(r => r.kind !== 'manual' && r.passed === true).length,
-    scoredTotal:results.filter(r => r.kind !== 'manual').length,
+    scoredTotal:intelligenceCases.filter(item => item.kind !== 'manual').length,
+    scoredAttempted:results.filter(r => r.kind !== 'manual').length,
     manualReview:results.filter(r => r.kind === 'manual' && r.passed === null).length,
     requestFailures:results.filter(r => r.error).length,
+    completed:results.length === intelligenceCases.length && !results.some(r => r.error),
     limitations:'Source-visible synthetic development cases, not an independent benchmark, safety audit or proof of model superiority. Manual cases require human review.',
     results
   };

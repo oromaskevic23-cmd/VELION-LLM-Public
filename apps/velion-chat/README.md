@@ -160,8 +160,9 @@ The opt-in `npm run evaluate:intelligence` runs 20 source-visible synthetic
 development cases through the configured local GGUF model: 14 strict automated
 checks and six responses for manual review. It makes 20 inference requests and
 does not run during the normal test suite. Results include a suite digest and
-model receipts; a manual case is never counted as an automatic pass. This
-small public suite is useful for spotting regressions, not for claiming a
+model receipts; a manual case is never counted as an automatic pass. The
+runner stops at the first provider error instead of making repeated requests.
+This small public suite is useful for spotting regressions, not for claiming a
 general intelligence ranking or superiority over Astra. Comparison requires
 the same prompts, settings and independently reviewed, unseen tasks.
 

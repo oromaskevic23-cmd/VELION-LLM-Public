@@ -27,18 +27,32 @@ test('strict scoring rejects extra prose, malformed JSON and wrong answers', () 
   assert.equal(scoreIntelligenceCase(find('honesty'), ''), false);
 });
 
-test('suite records failures and leaves manual cases for review without running tools', async () => {
+test('suite leaves manual cases for review without running tools', async () => {
   let calls = 0;
   const report = await runIntelligenceSuite({async chat() {
     calls++;
-    if (calls === 1) throw Object.assign(Error('provider details'), {code:'CHAT_MODEL_UNAVAILABLE'});
     return {answer:'example',receipt:{provider:'synthetic-fixture',toolAccess:'NONE'}};
   }});
   assert.equal(calls, 20);
   assert.equal(report.results.length, 20);
   assert.equal(report.scoredTotal, 14);
   assert.equal(report.manualReview, 6);
+  assert.equal(report.requestFailures, 0);
+  assert.equal(report.completed, true);
+  assert.equal(report.results[14].passed, null);
+});
+
+test('suite stops on the first provider failure instead of spending on retries', async () => {
+  let calls = 0;
+  const report = await runIntelligenceSuite({async chat() {
+    calls++;
+    throw Object.assign(Error('provider details'), {code:'CHAT_MODEL_UNAVAILABLE'});
+  }});
+  assert.equal(calls, 1);
+  assert.equal(report.results.length, 1);
+  assert.equal(report.scoredTotal, 14);
+  assert.equal(report.scoredAttempted, 1);
+  assert.equal(report.completed, false);
   assert.equal(report.requestFailures, 1);
   assert.equal(report.results[0].error, 'CHAT_MODEL_UNAVAILABLE');
-  assert.equal(report.results[14].passed, null);
 });
