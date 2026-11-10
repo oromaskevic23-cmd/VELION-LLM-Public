@@ -7,7 +7,11 @@ optional device-local chat history. It is a prototype, not a hosted service or
 a claim that VELION owns model weights. No third-party model is downloaded or
 activated by this repository.
 
-## Run on a trusted computer
+Two explicit local backends are available: an existing Ollama service or an
+optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
+automatic fallback between them.
+
+## Run with an existing Ollama service
 
 Requires Node.js 22 or later and a separately installed, running Ollama service
 on the same computer. The model must already be installed and authorized for
@@ -40,6 +44,35 @@ the session token is not saved. Turning that option off removes the saved copy.
 Storage failures are reported. Existing conversations remain in memory until
 the page is refreshed, closed or a conversation is deleted.
 
+## Run with a local GGUF model (optional)
+
+This alternative uses the separately installed `node-llama-cpp` package and a
+local GGUF file supplied by the operator. It requires no Ollama server and
+does not download a model at runtime. Use a model from a source and with terms
+appropriate to the intended use. The computer and model file remain trusted;
+this is not a sandbox for malicious model files.
+
+```sh
+# From apps/velion-chat: install the optional runtime and its locked dependencies.
+npm ci --prefix native-gguf --ignore-scripts --no-audit --no-fund
+export IMPERIAL_CHAT_LOCAL_ONLY=YES
+export VELION_LOCAL_BACKEND=gguf
+export VELION_GGUF_PATH=/absolute/path/to/your-model.gguf
+export VELION_GGUF_SHA256=YOUR_VERIFIED_MODEL_FILE_SHA256
+export VELION_CHAT_TOKEN="$(node -e 'console.log(require("node:crypto").randomBytes(32).toString("base64url"))')"
+printf 'Local session token: %s\n' "$VELION_CHAT_TOKEN"
+npm start
+```
+
+The GGUF path must be absolute, point to a regular non-symlink file and match
+the supplied lowercase SHA-256 before the runtime loads it. On Linux,
+`sha256sum /absolute/path/to/your-model.gguf` computes the file digest. Compare
+that digest with an independently trusted value; a hash alone does not prove
+model authorship or safety. The optional runtime selects CPU and rejects a
+missing prebuilt binary instead of automatically downloading or building one.
+Installation may take significant disk space. The server listens only on
+`127.0.0.1`; stopping its process stops the service.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
@@ -54,7 +87,8 @@ playback, not a full-duplex real-time voice service.
 
 - The service requires explicit opt-in, a nontrivial session token, fixed
   loopback Host and Origin, JSON, bounded request/response sizes and one active
-  model request. It calls only `127.0.0.1:11434` and rejects redirects.
+  model request. Ollama requests use only `127.0.0.1:11434` and reject redirects;
+  the optional GGUF backend runs the selected local file in the server process.
 - Generated text is rendered as text. The chat does not execute model output,
   invoke tools, authorize payments, approve changes or launch agents.
 - The token and local-origin checks are narrow development controls, not
@@ -63,13 +97,14 @@ playback, not a full-duplex real-time voice service.
 - A model request returns a non-persistent receipt with provider, requested
   and returned model, timestamps, latency, outcome and input/output SHA-256
   hashes. Hashes are not signatures, identity, a cost receipt or independent
-  audit evidence. Conversations are not added to a server journal.
+  audit evidence. GGUF receipts also report the checked model-file digest.
+  Conversations are not added to a server journal.
 - Model output is untrusted and can be inaccurate. The local model server,
   browser, computer and any speech-recognition provider are part of the trust
   boundary. This local server must not be exposed to the public internet.
-- No inference, installed model, real microphone, iPhone compatibility,
-  continuous voice conversation, 24/7 availability or production readiness
-  is established by the included automated tests.
+- The standard test suite does not establish live inference, real microphone,
+  iPhone compatibility, continuous voice conversation, 24/7 availability or
+  production readiness.
 
 ## Verification
 
@@ -79,11 +114,20 @@ npm run check
 npm test
 ```
 
-The runtime itself uses Node.js built-ins only. The locked `happy-dom` package
-is a test-only dependency for DOM emulation. Model responses, microphone and
-speech output in the tests are synthetic. The emulation is not a real browser,
-visual review, live model request or external security assessment. The
-workflow results must be checked for the exact commit being reviewed.
+To perform an explicit real-model check after configuring the GGUF environment
+above, run `npm run smoke:gguf`. It starts a temporary loopback server, sends
+three synthetic prompts and checks VELION identity, short conversation context
+and a basic arithmetic answer. The selected model can fail these checks. A pass
+is limited to those cases and is not a broad model-quality benchmark.
+One [bounded real-model run](evidence/LOCAL_GGUF_SMOKE_20261110.md) is recorded
+with its model hash, exact scope and warning.
+
+The default Ollama adapter uses Node.js built-ins only. The separately installed
+GGUF option uses `node-llama-cpp` and its dependencies; `happy-dom` is a
+test-only dependency for DOM emulation. The repository's automated tests use
+synthetic model responses and voice events. DOM emulation is not a real browser,
+live model request or external security assessment. Check workflow results for
+the exact commit being reviewed.
 
 Project author and founding architect: Alexander Nikolaevich Romaskevich
 (RomaskevicH). Third-party rights and model licenses remain separate.

@@ -14,7 +14,7 @@ test('emulated UI: dictation, chat, local history, language and safe text render
   let calls = 0,
     spoken = [],
     storageSnapshot;
-  const model = createLocalChatService({
+  const ollamaFixture = createLocalChatService({
     accessToken: TOKEN,
     model: MODEL,
     fetchImpl: async () => {
@@ -28,6 +28,13 @@ test('emulated UI: dictation, chat, local history, language and safe text render
       );
     },
   });
+  const model = {
+    ...ollamaFixture,
+    async chat(messages, options) {
+      const result = await ollamaFixture.chat(messages, options);
+      return { ...result, receipt: { ...result.receipt, provider: 'llama-cpp-local' } };
+    },
+  };
   const server = createAppServer({ localChatService: model });
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');

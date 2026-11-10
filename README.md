@@ -6,7 +6,7 @@
 
 Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
-**Standalone VELION conversation prototype:** [local chat and voice interface](apps/velion-chat/README.md). It offers a conversation sidebar, text chat, optional browser dictation and speech playback through an explicitly configured local third-party model. The interface is independent of other IMPERIAL Core products. It is not an always-on public service, a trained proprietary model, or proof of live inference. Model and voice tests use fixtures; actual browser, device and local-model behavior must be verified separately.
+**Standalone VELION conversation prototype:** [local chat and voice interface](apps/velion-chat/README.md). It offers a conversation sidebar, text chat, optional browser dictation and speech playback through an explicitly configured third-party local model (Ollama or optional CPU GGUF). The interface is independent of other IMPERIAL Core products. It is not an always-on public service, a trained proprietary model, or evidence of production readiness. Automated tests use fixtures; physical microphone, iPhone and deployment behavior require separate verification.
 
 **Verified 28 October 2026:** NVIDIA Nemotron 3 Nano 4B (external open model) completed real CPU inference in a free isolated GitHub Actions run: **11 generated tokens**, locally installed 2,837,597,147-byte model, output SHA-256 receipt. [Run evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) · [installation and limitations](docs/NEMOTRON3_NANO4B_REAL_RUN.md). **This does not establish VELION-owned weights or a persistent live endpoint.**
 
