@@ -157,8 +157,8 @@ live model request or external security assessment. Check workflow results for
 the exact commit being reviewed.
 
 The opt-in `npm run evaluate:intelligence` runs 20 source-visible synthetic
-development cases through the configured local GGUF model: 14 strict automated
-checks and six responses for manual review. It makes 20 inference requests and
+development cases through the configured local Ollama or GGUF backend: 14 strict automated
+checks and six responses for manual review. It makes up to 20 inference requests and
 does not run during the normal test suite. Results include a suite digest and
 model receipts; a manual case is never counted as an automatic pass. The
 runner stops at the first provider error instead of making repeated requests.

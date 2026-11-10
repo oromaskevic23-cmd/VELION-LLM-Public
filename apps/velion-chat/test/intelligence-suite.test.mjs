@@ -2,6 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {intelligenceCases, scoreIntelligenceCase} from '../tools/intelligence-cases.mjs';
 import {runIntelligenceSuite, SUITE_SHA256} from '../tools/intelligence-suite.mjs';
+import {localIntelligenceService} from '../tools/local-intelligence-service.mjs';
+
+test('evaluation requires opt-in and selects only a configured local backend', async () => {
+  await assert.rejects(localIntelligenceService({}), /LOCAL_INTELLIGENCE_EVALUATION_NOT_ENABLED/);
+  await assert.rejects(localIntelligenceService({IMPERIAL_CHAT_LOCAL_ONLY:'YES',VELION_LOCAL_BACKEND:'remote'}), /CHAT_BACKEND_INVALID/);
+  const token='synthetic-local-evaluation-token-123456789';
+  const service=await localIntelligenceService({IMPERIAL_CHAT_LOCAL_ONLY:'YES',VELION_LOCAL_BACKEND:'ollama',VELION_LOCAL_MODEL:'fixture:local',VELION_CHAT_TOKEN:token});
+  assert.equal(service.authenticate('Bearer '+token),true);
+});
 
 test('development suite has twenty distinct cases with valid alternating conversation turns', () => {
   assert.equal(intelligenceCases.length, 20);
