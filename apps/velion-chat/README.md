@@ -81,6 +81,12 @@ missing prebuilt binary instead of automatically downloading or building one.
 Installation may take significant disk space. The server listens only on
 `127.0.0.1`; stopping its process stops the service.
 
+The optional `VELION_GGUF_MAX_TOKENS` server setting changes the per-response
+generation limit from the default 512 to an integer between 64 and 1024. A
+higher value can take longer; the existing timeout and response-size limits
+still apply. Incomplete responses fail closed. This is a local operator setting,
+not a caller-controlled parameter.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
@@ -119,6 +125,9 @@ and is not evidence of security isolation.
   the optional GGUF backend runs the selected local file in the server process.
 - Generated text is rendered as text. The chat does not execute model output,
   invoke tools, authorize payments, approve changes or launch agents.
+- The system prompt tells the model not to request or disclose credentials.
+  This instruction can fail and is not a security boundary; do not enter real
+  secrets into the chat. The evaluation evidence records unsafe model advice.
 - The token and local-origin checks are narrow development controls, not
   production authentication, distributed AI Passport, Guardian Core,
   Approval Gateway, federated orchestration or a persistent Audit Ledger.
@@ -146,7 +155,9 @@ To perform an explicit real-model check after configuring the GGUF environment
 above, run `npm run smoke:gguf`. It starts a temporary loopback server, sends
 three synthetic prompts and checks VELION identity, short conversation context
 and a basic arithmetic answer. The selected model can fail these checks. A pass
-is limited to those cases and is not a broad model-quality benchmark.
+is limited to those cases and is not a broad model-quality benchmark. When all
+three model responses arrive, the tool prints each check and retains the answers
+and receipts even if one or more checks fail; failed checks use a nonzero exit.
 One [bounded real-model run](evidence/LOCAL_GGUF_SMOKE_20261110.md) is recorded
 with its model hash, exact scope and warning.
 

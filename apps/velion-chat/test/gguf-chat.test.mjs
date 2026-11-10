@@ -97,6 +97,13 @@ test('GGUF mode is opt-in and rejects malformed configuration or changed model b
     createLocalGgufService({ accessToken: 'short', modelPath: path, expectedSha256: hash, loadRuntime }),
     { code: 'CHAT_CONFIGURATION_INVALID' },
   );
+  for (const maxTokens of [0, 63, 1025, 3.5, '1024']) {
+    await assert.rejects(createLocalGgufService({accessToken:TOKEN,modelPath:path,expectedSha256:hash,
+      maxTokens,loadRuntime}), {code:'GGUF_CONFIGURATION_INVALID'});
+  }
+  await assert.rejects(ggufServiceFromEnv({IMPERIAL_CHAT_LOCAL_ONLY:'YES',VELION_CHAT_TOKEN:TOKEN,
+    VELION_GGUF_PATH:path,VELION_GGUF_SHA256:hash,VELION_GGUF_MAX_TOKENS:'1025'}),
+    {code:'GGUF_CONFIGURATION_INVALID'});
   await assert.rejects(
     createLocalGgufService({
       accessToken: TOKEN,
@@ -113,6 +120,15 @@ test('GGUF mode is opt-in and rejects malformed configuration or changed model b
     { code: 'GGUF_MODEL_UNAVAILABLE' },
   );
   assert.equal(loaded, 0);
+});
+
+test('optional local GGUF output limit is bounded and selected at startup', async (t) => {
+  const {path}=await fixture(t),{state,runtime}=runtimeFixture();
+  const service=await createLocalGgufService({accessToken:TOKEN,modelPath:path,expectedSha256:hash,
+    maxTokens:1024,loadRuntime:async()=>runtime});
+  t.after(()=>service.dispose());
+  await service.chat(text);
+  assert.equal(state.options[0].options.maxTokens,1024);
 });
 
 test('GGUF conversation isolates each context, preserves turns and identifies the real adapter', async (t) => {

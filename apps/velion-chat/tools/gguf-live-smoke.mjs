@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { ggufServiceFromEnv } from '../native-gguf/gguf-chat.mjs';
 import { createAppServer } from '../server.mjs';
+import { scoreGgufSmoke } from './gguf-smoke-cases.mjs';
 
 if (process.env.IMPERIAL_CHAT_LOCAL_ONLY !== 'YES' || process.env.VELION_LOCAL_BACKEND !== 'gguf')
   throw Error('Explicitly enable the local GGUF backend before running this smoke test.');
@@ -42,20 +43,15 @@ try {
   const answers = transcript
     .filter((message) => message.role === 'assistant')
     .map((message) => message.content);
-  assert.match(answers[0], /velion/i, 'Model did not identify itself as VELION');
-  assert.match(answers[1], /ирина/i, 'Model did not recall the synthetic user name');
-  assert.match(
-    answers[2],
-    /^\s*(4|четыре)[.!]?\s*$/iu,
-    'Model did not answer the arithmetic check correctly',
-  );
+  const checks = scoreGgufSmoke(answers);
+  const passed = checks.every(check => check.passed);
   console.log(
     JSON.stringify(
       {
-        status: 'LOCAL_GGUF_SMOKE_PASS',
+        status: passed ? 'LOCAL_GGUF_SMOKE_PASS' : 'LOCAL_GGUF_SMOKE_FAIL',
         provider: 'llama-cpp-local',
         modelSha256: process.env.VELION_GGUF_SHA256,
-        cases: ['identity', 'conversation-context', 'basic-arithmetic'],
+        cases: checks,
         answers,
         receipts,
       },
@@ -63,6 +59,7 @@ try {
       2,
     ),
   );
+  if (!passed) process.exitCode = 1;
 } finally {
   server.close();
   await once(server, 'close');

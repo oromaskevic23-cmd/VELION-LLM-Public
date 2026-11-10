@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check chat-service.mjs && node --check native-gguf/gguf-chat.mjs && node --check tools/gguf-live-smoke.mjs && node --check tools/gguf-quality-cases.mjs && node --check tools/gguf-quality-eval.mjs && node --check tools/intelligence-cases.mjs && node --check tools/intelligence-suite.mjs && node --check tools/local-intelligence-service.mjs && node --check tools/run-intelligence-suite.mjs && node --check tools/mobile-browser-smoke.mjs && node --check public/answer-renderer.mjs && node --check public/app.mjs",
+    "check": "node --check server.mjs && node --check chat-service.mjs && node --check native-gguf/gguf-chat.mjs && node --check tools/gguf-live-smoke.mjs && node --check tools/gguf-smoke-cases.mjs && node --check tools/gguf-quality-cases.mjs && node --check tools/gguf-quality-eval.mjs && node --check tools/intelligence-cases.mjs && node --check tools/intelligence-suite.mjs && node --check tools/local-intelligence-service.mjs && node --check tools/run-intelligence-suite.mjs && node --check tools/mobile-browser-smoke.mjs && node --check public/answer-renderer.mjs && node --check public/app.mjs",
     "test": "node --test test/*.test.mjs",
     "smoke:gguf": "node tools/gguf-live-smoke.mjs",
     "evaluate:gguf": "node tools/gguf-quality-eval.mjs",

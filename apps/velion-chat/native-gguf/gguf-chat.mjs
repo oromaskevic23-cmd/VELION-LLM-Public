@@ -15,12 +15,13 @@ async function hashModel(path) {
 }
 
 // The injectable runtime is for deterministic tests; production uses the pinned optional package.
-export async function createLocalGgufService({ accessToken, modelPath, expectedSha256, loadRuntime } = {}) {
+export async function createLocalGgufService({ accessToken, modelPath, expectedSha256, maxTokens = 512, loadRuntime } = {}) {
   if (
     typeof modelPath !== 'string' ||
     !isAbsolute(modelPath) ||
     typeof expectedSha256 !== 'string' ||
-    !/^[a-f0-9]{64}$/.test(expectedSha256)
+    !/^[a-f0-9]{64}$/.test(expectedSha256) ||
+    !Number.isSafeInteger(maxTokens) || maxTokens < 64 || maxTokens > 1024
   )
     throw fail('GGUF_CONFIGURATION_INVALID');
   // Validate the same access token before reading or loading a model.
@@ -71,7 +72,7 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
         );
       session.setChatHistory([...session.getChatHistory(), ...prior]);
       const result = await session.promptWithMeta(messages.at(-1).content, {
-        maxTokens: 512,
+        maxTokens,
         temperature: 0.2,
         signal: options.signal,
         stopOnAbortSignal: false,
@@ -117,5 +118,6 @@ export async function ggufServiceFromEnv(env = process.env) {
     accessToken: env.VELION_CHAT_TOKEN,
     modelPath: env.VELION_GGUF_PATH,
     expectedSha256: env.VELION_GGUF_SHA256,
+    maxTokens: env.VELION_GGUF_MAX_TOKENS === undefined ? 512 : Number(env.VELION_GGUF_MAX_TOKENS),
   });
 }
