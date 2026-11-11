@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2172" height="724" viewBox="0 0 2172 724" role="img" aria-labelledby="title desc">
+<title id="title">VELION — Intelligence architecture for IMPERIAL Core</title>
+<desc id="desc">Premium dark navy VELION banner with a blue and gold orbiting V emblem, warm gold wordmark, and subtle luminous wave accents.</desc>
+<defs>
+  <linearGradient id="background" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#020814"/><stop offset=".48" stop-color="#07152f"/><stop offset="1" stop-color="#020711"/></linearGradient>
+  <radialGradient id="halo" cx="42%" cy="44%" r="60%"><stop offset="0" stop-color="#14366b" stop-opacity=".48"/><stop offset=".64" stop-color="#0a2040" stop-opacity=".12"/><stop offset="1" stop-color="#06101c" stop-opacity="0"/></radialGradient>
+  <linearGradient id="blueV" x1="0" y1="0" x2=".82" y2="1"><stop offset="0" stop-color="#53c9ff"/><stop offset=".14" stop-color="#077ef7"/><stop offset=".51" stop-color="#0f3d8f"/><stop offset=".86" stop-color="#0b254f"/><stop offset="1" stop-color="#45baff"/></linearGradient>
+  <linearGradient id="goldV" x1=".3" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#fff2ba"/><stop offset=".28" stop-color="#f3ce7c"/><stop offset=".68" stop-color="#b67930"/><stop offset="1" stop-color="#fcdfa1"/></linearGradient>
+  <linearGradient id="goldText" x1="0" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#fff6d7"/><stop offset=".52" stop-color="#eac580"/><stop offset="1" stop-color="#dfaa58"/></linearGradient>
+  <linearGradient id="orbit" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a96b35" stop-opacity=".25"/><stop offset=".25" stop-color="#ffd989"/><stop offset=".55" stop-color="#fff2bc"/><stop offset=".8" stop-color="#f2b45d"/><stop offset="1" stop-color="#95562b" stop-opacity=".1"/></linearGradient>
+  <linearGradient id="edgeTop" x1="0" y1="0" x2="1" y2=".3"><stop offset="0" stop-color="#ffc56a" stop-opacity=".95"/><stop offset=".52" stop-color="#63b7ff"/><stop offset="1" stop-color="#0069ef" stop-opacity=".1"/></linearGradient>
+  <linearGradient id="edgeBottom" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0f62d9" stop-opacity="0"/><stop offset=".48" stop-color="#2588ff"/><stop offset=".76" stop-color="#fff0af"/><stop offset="1" stop-color="#e7a14d" stop-opacity=".46"/></linearGradient>
+  <filter id="glow" x="-45%" y="-85%" width="190%" height="270%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="softglow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="19"/></filter>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="12" stdDeviation="22" flood-color="#00040b" flood-opacity=".78"/></filter>
+</defs>
+<rect width="2172" height="724" fill="url(#background)"/>
+<rect width="2172" height="724" fill="url(#halo)"/>
+<path d="M-90 244 C145 58 321 89 614 -60" stroke="#1c66b8" stroke-width="36" opacity=".14" fill="none"/>
+<path d="M-56 223 C154 69 351 79 674 -29" stroke="url(#edgeTop)" stroke-width="4.5" fill="none" filter="url(#glow)"/>
+<path d="M-60 239 C147 83 361 91 687 -18" stroke="#8fa4db" stroke-width="1.4" opacity=".32" fill="none"/>
+<path d="M410 764 C824 689 1199 607 1576 630 C1837 645 1982 514 2220 427" stroke="#1c74fa" stroke-width="46" fill="none" opacity=".10"/>
+<path d="M316 762 C770 704 1178 602 1561 628 C1831 645 1996 513 2242 426" stroke="url(#edgeBottom)" stroke-width="5" fill="none" filter="url(#glow)"/>
+<path d="M394 751 C877 689 1236 604 1569 627 C1836 642 2018 504 2227 424" stroke="#8cbbff" stroke-width="1.4" opacity=".22" fill="none"/>
+<g transform="translate(100,50)" filter="url(#shadow)">
+  <ellipse cx="488" cy="308" rx="269" ry="78" transform="rotate(-13 488 308)" fill="none" stroke="#ffc876" stroke-width="7" opacity=".27" filter="url(#softglow)"/>
+  <ellipse cx="488" cy="308" rx="269" ry="78" transform="rotate(-13 488 308)" fill="none" stroke="url(#orbit)" stroke-width="3.2"/>
+  <path d="M268 144 C325 142 364 145 400 175 C439 211 464 275 499 332 C516 360 529 375 556 366 C518 399 491 402 466 382 C443 364 429 334 408 300 L310 162 C301 150 282 147 268 144 Z" fill="url(#blueV)"/>
+  <path d="M268 144 C331 140 362 150 397 178" fill="none" stroke="#78d9ff" stroke-width="4" opacity=".95"/>
+  <path d="M556 366 C594 348 614 307 641 262 L709 153 L790 153 C729 235 685 311 629 389 C598 434 559 440 529 423 C502 408 493 388 489 374 C508 390 525 390 556 366 Z" fill="url(#goldV)"/>
+  <path d="M708 154 L790 153 C746 211 707 278 667 329" fill="none" stroke="#fff4cb" stroke-width="3" opacity=".8"/>
+  <path d="M474 391 C513 423 555 434 597 408" fill="none" stroke="#38b9ff" stroke-width="4" opacity=".78" filter="url(#glow)"/>
+  <ellipse cx="681" cy="286" rx="14" ry="14" fill="#ffe1a2" filter="url(#glow)"/>
+  <circle cx="681" cy="286" r="6" fill="#fff8d8"/>
+</g>
+<g font-family="Inter,Segoe UI,Arial,Helvetica,sans-serif" text-anchor="middle">
+  <text x="1441" y="365" font-size="153" letter-spacing="29" font-weight="500" fill="url(#goldText)">VELION</text>
+  <path d="M894 431 H998" stroke="url(#orbit)" stroke-width="2.7" opacity=".88"/>
+  <text x="1441" y="445" font-size="40" letter-spacing=".5" fill="#f7f0df">Intelligence architecture for IMPERIAL Core.</text>
+  <path d="M1886 431 H1989" stroke="url(#orbit)" stroke-width="2.7" opacity=".88"/>
+</g>
+</svg>
