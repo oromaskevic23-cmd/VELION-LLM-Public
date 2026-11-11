@@ -212,6 +212,18 @@ test('GGUF incomplete model response fails closed and the context is released', 
   assert.equal(state.disposed, 1);
 });
 
+test('other GGUF stop reasons are not falsely reported as token-limit exhaustion', async t => {
+  const {path}=await fixture(t),{state,runtime}=runtimeFixture();
+  const service=await createLocalGgufService({accessToken:TOKEN,modelPath:path,expectedSha256:hash,
+    loadRuntime:async()=>runtime});
+  t.after(()=>service.dispose());
+  for(const reason of ['abort','functionCalls','customStopTrigger','unexpected']){
+    state.stopReason=reason;
+    await assert.rejects(service.chat(text),{code:'CHAT_MODEL_RESPONSE_INVALID'});
+  }
+  assert.equal(state.disposed,4);
+});
+
 test('GGUF cancellation reaches the model and frees its context', async (t) => {
   const { path } = await fixture(t);
   const { state, runtime } = runtimeFixture();
