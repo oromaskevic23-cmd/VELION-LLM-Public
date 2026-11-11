@@ -137,12 +137,14 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
           result.message?.role !== 'assistant' ||
           typeof result.message.content !== 'string' ||
           !result.message.content.trim() ||
-          result.message.content.length > 4000 ||
-          (Object.hasOwn(result, 'done_reason') && result.done_reason !== 'stop')
+          result.message.content.length > 4000
         )
           throw error('CHAT_MODEL_RESPONSE_INVALID');
+        if (Object.hasOwn(result, 'done_reason') && result.done_reason !== 'stop')
+          throw error(result.done_reason === 'length'
+            ? 'CHAT_MODEL_RESPONSE_INCOMPLETE' : 'CHAT_MODEL_RESPONSE_INVALID');
         if (responseFormat && !validateTaskDraftText(result.message.content))
-          throw error('CHAT_MODEL_RESPONSE_INVALID');
+          throw error('CHAT_MODEL_RESPONSE_SCHEMA_INVALID');
         const finished = Date.now();
         return {
           answer: result.message.content,
@@ -172,3 +174,4 @@ export function localChatServiceFromEnv(env = process.env) {
   if (env.IMPERIAL_CHAT_LOCAL_ONLY !== 'YES') return null;
   return createLocalChatService({ accessToken: env.VELION_CHAT_TOKEN, model: env.VELION_LOCAL_MODEL });
 }
+
