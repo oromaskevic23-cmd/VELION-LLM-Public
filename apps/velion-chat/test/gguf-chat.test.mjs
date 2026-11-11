@@ -156,7 +156,7 @@ test('structured draft mode is opt-in, bounded and actually passes the grammar t
   assert.equal(result.receipt.responseFormat,TASK_DRAFT_FORMAT);
   assert.equal(result.receipt.schemaSha256,TASK_DRAFT_SCHEMA_SHA256);
   state.answer='```json\n{}\n```';
-  await assert.rejects(enabled.chat(text,{responseFormat:TASK_DRAFT_FORMAT}),{code:'CHAT_MODEL_RESPONSE_INVALID'});
+  await assert.rejects(enabled.chat(text,{responseFormat:TASK_DRAFT_FORMAT}),{code:'CHAT_MODEL_RESPONSE_SCHEMA_INVALID'});
 });
 
 test('GGUF conversation isolates each context, preserves turns and identifies the real adapter', async (t) => {
@@ -208,7 +208,7 @@ test('GGUF incomplete model response fails closed and the context is released', 
     loadRuntime: async () => runtime,
   });
   t.after(() => service.dispose());
-  await assert.rejects(service.chat(text), { code: 'CHAT_MODEL_RESPONSE_INVALID' });
+  await assert.rejects(service.chat(text), { code: 'CHAT_MODEL_RESPONSE_INCOMPLETE' });
   assert.equal(state.disposed, 1);
 });
 
@@ -230,3 +230,4 @@ test('GGUF cancellation reaches the model and frees its context', async (t) => {
   await assert.rejects(pending, { code: 'CHAT_CANCELLED' });
   assert.equal(state.disposed, 1);
 });
+
