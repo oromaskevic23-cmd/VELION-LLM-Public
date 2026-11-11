@@ -1,6 +1,10 @@
 # VELION ⚡️
 
 <p align="center">
+  <img src="assets/velion-brand-banner-20261111.svg" alt="VELION — Intelligence architecture for IMPERIAL Core; blue and gold V emblem" width="100%" />
+</p>
+
+<p align="center">
   <img src="https://raw.githubusercontent.com/oromaskevic23-cmd/oromaskevic23-cmd/main/assets/alexander-romaskevich-portrait-20261110.jpg" alt="Alexander Nikolaevich Romaskevich, Founder, Owner and CEO of IMPERIAL Core" width="160" />
 </p>
 
