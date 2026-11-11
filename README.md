@@ -1,7 +1,7 @@
 # VELION ⚡️
 
 <p align="center">
-  <img src="assets/velion-brand-banner-20261111.svg" alt="VELION — Intelligence architecture for IMPERIAL Core; blue and gold V emblem" width="100%" />
+  <img src="assets/velion-brand-banner-approved-20261111.jpg" alt="Official VELION blue-and-gold banner — original approved image" width="100%" />
 </p>
 
 <p align="center">
