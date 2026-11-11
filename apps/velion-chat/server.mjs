@@ -139,6 +139,8 @@ export function createAppServer({ localChatService = null } = {}) {
               'CHAT_MODEL_UNAVAILABLE',
               'CHAT_MODEL_HTTP_FAILED',
               'CHAT_MODEL_RESPONSE_INVALID',
+              'CHAT_MODEL_RESPONSE_INCOMPLETE',
+              'CHAT_MODEL_RESPONSE_SCHEMA_INVALID',
               'CHAT_MODEL_RESPONSE_TOO_LARGE',
             ].includes(code)
               ? code
@@ -193,3 +195,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     process.stdout.write('VELION local chat listening on http://127.0.0.1:' + port + '\n');
   });
 }
+
