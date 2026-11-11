@@ -87,7 +87,7 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
         JSON.stringify({
           model: modelName,
           done: true,
-          done_reason: finished ? 'stop' : 'length',
+          done_reason: finished ? 'stop' : result.stopReason === 'maxTokens' ? 'length' : 'other',
           message: { role: 'assistant', content: result.responseText },
         }),
         { headers: { 'Content-Type': 'application/json' } },
@@ -128,3 +128,4 @@ export async function ggufServiceFromEnv(env = process.env) {
     enableStructured: env.VELION_GGUF_STRUCTURED_DRAFT === 'YES',
   });
 }
+

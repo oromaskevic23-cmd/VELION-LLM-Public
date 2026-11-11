@@ -67,6 +67,7 @@ const translations = {
     busy: 'Модель обрабатывает другой запрос.',
     unavailable: 'Локальная модель недоступна. Проверьте сервер модели.',
     invalid: 'Запрос или ответ модели не прошёл проверку.',
+    incomplete: 'Модель остановилась до завершения ответа. Проверьте ограничение длины ответа.',
     failed: 'Не удалось получить ответ. Проверьте локальный сервер.',
     storageError: 'Не удалось сохранить историю в браузере.',
     copy: 'Копировать',
@@ -139,6 +140,7 @@ const translations = {
     busy: 'The model is handling another request.',
     unavailable: 'The local model is unavailable. Check the model server.',
     invalid: 'The request or model response failed validation.',
+    incomplete: 'The model stopped before finishing its response. Check the output limit.',
     failed: 'Could not get a response. Check the local server.',
     storageError: 'Could not save conversation history in this browser.',
     copy: 'Copy',
@@ -211,6 +213,7 @@ const translations = {
     busy: 'Модель обробляє інший запит.',
     unavailable: 'Локальна модель недоступна. Перевірте сервер моделі.',
     invalid: 'Запит або відповідь моделі не пройшли перевірку.',
+    incomplete: 'Модель зупинилася до завершення відповіді. Перевірте обмеження довжини.',
     failed: 'Не вдалося отримати відповідь. Перевірте локальний сервер.',
     storageError: 'Не вдалося зберегти історію в браузері.',
     copy: 'Копіювати',
@@ -747,6 +750,8 @@ $('#chat-form').addEventListener('submit', async (event) => {
         CHAT_MODEL_HTTP_FAILED: 'unavailable',
         CHAT_INVALID_MESSAGES: 'invalid',
         CHAT_MODEL_RESPONSE_INVALID: 'invalid',
+        CHAT_MODEL_RESPONSE_SCHEMA_INVALID: 'invalid',
+        CHAT_MODEL_RESPONSE_INCOMPLETE: 'incomplete',
         CHAT_MODEL_RESPONSE_TOO_LARGE: 'invalid',
       };
       throw Object.assign(Error('Request failed'), { display: errors[data.code] || 'failed' });
@@ -787,3 +792,4 @@ restore();
 setSidebar(!mobileLayout.matches);
 translate();
 setStatus('ready');
+
