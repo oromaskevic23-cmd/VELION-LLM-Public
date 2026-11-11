@@ -179,12 +179,15 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   const port = Number(process.env.PORT ?? 4174);
   if (!Number.isInteger(port) || port < 0 || port > 65535) throw TypeError('Invalid PORT');
   const backend = process.env.VELION_LOCAL_BACKEND ?? 'ollama';
-  if (!['ollama', 'gguf'].includes(backend)) throw Error('CHAT_BACKEND_INVALID');
+  if (!['ollama', 'gguf', 'openjarvis'].includes(backend)) throw Error('CHAT_BACKEND_INVALID');
   let localChatService = null;
   if (process.env.IMPERIAL_CHAT_LOCAL_ONLY === 'YES') {
     if (backend === 'gguf') {
       const { ggufServiceFromEnv } = await import('./native-gguf/gguf-chat.mjs');
       localChatService = await ggufServiceFromEnv();
+    } else if (backend === 'openjarvis') {
+      const { openJarvisServiceFromEnv } = await import('./openjarvis-chat.mjs');
+      localChatService = openJarvisServiceFromEnv();
     } else {
       localChatService = localChatServiceFromEnv();
     }
@@ -193,3 +196,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     process.stdout.write('VELION local chat listening on http://127.0.0.1:' + port + '\n');
   });
 }
+
