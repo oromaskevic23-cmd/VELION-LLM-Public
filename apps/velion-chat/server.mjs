@@ -1,11 +1,11 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
 // Local development interface only; this is not an internet-facing production server.
+import { privatePhoneBridgeFromEnv, isAuthorizedPrivatePhoneRequest } from './private-phone-bridge.mjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { localChatServiceFromEnv } from './chat-service.mjs';
-import { privatePhoneBridgeFromEnv, isAuthorizedPrivatePhoneRequest } from './private-phone-bridge.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'public');
 const routes = new Map([
@@ -199,3 +199,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     process.stdout.write('VELION local chat listening on http://127.0.0.1:' + port + '\n');
   });
 }
+
