@@ -1,5 +1,3 @@
-# VELION ⚡️
-
 <p align="center">
   <img src="assets/velion-brand-banner-approved-20261111.jpg" alt="Official VELION blue-and-gold banner — original approved image" width="100%" />
 </p>
