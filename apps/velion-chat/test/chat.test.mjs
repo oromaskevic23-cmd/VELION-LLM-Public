@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { once } from 'node:events';
 import { createLocalChatService, localChatServiceFromEnv } from '../chat-service.mjs';
 import { createAppServer } from '../server.mjs';
+import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA_SHA256,validateTaskDraftText} from '../task-draft-schema.mjs';
 
 const TOKEN = 'fixture-token-for-local-chat-tests-123456';
 const MODEL = 'example-local:1b';
@@ -209,4 +210,29 @@ test('HTTP chat enforces origin, authentication, content type and validated mess
   const result = await ok.json();
   assert.equal(result.answer, 'Hello, Architect.');
   assert.equal(calls, 1);
+});
+
+test('fixed task output schema rejects invalid model text and unsafe schema substitutions',async t=>{
+  const valid={schema:TASK_DRAFT_FORMAT,summary:'Synthetic',steps:[{id:'build',action:'Build',acceptance:'Review'}],
+    files:[{path:'app.mjs',content:'export const x=1;'},
+      {path:'test/app.test.mjs',content:'export const y=1;'}]};
+  assert.equal(validateTaskDraftText(JSON.stringify(valid)),true);
+  for(const bad of ['```json\n{}\n```',JSON.stringify({...valid,extra:true}),
+    JSON.stringify({...valid,files:[valid.files[1],valid.files[0]]}),
+    JSON.stringify({...valid,steps:[{...valid.steps[0],id:'other'}]})])
+    assert.equal(validateTaskDraftText(bad),false);
+  let calls=0;
+  const service=createLocalChatService({accessToken:TOKEN,model:MODEL,enableStructured:true,
+    fetchImpl:async(_url,options)=>{calls++;assert.equal(JSON.parse(options.body).format,TASK_DRAFT_FORMAT);
+      return mockResponse(JSON.stringify(valid));}});
+  const origin=await setup(service,t);
+  const request=body=>fetch(origin+'/api/chat',{method:'POST',headers:headers(origin),body:JSON.stringify(body)});
+  assert.equal((await request({messages:MESSAGE,responseFormat:'any-schema'})).status,400);
+  assert.equal((await request({messages:MESSAGE,responseFormat:TASK_DRAFT_FORMAT,schema:{}})).status,400);
+  assert.equal(calls,0);
+  const response=await request({messages:MESSAGE,responseFormat:TASK_DRAFT_FORMAT});
+  assert.equal(response.status,200);const result=await response.json();
+  assert.equal(result.receipt.responseFormat,TASK_DRAFT_FORMAT);
+  assert.equal(result.receipt.schemaSha256,TASK_DRAFT_SCHEMA_SHA256);
+  assert.equal(calls,1);
 });

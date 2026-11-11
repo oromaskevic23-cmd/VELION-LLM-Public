@@ -5,6 +5,7 @@ import { mkdtemp, rm, writeFile, symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createLocalGgufService, ggufServiceFromEnv } from '../native-gguf/gguf-chat.mjs';
+import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA_SHA256} from '../task-draft-schema.mjs';
 
 const TOKEN = 'fixture-token-for-local-chat-tests-123456';
 const bytes = Buffer.from('synthetic model file, not a real GGUF');
@@ -26,11 +27,16 @@ function runtimeFixture() {
     options: [],
     stopReason: 'eogToken',
     block: false,
+    answer: 'Hello from a fixture.',
+    grammar: null,
   };
   const runtime = {
     async getLlama(opts) {
       assert.deepEqual(opts, { gpu: false, build: 'never' });
       return {
+        async createGrammarForJsonSchema(schema) {
+          state.grammar={schema};return state.grammar;
+        },
         async loadModel(args) {
           state.loads++;
           assert.equal(args.gpuLayers, 0);
@@ -68,7 +74,7 @@ function runtimeFixture() {
           await new Promise((_resolve, reject) =>
             options.signal.addEventListener('abort', () => reject(Error('aborted')), { once: true }),
           );
-        return { stopReason: state.stopReason, responseText: 'Hello from a fixture.' };
+        return { stopReason: state.stopReason, responseText: state.answer };
       }
       dispose() {}
     },
@@ -129,6 +135,28 @@ test('optional local GGUF output limit is bounded and selected at startup', asyn
   t.after(()=>service.dispose());
   await service.chat(text);
   assert.equal(state.options[0].options.maxTokens,1024);
+});
+
+test('structured draft mode is opt-in, bounded and actually passes the grammar to generation', async t=>{
+  const {path}=await fixture(t),{state,runtime}=runtimeFixture();
+  const disabled=await createLocalGgufService({accessToken:TOKEN,modelPath:path,expectedSha256:hash,
+    loadRuntime:async()=>runtime});
+  t.after(()=>disabled.dispose());
+  await assert.rejects(disabled.chat(text,{responseFormat:TASK_DRAFT_FORMAT}),{code:'CHAT_FORMAT_DISABLED'});
+  assert.equal(state.contexts,0);
+  const enabled=await createLocalGgufService({accessToken:TOKEN,modelPath:path,expectedSha256:hash,
+    enableStructured:true,loadRuntime:async()=>runtime});
+  t.after(()=>enabled.dispose());
+  const draft={schema:TASK_DRAFT_FORMAT,summary:'Synthetic',steps:[{id:'build',action:'Build',acceptance:'Review'}],
+    files:[{path:'app.mjs',content:'export const x=1;'},
+      {path:'test/app.test.mjs',content:'export const y=1;'}]};
+  state.answer=JSON.stringify(draft);
+  const result=await enabled.chat(text,{responseFormat:TASK_DRAFT_FORMAT});
+  assert.equal(state.options.at(-1).options.grammar,state.grammar);
+  assert.equal(result.receipt.responseFormat,TASK_DRAFT_FORMAT);
+  assert.equal(result.receipt.schemaSha256,TASK_DRAFT_SCHEMA_SHA256);
+  state.answer='```json\n{}\n```';
+  await assert.rejects(enabled.chat(text,{responseFormat:TASK_DRAFT_FORMAT}),{code:'CHAT_MODEL_RESPONSE_INVALID'});
 });
 
 test('GGUF conversation isolates each context, preserves turns and identifies the real adapter', async (t) => {

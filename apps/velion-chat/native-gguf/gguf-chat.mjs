@@ -5,6 +5,7 @@ import { createReadStream } from 'node:fs';
 import { lstat } from 'node:fs/promises';
 import { isAbsolute } from 'node:path';
 import { createLocalChatService } from '../chat-service.mjs';
+import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA} from '../task-draft-schema.mjs';
 
 const fail = (code) => Object.assign(new Error(code), { code });
 
@@ -15,13 +16,14 @@ async function hashModel(path) {
 }
 
 // The injectable runtime is for deterministic tests; production uses the pinned optional package.
-export async function createLocalGgufService({ accessToken, modelPath, expectedSha256, maxTokens = 512, loadRuntime } = {}) {
+export async function createLocalGgufService({ accessToken, modelPath, expectedSha256, maxTokens = 512, enableStructured = false, loadRuntime } = {}) {
   if (
     typeof modelPath !== 'string' ||
     !isAbsolute(modelPath) ||
     typeof expectedSha256 !== 'string' ||
     !/^[a-f0-9]{64}$/.test(expectedSha256) ||
-    !Number.isSafeInteger(maxTokens) || maxTokens < 64 || maxTokens > 1024
+    !Number.isSafeInteger(maxTokens) || maxTokens < 64 || maxTokens > 1024 ||
+    typeof enableStructured !== 'boolean'
   )
     throw fail('GGUF_CONFIGURATION_INVALID');
   // Validate the same access token before reading or loading a model.
@@ -44,11 +46,12 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
 
   const runtime = loadRuntime ? await loadRuntime() : await import('node-llama-cpp');
   const llama = await runtime.getLlama({ gpu: false, build: 'never' });
-  let model;
+  let model, grammar;
   try {
     model = await llama.loadModel({ modelPath, gpuLayers: 0 });
+    if (enableStructured) grammar = await llama.createGrammarForJsonSchema(TASK_DRAFT_SCHEMA);
   } catch (cause) {
-    await llama.dispose();
+    try { if(model) await model.dispose(); } finally { await llama.dispose(); }
     throw cause;
   }
   let disposed = false;
@@ -76,6 +79,7 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
         temperature: 0.2,
         signal: options.signal,
         stopOnAbortSignal: false,
+        ...(payload.format === TASK_DRAFT_FORMAT ? {grammar} : {}),
       });
       if (options.signal.aborted) throw fail('GGUF_CANCELLED');
       const finished = ['eogToken', 'stopGenerationTrigger'].includes(result.stopReason);
@@ -96,7 +100,7 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
       }
     }
   };
-  const base = createLocalChatService({ accessToken, model: modelName, fetchImpl });
+  const base = createLocalChatService({ accessToken, model: modelName, fetchImpl, enableStructured });
   return Object.freeze({
     authenticate: base.authenticate,
     async chat(messages, options) {
@@ -114,10 +118,13 @@ export async function createLocalGgufService({ accessToken, modelPath, expectedS
 
 export async function ggufServiceFromEnv(env = process.env) {
   if (env.IMPERIAL_CHAT_LOCAL_ONLY !== 'YES') return null;
+  if (env.VELION_GGUF_STRUCTURED_DRAFT !== undefined && !['YES','NO'].includes(env.VELION_GGUF_STRUCTURED_DRAFT))
+    throw fail('GGUF_CONFIGURATION_INVALID');
   return createLocalGgufService({
     accessToken: env.VELION_CHAT_TOKEN,
     modelPath: env.VELION_GGUF_PATH,
     expectedSha256: env.VELION_GGUF_SHA256,
     maxTokens: env.VELION_GGUF_MAX_TOKENS === undefined ? 512 : Number(env.VELION_GGUF_MAX_TOKENS),
+    enableStructured: env.VELION_GGUF_STRUCTURED_DRAFT === 'YES',
   });
 }

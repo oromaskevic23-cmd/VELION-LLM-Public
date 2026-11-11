@@ -5,6 +5,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { localChatServiceFromEnv } from './chat-service.mjs';
+import { TASK_DRAFT_FORMAT } from './task-draft-schema.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'public');
 const routes = new Map([
@@ -110,7 +111,8 @@ export function createAppServer({ localChatService = null } = {}) {
         !input ||
         typeof input !== 'object' ||
         Array.isArray(input) ||
-        Object.keys(input).join('|') !== 'messages'
+        !['messages','messages|responseFormat'].includes(Object.keys(input).sort().join('|')) ||
+        (input.responseFormat !== undefined && input.responseFormat !== TASK_DRAFT_FORMAT)
       ) {
         reply(res, 400, { code: 'INVALID_REQUEST' });
         return;
@@ -121,15 +123,18 @@ export function createAppServer({ localChatService = null } = {}) {
       };
       res.once('close', cancel);
       try {
-        const result = await localChatService.chat(input.messages, { signal: controller.signal });
+        const result = await localChatService.chat(input.messages, { signal: controller.signal, responseFormat:input.responseFormat });
         if (!controller.signal.aborted) reply(res, 200, result);
       } catch (cause) {
         if (!controller.signal.aborted) {
           const code = cause?.code,
-            status = code === 'CHAT_INVALID_MESSAGES' ? 400 : code === 'CHAT_BUSY' ? 409 : 502;
+            status = ['CHAT_INVALID_MESSAGES','CHAT_FORMAT_INVALID'].includes(code) ? 400 :
+              code === 'CHAT_FORMAT_DISABLED' ? 503 : code === 'CHAT_BUSY' ? 409 : 502;
           reply(res, status, {
             code: [
               'CHAT_INVALID_MESSAGES',
+              'CHAT_FORMAT_INVALID',
+              'CHAT_FORMAT_DISABLED',
               'CHAT_BUSY',
               'CHAT_MODEL_UNAVAILABLE',
               'CHAT_MODEL_HTTP_FAILED',

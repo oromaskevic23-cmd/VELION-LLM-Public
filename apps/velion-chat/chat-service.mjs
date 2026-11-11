@@ -1,6 +1,7 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
 // Local conversation adapter: no tools, code execution, privileged actions or remote fallback.
 import { createHash, timingSafeEqual } from 'node:crypto';
+import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA_SHA256,validateTaskDraftText} from './task-draft-schema.mjs';
 
 const MODEL_URL = 'http://127.0.0.1:11434/api/chat';
 const MODEL_NAME = /^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,90}$/;
@@ -71,7 +72,7 @@ async function readBounded(response) {
   }
 }
 
-export function createLocalChatService({ accessToken, model, fetchImpl = fetch, timeoutMs = 90000 } = {}) {
+export function createLocalChatService({ accessToken, model, fetchImpl = fetch, timeoutMs = 90000, enableStructured = false } = {}) {
   if (
     typeof accessToken !== 'string' ||
     !/^[A-Za-z0-9_-]{32,128}$/.test(accessToken) ||
@@ -82,7 +83,7 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
     typeof fetchImpl !== 'function' ||
     !Number.isSafeInteger(timeoutMs) ||
     timeoutMs < 1000 ||
-    timeoutMs > 120000
+    timeoutMs > 120000 || typeof enableStructured !== 'boolean'
   )
     throw error('CHAT_CONFIGURATION_INVALID');
   const expected = Buffer.from(accessToken, 'utf8');
@@ -93,8 +94,10 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
       const supplied = Buffer.from(header.slice(7), 'utf8');
       return supplied.length === expected.length && timingSafeEqual(supplied, expected);
     },
-    async chat(messages, { signal } = {}) {
+    async chat(messages, { signal, responseFormat } = {}) {
       const clean = validateMessages(messages);
+      if (responseFormat !== undefined && responseFormat !== TASK_DRAFT_FORMAT) throw error('CHAT_FORMAT_INVALID');
+      if (responseFormat && !enableStructured) throw error('CHAT_FORMAT_DISABLED');
       if (busy) throw error('CHAT_BUSY');
       busy = true;
       try {
@@ -104,6 +107,7 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
           stream: false,
           messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...clean],
           options: { num_predict: 1024 },
+          ...(responseFormat ? {format:responseFormat} : {}),
         };
         let response;
         try {
@@ -137,6 +141,8 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
           (Object.hasOwn(result, 'done_reason') && result.done_reason !== 'stop')
         )
           throw error('CHAT_MODEL_RESPONSE_INVALID');
+        if (responseFormat && !validateTaskDraftText(result.message.content))
+          throw error('CHAT_MODEL_RESPONSE_INVALID');
         const finished = Date.now();
         return {
           answer: result.message.content,
@@ -152,6 +158,7 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
             outcome: 'MODEL_RESPONSE_RECEIVED',
             toolAccess: 'NONE',
             approval: 'NOT_GRANTED',
+            ...(responseFormat ? {responseFormat,schemaSha256:TASK_DRAFT_SCHEMA_SHA256} : {}),
           },
         };
       } finally {

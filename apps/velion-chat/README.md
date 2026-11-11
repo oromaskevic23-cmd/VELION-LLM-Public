@@ -87,6 +87,14 @@ higher value can take longer; the existing timeout and response-size limits
 still apply. Incomplete responses fail closed. This is a local operator setting,
 not a caller-controlled parameter.
 
+For an explicitly enabled, local CONSTRUCTOR AI experiment, set
+`VELION_GGUF_STRUCTURED_DRAFT=YES` before starting the GGUF server. The fixed
+`constructor_draft_v1` format uses a pinned JSON grammar and an independent
+shape check; callers cannot supply an arbitrary schema. It is disabled by
+default and does not affect ordinary chat. The format constrains syntax, not
+correctness, safety, execution permission or release. The generated source
+remains untrusted and must still pass Constructor's quarantine and separate QA.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
