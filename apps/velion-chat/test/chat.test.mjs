@@ -123,13 +123,29 @@ test('provider failures, mismatched or oversized responses fail closed', async (
     [() => Promise.resolve(new Response('', { status: 503 })), 'CHAT_MODEL_HTTP_FAILED'],
     [() => Promise.resolve(mockResponse('ok', { model: 'different' })), 'CHAT_MODEL_RESPONSE_INVALID'],
     [() => Promise.resolve(mockResponse('ok', { done: false })), 'CHAT_MODEL_RESPONSE_INVALID'],
-    [() => Promise.resolve(mockResponse('ok', { done_reason: 'length' })), 'CHAT_MODEL_RESPONSE_INVALID'],
+    [() => Promise.resolve(mockResponse('ok', { done_reason: 'length' })), 'CHAT_MODEL_RESPONSE_INCOMPLETE'],
+    [() => Promise.resolve(mockResponse('ok', { done_reason: 'unexpected' })), 'CHAT_MODEL_RESPONSE_INVALID'],
     [() => Promise.resolve(mockResponse('x'.repeat(4001))), 'CHAT_MODEL_RESPONSE_INVALID'],
     [() => Promise.resolve(new Response('x'.repeat(65537))), 'CHAT_MODEL_RESPONSE_TOO_LARGE'],
   ];
   for (const [fetchImpl, code] of cases) {
     const service = createLocalChatService({ accessToken: TOKEN, model: MODEL, fetchImpl });
     await assert.rejects(service.chat(MESSAGE), { code });
+  }
+});
+
+test('HTTP reports bounded model diagnostic codes without exposing provider details', async t => {
+  for (const code of ['CHAT_MODEL_RESPONSE_INCOMPLETE','CHAT_MODEL_RESPONSE_SCHEMA_INVALID']) {
+    const service={
+      authenticate:()=>true,
+      chat:async()=>{throw Object.assign(Error('private provider text'),{code});}
+    };
+    const origin=await setup(service,t);
+    const response=await post(origin);
+    assert.equal(response.status,502);
+    const text=await response.text();
+    assert.deepEqual(JSON.parse(text),{code});
+    assert.equal(text.includes('private provider text'),false);
   }
 });
 
@@ -236,3 +252,4 @@ test('fixed task output schema rejects invalid model text and unsafe schema subs
   assert.equal(result.receipt.schemaSha256,TASK_DRAFT_SCHEMA_SHA256);
   assert.equal(calls,1);
 });
+
