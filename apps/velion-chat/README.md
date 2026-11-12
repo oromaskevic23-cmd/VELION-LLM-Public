@@ -11,6 +11,16 @@ Two explicit local backends are available: an existing Ollama service or an
 optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
 automatic fallback between them.
 
+## Private phone test (opt-in, not deployed)
+
+An optional, **private tailnet-only** HTTPS reverse-proxy proof has been added
+for an owner-controlled phone. It keeps the Node server bound to loopback,
+requires the matching Tailscale Serve identity, exact HTTPS Origin and the
+existing bearer token, and is disabled by default. It is not internet-facing,
+not a native app and not device-verified. Do not use Tailscale Funnel or
+production data. Read [the security boundary and operator test runbook](PRIVATE_PHONE_TEST.md)
+before configuring anything. No cloud service is launched by these changes.
+
 ## Run with an existing Ollama service
 
 Requires Node.js 22 or later and a separately installed, running Ollama service

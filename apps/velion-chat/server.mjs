@@ -1,5 +1,6 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
 // Local development interface only; this is not an internet-facing production server.
+import { privatePhoneBridgeFromEnv, isAuthorizedPrivatePhoneRequest } from './private-phone-bridge.mjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -42,7 +43,7 @@ function readBody(req) {
   });
 }
 
-export function createAppServer({ localChatService = null } = {}) {
+export function createAppServer({ localChatService = null, privatePhoneBridge = null } = {}) {
   const server = createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'no-referrer');
@@ -52,6 +53,16 @@ export function createAppServer({ localChatService = null } = {}) {
       'Content-Security-Policy',
       "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     );
+    // Only a local Tailscale Serve reverse proxy with the permitted user identity can use the phone origin.
+    if (
+      privatePhoneBridge &&
+      req.headers.host === privatePhoneBridge.host &&
+      !isAuthorizedPrivatePhoneRequest(req, privatePhoneBridge)
+    ) {
+      req.resume();
+      reply(res, 403, { code: 'TAILNET_IDENTITY_REQUIRED' });
+      return;
+    }
     let pathname;
     try {
       pathname = new URL(req.url, 'http://localhost').pathname;
@@ -74,11 +85,11 @@ export function createAppServer({ localChatService = null } = {}) {
       const addr = server.address(),
         remote = req.socket.remoteAddress;
       const authority = addr && typeof addr === 'object' ? '127.0.0.1:' + addr.port : '';
-      if (
-        !['127.0.0.1', '::ffff:127.0.0.1'].includes(remote) ||
-        req.headers.host !== authority ||
-        req.headers.origin !== 'http://' + authority
-      ) {
+      const localRequest =
+        ['127.0.0.1', '::ffff:127.0.0.1'].includes(remote) &&
+        req.headers.host === authority &&
+        req.headers.origin === 'http://' + authority;
+      if (!localRequest && !isAuthorizedPrivatePhoneRequest(req, privatePhoneBridge)) {
         req.resume();
         reply(res, 403, { code: 'LOCAL_ORIGIN_REQUIRED' });
         return;
@@ -191,7 +202,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
       localChatService = localChatServiceFromEnv();
     }
   }
-  createAppServer({ localChatService }).listen(port, '127.0.0.1', () => {
+  const privatePhoneBridge = privatePhoneBridgeFromEnv();
+  createAppServer({ localChatService, privatePhoneBridge }).listen(port, '127.0.0.1', () => {
     process.stdout.write('VELION local chat listening on http://127.0.0.1:' + port + '\n');
   });
 }
