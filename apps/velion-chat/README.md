@@ -7,8 +7,9 @@ optional device-local chat history. It is a prototype, not a hosted service or
 a claim that VELION owns model weights. No third-party model is downloaded or
 activated by this repository.
 
-Two explicit local backends are available: an existing Ollama service or an
-optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
+Three explicit local backends are available: an existing Ollama service, an
+optional CPU-only GGUF runtime, or a separately operated OpenJarvis API. None
+is enabled by default, and there is no
 automatic fallback between them.
 
 ## Run with an existing Ollama service
@@ -95,6 +96,45 @@ default and does not affect ordinary chat. The format constrains syntax, not
 correctness, safety, execution permission or release. The generated source
 remains untrusted and must still pass Constructor's quarantine and separate QA.
 
+## OpenJarvis local chat adapter (experimental)
+
+This adapter is an opt-in client for a separately installed, trusted
+OpenJarvis server's `/v1/chat/completions` API. It does not install or start
+OpenJarvis, provision an inference engine, connect email or calendar, grant
+permissions, or start agents. It accepts only a fixed `127.0.0.1` endpoint,
+uses a separate API key, rejects redirects, and has no fallback to a different
+backend. The present checks use a synthetic local API; a real OpenJarvis/model
+integration has not been verified.
+
+Before enabling it, inspect the actual OpenJarvis instance and its configuration.
+Use an isolated OpenJarvis home and credential store; configure loopback,
+authenticated API access, a known local engine/model and direct engine mode
+(`[server] agent = ""`). Disable MCP servers, agent manager/scheduler, channels
+and other background services in that instance, and do not supply cloud
+credentials. The reviewed upstream source can load MCP tools and discover cloud
+credentials even when a client submits no tools. Server logs and configuration
+must be verified separately: the `trusted` environment flag is an operator
+assertion, not an automated check or security guarantee. See
+[OpenJarvis API documentation](https://open-jarvis.github.io/OpenJarvis/deployment/api-server/)
+and inspect the precise installed version.
+
+Once that server has been independently configured and checked, start VELION
+with `IMPERIAL_CHAT_LOCAL_ONLY=YES`, `VELION_LOCAL_BACKEND=openjarvis`,
+`VELION_LOCAL_MODEL` set to the model served by OpenJarvis,
+`VELION_CHAT_TOKEN` set to a fresh VELION session token, and
+`VELION_OPENJARVIS_API_KEY` set to the server's separate API key. Set
+`VELION_OPENJARVIS_PORT` only if the loopback port differs from 8000. Set
+`VELION_OPENJARVIS_TRUSTED_DIRECT_MODE=YES` only after that inspection.
+The API key must contain 32–256 letters, digits, underscores or hyphens; do not
+commit or share it. Open VELION on the same computer at the normal loopback URL.
+No remote phone access or persistent service is established by this adapter.
+
+The request contains no tool definitions. This alone does not stop a separately
+configured server-side agent from acting or prove which engine generated the
+response. Receipts therefore label server tool access and the inference backend
+as unverified. OpenJarvis structured CONSTRUCTOR AI draft requests are disabled:
+this text adapter does not provide the existing GGUF grammar or acceptance gate.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
@@ -150,6 +190,8 @@ and is not evidence of security isolation.
 - The standard test suite does not establish live inference, real microphone,
   iPhone compatibility, continuous voice conversation, 24/7 availability or
   production readiness.
+- For OpenJarvis, local access restrictions apply to the VELION endpoint; the
+  separate server's own configuration and actual engine still require review.
 
 ## Verification
 
@@ -202,3 +244,4 @@ Neither configuration is suitable for a phone-facing service on this evidence.
 
 Project author and founding architect: Alexander Nikolaevich Romaskevich
 (RomaskevicH). Third-party rights and model licenses remain separate.
+
