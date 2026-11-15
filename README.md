@@ -34,6 +34,8 @@ This image is a design concept for the desktop and mobile experience, not a scre
 
 **Synthetic training lab:** [reproducible offline intent-classifier experiment](training/intent_lab/README.md) for VELION/NCA research. It trains a small classifier, not LLM weights. Its held-out tests reveal errors on ambiguous and negated cases; it has no routing or approval authority. A [separate CPU LoRA pilot](docs/VELION_CPU_LORA_PILOT_20261030.md) trained temporary adapter parameters on a third-party model; it was not retained or deployed.
 
+**Document intelligence checkpoint (15 November 2026):** two external models completed 16 actual inference calls on eight frozen synthetic invoice texts. SmolLM2 produced 0/8 fully correct documents; Qwen produced 2/8. Neither passed quality acceptance. After targeted consistency hardening, 21/21 extraction-contract tests passed; replay retained two correct review-only candidates and rejected six. [Evaluation and limitations](docs/VELION_DOCUMENT_INTELLIGENCE_20261115.md). No proprietary weights, OCR, production deployment or independent QA claimed.
+
 ## Official IMPERIAL Core web identity
 
 **[Alexander Romaskevich — official founder site](https://oromaskevic23-cmd.github.io/oromaskevic23-cmd/)** · **[IMPERIAL Core — official ecosystem site](https://oromaskevic23-cmd.github.io/Capital-Core-Public/)**
