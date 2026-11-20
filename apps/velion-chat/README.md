@@ -4,12 +4,17 @@ VELION is a standalone IMPERIAL Core product. This increment provides a local
 conversation interface with a searchable conversation sidebar, multilingual controls,
 multi-turn text, optional browser speech recognition, response playback, and
 optional device-local chat history. It is a prototype, not a hosted service or
-a claim that VELION owns model weights. No third-party model is downloaded or
-activated by this repository.
+a claim that VELION owns model weights. The application never automatically
+downloads or activates third-party model weights. Previous one-off GitHub Actions
+engineering probes used isolated CPU inference and were removed after testing.
 
 Two explicit local backends are available: an existing Ollama service or an
 optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
 automatic fallback between them.
+
+## Optional NVIDIA Nemotron 3.5 Bolt E4B evaluation
+
+An explicitly configured **third-party** NVIDIA Nemotron 3.5 Bolt E4B 4GB (GGUF Q4_K_M) can be evaluated through the existing local Ollama adapter. Real, temporary GitHub CPU tests on 20 November 2026 gave **3/3 smoke PASS** and **14/14 strict development tasks PASS**, but review found a real coding failure among six manual cases. The added offline evidence quality gate therefore returns **BLOCKED_MANUAL_FAILURE / release DENIED** for that run. These tests did not deploy a model to a persistent VELION server or a phone. See [installation, evidence, quality gate and release limits](docs/NEMOTRON_BOLT_E4B_INTEGRATION.md). Run `npm run smoke:bolt` only after authorized local installation and explicit consent.
 
 ## Run with an existing Ollama service
 
