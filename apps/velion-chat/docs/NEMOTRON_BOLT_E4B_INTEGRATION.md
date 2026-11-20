@@ -52,3 +52,19 @@ To use the existing UI, follow the existing README token/session instructions an
 VELION remains the intelligence core. HANTER is the AI Command Center; federated orchestrators and scoped Nano Core Agents remain independently governed. The optional NVIDIA backend does not receive privileges or alter AI Passport, Enterprise Skills, Guardian Core, Approval Gateway, Audit Ledger, Zero Trust, Owner Kill Switch, Public/Private Boundary or CRYPTO IMPERIAL Ecosystem Boundary.
 
 **Acceptance:** record exact source commit, installed local digest, hardware, RAM, model/runner versions, latency, output-token counts, pass/fail results and any free-tier resource costs. Treat code-level checks as code-level checks, not inference benchmarks. Keep release and deployments denied until independent QA and Owner authorization.
+
+## Mandatory development quality review (fail closed)
+
+The 20-case benchmark has 14 strictly scored and 6 manually evaluated questions. Its automatic 14/14 PASS does NOT authorize deployment or autonomous software development. The 2026-11-20 real NVIDIA Bolt run had one observed programming failure.
+
+The offline quality gate in `tools/intelligence-quality-gate.mjs` re-scores all 14 automatic cases, checks case ordering, receipt-bound input/output hashes, model identity and source-suite digest, and requires individual answer-SHA-bound manual review. Any missing review or manual FAIL blocks acceptance. Review annotations are unsigned development observations, NOT an independent QA attestation or Owner Approval Gateway.
+
+For the original raw GitHub Actions artifact download containing `bolt-intelligence-report.json`, run this command from `apps/velion-chat`:
+
+```sh
+npm run review:intelligence -- /absolute/path/to/bolt-intelligence-report.json evidence/BOLT_MANUAL_REVIEW_20261120.json
+```
+
+The **expected** result for the real 20-case NVIDIA Bolt report is `BLOCKED_MANUAL_FAILURE`, `manualFailed: ["programming"]`, `manualPending: 5`, `release: DENIED`. The command returns nonzero. No model-generated source is executed; this evaluates evidence consistency and recorded manual disposition only.
+
+The original ZIP artifact expires after seven days; keep a controlled offline copy if the evidence must remain reproducible. A signed independent evaluation, unseen cases, safe code execution in a no-network sandbox, and explicit Owner approval are distinct prerequisites for any production release.

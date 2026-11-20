@@ -1,0 +1,14 @@
+{
+  "schema": "velion_manual_adjudication_v1",
+  "suiteSha256": "a54d41753a101a240cd9eec05afd2d67a4428c65a76f9fc6bbfd5ae5d09f0261",
+  "reportSha256": "3bacc73d10105fe4d27698247af13ba7b3668fc339fb31412533792b63858a76",
+  "reviewAuthority": "ASSISTANT_REVIEW_UNATTESTED",
+  "reviews": [
+    {
+      "id": "programming",
+      "verdict": "FAIL",
+      "answerSha256": "b3e7ffc9612a32f4c1654e566a8c7e48490b2da679b17342b9496220349bf572",
+      "reason": "The model generated a function that sums only even numbers and silently ignores invalid values; the request required summing every finite value and rejecting all invalid entries."
+    }
+  ]
+}
