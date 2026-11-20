@@ -11,6 +11,10 @@ Two explicit local backends are available: an existing Ollama service or an
 optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
 automatic fallback between them.
 
+## Optional NVIDIA Nemotron 3.5 Bolt E4B evaluation
+
+An explicitly configured **third-party** NVIDIA Nemotron 3.5 Bolt E4B 4GB (GGUF Q4_K_M) can be evaluated through the existing local Ollama adapter. The separate fail-closed preflight checks the local Ollama inventory, then an opt-in smoke runner sends three synthetic real-inference requests. The weights are **not** installed by this repository; no actual Bolt inference or target-device deployment is claimed. See [installation, license, verification and limits](docs/NEMOTRON_BOLT_E4B_INTEGRATION.md). Run `npm run smoke:bolt` only after local installation and explicit consent.
+
 ## Run with an existing Ollama service
 
 Requires Node.js 22 or later and a separately installed, running Ollama service
