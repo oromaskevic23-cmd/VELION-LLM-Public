@@ -1,6 +1,6 @@
 # VELION ⚡️ × NVIDIA Nemotron 3.5 Bolt E4B 4GB — opt-in evaluation
 
-**Status (2026-11-20):** code-level preflight and a real-inference test runner are prepared. The NVIDIA model has NOT been downloaded to the user's VELION server or tested on a live model in this change. The local test suite uses mocked responses. No public VELION endpoint, iPhone compatibility or production approval is established.
+**Status (2026-11-20):** real NVIDIA Bolt weights were loaded successfully in two one-off CPU GitHub Actions runs, with **3/3 smoke PASS** and **14/14 strict development checks PASS**. A separately inspected programming response was incorrect; the new fail-closed evidence quality gate reports **BLOCKED_MANUAL_FAILURE**. Source-controlled app tests use mocks. The real model has NOT been installed on a persistent VELION server or an iPhone; there is no public endpoint, phone acceptance, independent production security attestation or release approval.
 
 **Owner:** Alexander Nikolaevich Romaskevich (RomaskevicH), Founder · Owner · CEO · Final Architectural Decision Authority, IMPERIAL Core.
 
@@ -27,7 +27,7 @@ ollama list
 
 **Independent upstream GGUF integrity reference (NVIDIA Hugging Face file page, 2026-11-20):** `Nemotron-3.5-Bolt-E4B-Q4_K_M.gguf` file SHA-256 is `c8af2b8aea10a690a1d9491db744a9446660173cb38fc489612b556615a69612` (source: https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB/blob/main/Nemotron-3.5-Bolt-E4B-Q4_K_M.gguf). This is the SHA-256 of the official GGUF **file**, not of an Ollama model manifest. The one-off Ollama inventory digest `139e7d57c1c319f8a244800512f359394c7a4dd6ae52c90bf4c2ae5a4d56cff1` is different and must not be treated as a mismatch or an independently verified file hash. Before persistent deployment, securely locate and hash the actual model blob, compare it to the trusted upstream checksum for the pinned release, and fail closed on any disagreement. This check was **not performed** by the initial 3-case workflow.
 
-Downloading weights is **never automatic in this repository**. Do not run repeated weight downloads on short-lived CI runners; do not enable Val Town, chargeable providers or paid fallback.
+The current application and retained CI workflows do **not** automatically download model weights. Two temporary one-off inference workflows pulled them on ephemeral GitHub CPU runners as test evidence and were removed from the PR after completion. Do not re-enable repeated weight downloads on short-lived CI runners; do not enable Val Town, chargeable providers or paid fallback.
 
 ## Test VELION against the installed model
 
