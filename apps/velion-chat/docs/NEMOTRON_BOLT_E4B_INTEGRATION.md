@@ -25,6 +25,8 @@ ollama pull hf.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB:Q4_K_M
 ollama list
 ```
 
+**Independent upstream GGUF integrity reference (NVIDIA Hugging Face file page, 2026-11-20):** `Nemotron-3.5-Bolt-E4B-Q4_K_M.gguf` file SHA-256 is `c8af2b8aea10a690a1d9491db744a9446660173cb38fc489612b556615a69612` (source: https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-4GB/blob/main/Nemotron-3.5-Bolt-E4B-Q4_K_M.gguf). This is the SHA-256 of the official GGUF **file**, not of an Ollama model manifest. The one-off Ollama inventory digest `139e7d57c1c319f8a244800512f359394c7a4dd6ae52c90bf4c2ae5a4d56cff1` is different and must not be treated as a mismatch or an independently verified file hash. Before persistent deployment, securely locate and hash the actual model blob, compare it to the trusted upstream checksum for the pinned release, and fail closed on any disagreement. This check was **not performed** by the initial 3-case workflow.
+
 Downloading weights is **never automatic in this repository**. Do not run repeated weight downloads on short-lived CI runners; do not enable Val Town, chargeable providers or paid fallback.
 
 ## Test VELION against the installed model
