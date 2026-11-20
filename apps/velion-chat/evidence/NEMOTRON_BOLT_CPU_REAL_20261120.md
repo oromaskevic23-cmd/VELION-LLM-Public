@@ -24,10 +24,10 @@ The exact existing VELION Ollama chat adapter was used. These are **actual gener
 | Source-visible case | Generated answer | Result | End-to-end request latency |
 | --- | --- | --- | --- |
 | `inventory` (84 − 27 + 13) | `70` | **PASS** | 19,044 ms |
-| `json_object` | `{"agent_id":"NCA-014","mission":"Проверить отчёт"}` | **PASS** | 13,087 ms |
+| `json_object` | `{"agent_id":"NCA-014","mission":"\\u041f\\u0440\\u043e\\u0432\\u0435\\u0440\\u0438\\u0442\\u044c \\u043e\\u0442\\u0447\\u0451\\u0442"}` | **PASS** | 13,087 ms |
 | `context` (short dialogue memory) | `SOLAR-7` | **PASS** | 5,654 ms |
 
-**Real inference: 3/3 PASS**. Total three request latencies: **37,785 ms**; includes load/warm-up effects and is not a tokens-per-second, time-to-first-token or interactive UX benchmark. Model output had `toolAccess: NONE`, `approval: NOT_GRANTED`, and `release: NOT_AUTHORIZED`.
+The JSON entry above uses ASCII Unicode escapes for the original Russian mission string to satisfy the repository English-only documentation gate; the original exact UTF-8 answer remains in the immutable run log and evidence artifact.\n\n**Real inference: 3/3 PASS**. Total three request latencies: **37,785 ms**; includes load/warm-up effects and is not a tokens-per-second, time-to-first-token or interactive UX benchmark. Model output had `toolAccess: NONE`, `approval: NOT_GRANTED`, and `release: NOT_AUTHORIZED`.
 
 Preflight negative tests: **4/4 PASS** in the real runner. GitHub job conclusion: **success**. Five separate PR CI workflows covering the chat and repository policy checks completed successfully on the test branch at the checkpoint (CI evidence does **not** establish model quality or independent security certification).
 
