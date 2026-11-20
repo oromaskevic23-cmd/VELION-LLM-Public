@@ -16,7 +16,8 @@ concurrency:
 
 jobs:
   bounded-real-bolt-test:
-    if: github.repository == 'oromaskevic23-cmd/VELION-LLM-Public' && github.event.head_commit.message == 'test(velion): one-shot Bolt E4B real CPU inference'
+    if: >-
+      github.repository == 'oromaskevic23-cmd/VELION-LLM-Public' && github.event.head_commit.message == 'test(velion): one-shot Bolt E4B real CPU inference'
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     env:
