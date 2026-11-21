@@ -91,7 +91,7 @@ export function createAppServer({ localChatService = null } = {}) {
         reply(res, 401, { code: 'LOCAL_ACCESS_TOKEN_REQUIRED' });
         return;
       }
-      if (!/^application\\/json(?:\\s*;\\s*charset=utf-8)?$/i.test(req.headers['content-type'] || '')) {
+      if (!/^application\/json(?:\s*;\s*charset=utf-8)?$/i.test(req.headers['content-type'] || '')) {
         req.resume();
         reply(res, 415, { code: 'JSON_REQUIRED' });
         return;
