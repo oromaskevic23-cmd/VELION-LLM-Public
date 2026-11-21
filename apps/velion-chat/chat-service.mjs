@@ -111,13 +111,13 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
       if (responseFormat !== undefined && responseFormat !== TASK_DRAFT_FORMAT) throw error('CHAT_FORMAT_INVALID');
       if (!['STANDARD', 'MAX'].includes(responseMode) || (responseMode === 'MAX' && responseFormat))
         throw error('CHAT_MODE_INVALID');
+      if (skillId !== undefined && (skillId !== CALCULATOR_SKILL_ID ||
+          responseFormat !== undefined || responseMode !== 'STANDARD'))
+        throw error('CHAT_SKILL_INVALID');
       if (responseFormat && !enableStructured) throw error('CHAT_FORMAT_DISABLED');
       if (responseMode === 'MAX' && clean.at(-1).content.length > MAX_REVIEW_CONTEXT_CHARS)
         throw error('CHAT_MAX_CONTEXT_TOO_LARGE');
       if (skillId !== undefined) {
-        if (skillId !== CALCULATOR_SKILL_ID || responseFormat !== undefined ||
-            responseMode !== 'STANDARD')
-          throw error('CHAT_SKILL_INVALID');
         if (!enableReadOnlySkills) throw error('CHAT_SKILL_DISABLED');
         // No model outputs are used as tool arguments, no execution of model code.
         // Only an exact slash command from the latest user turn is eligible.
