@@ -1,5 +1,5 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
-// Local conversation adapter: no tools, code execution, privileged actions or remote fallback.
+// Local conversation adapter: optional opt-in deterministic local /calc only; no model-triggered tools, privileged actions or remote fallback.
 import { createHash, timingSafeEqual } from 'node:crypto';
 import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA_SHA256,validateTaskDraftText} from './task-draft-schema.mjs';
 import {CALCULATOR_SKILL_ID, executeReadOnlySkill} from './read-only-skills.mjs';
