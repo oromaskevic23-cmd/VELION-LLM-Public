@@ -121,6 +121,63 @@ default and does not affect ordinary chat. The format constrains syntax, not
 correctness, safety, execution permission or release. The generated source
 remains untrusted and must still pass Constructor's quarantine and separate QA.
 
+## VELION read-only Enterprise Skill reference — `/calc`
+
+The standalone chat now includes an **explicit user-operated, deterministic
+local calculator** for exact integer/rational arithmetic. It is a minimal
+functional Enterprise Skill **reference**, not a deployed Enterprise Skills
+control plane, a model-generated autonomous tool caller or an independent
+approval gateway. The model cannot choose or execute it.
+
+To enable **only** this read-only skill in an existing local Ollama session,
+set the following before `npm start`:
+
+```sh
+export VELION_LOCAL_SKILLS=YES
+```
+
+All earlier chat configuration (including `IMPERIAL_CHAT_LOCAL_ONLY=YES`,
+`VELION_LOCAL_MODEL` and the local session token) is still required.
+The optional GGUF backend does **not** expose this skill in the current
+reference. If this flag is absent or different, all skill requests fail closed.
+
+In the text field of the VELION chat, enter an explicit command such as:
+
+```text
+/calc (2 + 3) * 4
+/calc 1/3 + 1/6
+```
+
+These return `Exact result: 20` and `Exact result: 1/2`, respectively.
+The tool handles only decimal **integers**, parentheses, unary plus/minus
+and `+ - * /`; division produces an **exact simplified fraction** when
+needed. Fractions are not decimal approximations. Expressions have a 96
+character limit, up to 12 digits per integer and bounded token/nesting/result
+sizes. Division by zero, unknown functions, float literals, code,
+unsupported schema fields and arbitrary tool identifiers are rejected.
+The command is run only from the latest explicitly submitted user text
+beginning with `/calc `. If VELION MAX is selected, this explicit
+calculator command runs as STANDARD with **zero model calls**, because an
+LLM second pass could corrupt an exact answer.
+
+A successful response includes an unsigned, ephemeral SHA-256 receipt with
+`provider=velion-local-skill`, `toolAccess=BOUNDED_LOCAL_READ_ONLY`,
+`modelCalls=0`, `approval=NOT_GRANTED` and the fixed
+`arithmetic.v1` capability. These values provide **testable local
+evidence only**; they are not AI Passport credentials, Guardian Core
+policy attestations, Approval Gateway permits, Audit Ledger entries,
+a signed proof, owner authorization or an enterprise security guarantee.
+
+**Do not expose the local server to the Internet or enter sensitive data.**
+This module deliberately has no file-system access, shell execution,
+model-initiated calls, network requests, accounts, payments or other
+privileged effects. Future real Enterprise Skills integrations need Zero
+Trust isolation, tenant-scoped AI Passport, Guardian Core, Approval
+Gateway, Audit Ledger, independent Owner Stop and security QA.
+
+See [source-level tests](test/read-only-skills.test.mjs) and
+[exact-source development evidence](../../docs/VELION_READONLY_ENTERPRISE_SKILL_20261121.md).
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
@@ -158,7 +215,9 @@ and is not evidence of security isolation.
   model request. Ollama requests use only `127.0.0.1:11434` and reject redirects;
   the optional GGUF backend runs the selected local file in the server process.
 - Generated text is rendered as text. The chat does not execute model output,
-  invoke tools, authorize payments, approve changes or launch agents.
+  invoke externally connected tools, authorize payments, approve changes or launch
+  agents. A separately enabled, strictly deterministic `/calc` local read-only
+  skill is the sole exception; it has no network or external effects.
 - The system prompt tells the model not to request or disclose credentials.
   This instruction can fail and is not a security boundary; do not enter real
   secrets into the chat. The evaluation evidence records unsafe model advice.
