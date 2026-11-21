@@ -1,7 +1,8 @@
 // Project author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
-// Local conversation adapter: no tools, code execution, privileged actions or remote fallback.
+// Local conversation adapter: optional opt-in deterministic local /calc only; no model-triggered tools, privileged actions or remote fallback.
 import { createHash, timingSafeEqual } from 'node:crypto';
 import {TASK_DRAFT_FORMAT,TASK_DRAFT_SCHEMA_SHA256,validateTaskDraftText} from './task-draft-schema.mjs';
+import {CALCULATOR_SKILL_ID, executeReadOnlySkill} from './read-only-skills.mjs';
 
 const MODEL_URL = 'http://127.0.0.1:11434/api/chat';
 const MODEL_NAME = /^[A-Za-z0-9][A-Za-z0-9_.:/-]{0,90}$/;
@@ -83,7 +84,7 @@ async function readBounded(response) {
   }
 }
 
-export function createLocalChatService({ accessToken, model, fetchImpl = fetch, timeoutMs = 90000, enableStructured = false } = {}) {
+export function createLocalChatService({ accessToken, model, fetchImpl = fetch, timeoutMs = 90000, enableStructured = false, enableReadOnlySkills = false } = {}) {
   if (
     typeof accessToken !== 'string' ||
     !/^[A-Za-z0-9_-]{32,128}$/.test(accessToken) ||
@@ -94,7 +95,7 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
     typeof fetchImpl !== 'function' ||
     !Number.isSafeInteger(timeoutMs) ||
     timeoutMs < 1000 ||
-    timeoutMs > 120000 || typeof enableStructured !== 'boolean'
+    timeoutMs > 120000 || typeof enableStructured !== 'boolean' || typeof enableReadOnlySkills !== 'boolean'
   )
     throw error('CHAT_CONFIGURATION_INVALID');
   const expected = Buffer.from(accessToken, 'utf8');
@@ -105,14 +106,44 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
       const supplied = Buffer.from(header.slice(7), 'utf8');
       return supplied.length === expected.length && timingSafeEqual(supplied, expected);
     },
-    async chat(messages, { signal, responseFormat, responseMode = 'STANDARD' } = {}) {
+    async chat(messages, { signal, responseFormat, responseMode = 'STANDARD', skillId } = {}) {
       const clean = validateMessages(messages);
       if (responseFormat !== undefined && responseFormat !== TASK_DRAFT_FORMAT) throw error('CHAT_FORMAT_INVALID');
       if (!['STANDARD', 'MAX'].includes(responseMode) || (responseMode === 'MAX' && responseFormat))
         throw error('CHAT_MODE_INVALID');
+      if (skillId !== undefined && (skillId !== CALCULATOR_SKILL_ID ||
+          responseFormat !== undefined || responseMode !== 'STANDARD'))
+        throw error('CHAT_SKILL_INVALID');
       if (responseFormat && !enableStructured) throw error('CHAT_FORMAT_DISABLED');
       if (responseMode === 'MAX' && clean.at(-1).content.length > MAX_REVIEW_CONTEXT_CHARS)
         throw error('CHAT_MAX_CONTEXT_TOO_LARGE');
+      if (skillId !== undefined) {
+        if (!enableReadOnlySkills) throw error('CHAT_SKILL_DISABLED');
+        // No model outputs are used as tool arguments, no execution of model code.
+        // Only an exact slash command from the latest user turn is eligible.
+        // This is a development reference, NOT an autonomous Enterprise Skill permit.
+        const now = new Date().toISOString();
+        const value = executeReadOnlySkill({ skillId, userText: clean.at(-1).content });
+        return {
+          answer: value.answer,
+          receipt: {
+            provider: 'velion-local-skill',
+            requestedModel: model,
+            returnedModel: null,
+            startedAt: now,
+            finishedAt: new Date().toISOString(),
+            inputSha256: sha256(JSON.stringify(clean)),
+            outputSha256: sha256(value.answer),
+            outcome: 'DETERMINISTIC_READ_ONLY_SKILL',
+            responseMode: 'STANDARD',
+            modelCalls: 0,
+            qualityVerified: false,
+            toolAccess: 'BOUNDED_LOCAL_READ_ONLY',
+            approval: 'NOT_GRANTED',
+            skill: value.skillReceipt,
+          },
+        };
+      }
       if (busy) throw error('CHAT_BUSY');
       busy = true;
       try {
@@ -218,6 +249,6 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
 
 export function localChatServiceFromEnv(env = process.env) {
   if (env.IMPERIAL_CHAT_LOCAL_ONLY !== 'YES') return null;
-  return createLocalChatService({ accessToken: env.VELION_CHAT_TOKEN, model: env.VELION_LOCAL_MODEL });
+  return createLocalChatService({ accessToken: env.VELION_CHAT_TOKEN, model: env.VELION_LOCAL_MODEL, enableReadOnlySkills: env.VELION_LOCAL_SKILLS === 'YES' });
 }
 
