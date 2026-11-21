@@ -249,6 +249,31 @@
           MAX дополнительно пересматривает ответ той же локальной моделью.
           Это не независимая проверка, не доступ к инструментам и не разрешение на действия.
         </p>
+        <section class="skill-lab" aria-labelledby="skill-lab-title">
+          <h3 id="skill-lab-title" data-i18n="skillTitle">Enterprise Skills · точный расчёт</h3>
+          <p class="hint" data-i18n="skillHint">
+            Только ручной локальный расчёт. Без доступа к файлам, сети и внешним действиям.
+          </p>
+          <form id="skill-form" autocomplete="off">
+            <label for="skill-operation" data-i18n="skillOperation">Операция</label>
+            <select id="skill-operation" required>
+              <option value="add" data-i18n="skillAdd">Сложить</option>
+              <option value="subtract" data-i18n="skillSubtract">Вычесть</option>
+              <option value="multiply" data-i18n="skillMultiply">Умножить</option>
+              <option value="divide_with_remainder" data-i18n="skillDivide">Разделить с остатком</option>
+            </select>
+            <label for="skill-left" data-i18n="skillLeft">Первое целое число</label>
+            <input id="skill-left" type="text" inputmode="numeric" maxlength="19"
+              pattern="-?(0|[1-9][0-9]{0,17})" placeholder="12" required />
+            <label for="skill-right" data-i18n="skillRight">Второе целое число</label>
+            <input id="skill-right" type="text" inputmode="numeric" maxlength="19"
+              pattern="-?(0|[1-9][0-9]{0,17})" placeholder="3" required />
+            <button id="skill-run" class="skill-run-button" type="submit" data-i18n="skillRun">
+              Рассчитать локально
+            </button>
+          </form>
+          <output id="skill-result" role="status" aria-live="polite"></output>
+        </section>
         <label class="check"
           ><input id="auto-speak" type="checkbox" /><span data-i18n="autoSpeak"
             >Озвучивать ответы</span
