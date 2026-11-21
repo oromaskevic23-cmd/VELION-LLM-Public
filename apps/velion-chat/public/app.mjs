@@ -335,6 +335,72 @@ Object.assign(translations['uk-UA'], {
   maxModeHint: 'MAX перевіряє чернетку тією ж локальною моделлю. Це не незалежна перевірка й не доступ до інструментів.',
   answeredMax: 'VELION MAX виконав два локальні проходи. Перевіряйте важливі факти й висновки.',
 });
+Object.assign(translations['ru-RU'], {
+  skillTitle: 'Enterprise Skills · точный расчёт',
+  skillHint: 'Только ручной локальный расчёт. Без доступа к сети, файлам и внешним действиям.',
+  skillOperation: 'Операция', skillAdd: 'Сложить', skillSubtract: 'Вычесть',
+  skillMultiply: 'Умножить', skillDivide: 'Разделить с остатком',
+  skillLeft: 'Первое целое число', skillRight: 'Второе целое число',
+  skillRun: 'Рассчитать локально', skillWorking: 'Выполняется локальный расчёт…',
+  skillResult: 'Результат', skillQuotient: 'Частное', skillRemainder: 'Остаток',
+  skillInvalid: 'Введите целые числа в допустимом диапазоне.',
+  skillFailed: 'Локальный расчёт недоступен или отклонён. Проверьте ключ сессии.',
+});
+Object.assign(translations['en-US'], {
+  skillTitle: 'Enterprise Skills · exact calculator',
+  skillHint: 'Manually triggered, local-only arithmetic. No file, network or external actions.',
+  skillOperation: 'Operation', skillAdd: 'Add', skillSubtract: 'Subtract',
+  skillMultiply: 'Multiply', skillDivide: 'Divide with remainder',
+  skillLeft: 'First integer', skillRight: 'Second integer',
+  skillRun: 'Calculate locally', skillWorking: 'Running a local calculation…',
+  skillResult: 'Result', skillQuotient: 'Quotient', skillRemainder: 'Remainder',
+  skillInvalid: 'Enter canonical integers within the allowed range.',
+  skillFailed: 'Local calculation unavailable or denied. Check the session token.',
+});
+Object.assign(translations['uk-UA'], {
+  skillTitle: 'Enterprise Skills · точний розрахунок',
+  skillHint: 'Лише ручне локальне обчислення. Без доступу до мережі, файлів і зовнішніх дій.',
+  skillOperation: 'Операція', skillAdd: 'Додати', skillSubtract: 'Відняти',
+  skillMultiply: 'Помножити', skillDivide: 'Поділити з остачею',
+  skillLeft: 'Перше ціле число', skillRight: 'Друге ціле число',
+  skillRun: 'Обчислити локально', skillWorking: 'Виконується локальний розрахунок…',
+  skillResult: 'Результат', skillQuotient: 'Частка', skillRemainder: 'Остача',
+  skillInvalid: 'Введіть цілі числа в допустимому діапазоні.',
+  skillFailed: 'Локальний розрахунок недоступний або відхилений. Перевірте ключ сесії.',
+});
+Object.assign(translations['ru-RU'], {
+  proposalTitle: 'VELION · предложить Skill',
+  proposalHint: 'Модель предлагает только точный целочисленный расчёт. Это черновик без исполнения и одобрения.',
+  proposalTask: 'Задача для предложения',
+  proposalPlaceholder: 'Сколько будет 12 плюс 3?',
+  proposalSubmit: 'Предложить без исполнения',
+  proposalWaiting: 'Локальная модель готовит предложение…',
+  proposalRejected: 'Предложение отклонено или модель недоступна. Проверьте задачу и локальное подключение.',
+  proposalPreview: 'Черновик',
+  proposalNoExecution: 'НЕ ВЫПОЛНЕНО · проверьте числа самостоятельно.',
+});
+Object.assign(translations['en-US'], {
+  proposalTitle: 'VELION · suggest a Skill',
+  proposalHint: 'The model can only suggest exact-integer arithmetic. This is an unapproved, unexecuted draft.',
+  proposalTask: 'Task for the proposal',
+  proposalPlaceholder: 'What is 12 plus 3?',
+  proposalSubmit: 'Suggest without executing',
+  proposalWaiting: 'The local model is drafting a proposal…',
+  proposalRejected: 'Proposal denied or model unavailable. Check the task and local connection.',
+  proposalPreview: 'Draft',
+  proposalNoExecution: 'NOT EXECUTED · independently review the operands.',
+});
+Object.assign(translations['uk-UA'], {
+  proposalTitle: 'VELION · запропонувати Skill',
+  proposalHint: 'Модель лише пропонує точний цілочисельний розрахунок. Це чернетка без виконання та схвалення.',
+  proposalTask: 'Завдання для пропозиції',
+  proposalPlaceholder: 'Скільки буде 12 плюс 3?',
+  proposalSubmit: 'Запропонувати без виконання',
+  proposalWaiting: 'Локальна модель готує пропозицію…',
+  proposalRejected: 'Пропозицію відхилено або модель недоступна. Перевірте завдання та підключення.',
+  proposalPreview: 'Чернетка',
+  proposalNoExecution: 'НЕ ВИКОНАНО · перевірте числа самостійно.',
+});
 const setStatus = (key) => {
   status.textContent = tr(key);
 };
@@ -586,6 +652,148 @@ for (const id of ['#open-settings', '#settings-top'])
     dialog.showModal();
   });
 $('#close-settings').addEventListener('click', () => dialog.close());
+let localProposalBusy = false;
+$('#skill-proposal-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (localProposalBusy) return;
+  const output = $('#skill-proposal-output');
+  const task = $('#skill-proposal-task').value.trim();
+  const endpoint = localEndpoint();
+  if (!endpoint || !token.value) {
+    output.textContent = !endpoint ? tr('notLocal') : tr('enterToken');
+    return;
+  }
+  if (task.length < 3 || task.length > 300 || /[\u0000-\u001f\u007f]/.test(task)) {
+    output.textContent = tr('proposalRejected');
+    return;
+  }
+  const chosenToken = token.value;
+  const button = $('#skill-proposal-button');
+  localProposalBusy = true;
+  button.disabled = true;
+  output.textContent = tr('proposalWaiting');
+  try {
+    // The only allowed path is a USER-triggered proposal-only endpoint.
+    // Never call /api/skills/run or auto-fill its consent-bearing form.
+    const response = await fetch(new URL('/api/skills/propose', endpoint).href, {
+      method: 'POST',
+      mode: 'same-origin',
+      credentials: 'omit',
+      cache: 'no-store',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+      signal: AbortSignal.timeout(95000),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + chosenToken,
+      },
+      body: JSON.stringify({ task }),
+    });
+    const data = await response.json();
+    const integer = /^(?:0|[1-9][0-9]{0,17}|-[1-9][0-9]{0,17})$/;
+    const operation = data?.arguments?.operation;
+    const left = data?.arguments?.left;
+    const right = data?.arguments?.right;
+    if (!response.ok || token.value !== chosenToken ||
+        data?.schema !== 'velion-local-skill-proposal-v1' ||
+        data?.status !== 'PROPOSAL_ONLY' ||
+        data?.tenant !== 'velion-local' ||
+        data?.skill !== 'velion.arithmetic.exact_v1' ||
+        !['add', 'subtract', 'multiply', 'divide_with_remainder'].includes(operation) ||
+        !integer.test(left) || !integer.test(right) ||
+        data?.receipt?.execution !== 'NOT_EXECUTED' ||
+        data?.receipt?.clientConsent !== false ||
+        data?.receipt?.humanConfirmationRequired !== true ||
+        data?.receipt?.approvalGatewayApproved !== false ||
+        data?.receipt?.productionRelease !== 'NOT_AUTHORIZED')
+      throw Error('Untrusted proposal');
+    const names = {
+      add: 'skillAdd', subtract: 'skillSubtract',
+      multiply: 'skillMultiply', divide_with_remainder: 'skillDivide',
+    };
+    output.textContent =
+      tr('proposalPreview') + ': ' + tr(names[operation]) + ' (' + left + ', ' + right +
+      '). ' + tr('proposalNoExecution');
+  } catch {
+    output.textContent = tr('proposalRejected');
+  } finally {
+    localProposalBusy = false;
+    button.disabled = false;
+  }
+});
+
+let localSkillBusy = false;
+$('#skill-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (localSkillBusy) return;
+  const output = $('#skill-result');
+  const endpoint = localEndpoint();
+  if (!endpoint || !token.value) {
+    output.textContent = !endpoint ? tr('notLocal') : tr('enterToken');
+    return;
+  }
+  const operation = $('#skill-operation').value;
+  const left = $('#skill-left').value.trim();
+  const right = $('#skill-right').value.trim();
+  const integer = /^(?:0|[1-9][0-9]{0,17}|-[1-9][0-9]{0,17})$/;
+  if (!integer.test(left) || !integer.test(right) ||
+      !['add', 'subtract', 'multiply', 'divide_with_remainder'].includes(operation)) {
+    output.textContent = tr('skillInvalid');
+    return;
+  }
+  const chosenToken = token.value;
+  const button = $('#skill-run');
+  localSkillBusy = true;
+  button.disabled = true;
+  output.textContent = tr('skillWorking');
+  try {
+    // Only a real user form submit invokes the read-only skill. VELION model
+    // text has no route, callback or permission for initiating this action.
+    const response = await fetch(new URL('/api/skills/run', endpoint).href, {
+      method: 'POST',
+      mode: 'same-origin',
+      credentials: 'omit',
+      cache: 'no-store',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+      signal: AbortSignal.timeout(10000),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + chosenToken,
+      },
+      body: JSON.stringify({
+        tenant: 'velion-local',
+        skill: 'velion.arithmetic.exact_v1',
+        clientConsent: true,
+        arguments: { operation, left, right },
+      }),
+    });
+    const payload = await response.json();
+    if (!response.ok || token.value !== chosenToken ||
+        payload?.schema !== 'velion-local-skill-result-v1' ||
+        payload?.receipt?.execution !== 'LOCAL_DETERMINISTIC_READ_ONLY' ||
+        payload?.receipt?.externalSideEffects !== false ||
+        payload?.receipt?.ownerApprovalGranted !== false ||
+        payload?.receipt?.productionRelease !== 'NOT_AUTHORIZED')
+      throw Error('Untrusted local skill receipt');
+    const number = /^(?:0|[1-9][0-9]{0,39}|-[1-9][0-9]{0,39})$/;
+    if (operation === 'divide_with_remainder') {
+      if (!number.test(payload.result?.quotient) ||
+          !number.test(payload.result?.remainder)) throw Error('Invalid result');
+      output.textContent = tr('skillQuotient') + ': ' + payload.result.quotient +
+        ' · ' + tr('skillRemainder') + ': ' + payload.result.remainder;
+    } else {
+      if (!number.test(payload.result?.integer)) throw Error('Invalid result');
+      output.textContent = tr('skillResult') + ': ' + payload.result.integer;
+    }
+  } catch {
+    output.textContent = tr('skillFailed');
+  } finally {
+    localSkillBusy = false;
+    button.disabled = false;
+  }
+});
+
 $('#new-chat').addEventListener('click', () => {
   if (controller) return;
   if (chats.length >= 25) {
