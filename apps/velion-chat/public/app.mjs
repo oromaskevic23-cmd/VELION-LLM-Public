@@ -241,6 +241,7 @@ const sidebar = $('#sidebar'),
   send = $('#send');
 const saveHistory = $('#save-history'),
   autoSpeak = $('#auto-speak'),
+  responseMode = $('#response-mode'),
   storageKey = 'velion-chat-history-v1';
 const tr = (key) => translations[language.value][key] || translations['en-US'][key] || key;
 Object.assign(translations['ru-RU'], {
@@ -315,6 +316,24 @@ Object.assign(translations['uk-UA'], {
   restoreFailed: 'Відновити запит', copyFailed: 'Копіювати запит', dismissFailed: 'Закрити',
   resolveFailed: 'Спочатку відновіть попередній запит або закрийте повідомлення.',
   failedCopied: 'Попередній запит скопійовано.',
+});
+Object.assign(translations['ru-RU'], {
+  responseMode: 'Режим ответа', standardMode: 'STANDARD — один проход',
+  maxMode: 'VELION MAX — два прохода',
+  maxModeHint: 'MAX делает вторую проверку той же локальной моделью. Это не независимая проверка и не доступ к инструментам.',
+  answeredMax: 'VELION MAX завершил два локальных прохода. Факты и выводы требуют проверки.',
+});
+Object.assign(translations['en-US'], {
+  responseMode: 'Response mode', standardMode: 'STANDARD — one pass',
+  maxMode: 'VELION MAX — two passes',
+  maxModeHint: 'MAX reviews the draft with the same local model. It is not independent verification or tool access.',
+  answeredMax: 'VELION MAX completed two local passes. Verify important facts and conclusions.',
+});
+Object.assign(translations['uk-UA'], {
+  responseMode: 'Режим відповіді', standardMode: 'STANDARD — один прохід',
+  maxMode: 'VELION MAX — два проходи',
+  maxModeHint: 'MAX перевіряє чернетку тією ж локальною моделлю. Це не незалежна перевірка й не доступ до інструментів.',
+  answeredMax: 'VELION MAX виконав два локальні проходи. Перевіряйте важливі факти й висновки.',
 });
 const setStatus = (key) => {
   status.textContent = tr(key);
@@ -712,6 +731,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
   }
   if (listening) recognition.stop();
   const chat = selected();
+  const modeForRequest = responseMode.value === 'MAX' ? 'MAX' : 'STANDARD';
   chat.messages.push({ role: 'user', content: value });
   renderMessages();
   prompt.value = '';
@@ -738,7 +758,10 @@ $('#chat-form').addEventListener('submit', async (event) => {
       referrerPolicy: 'no-referrer',
       signal: AbortSignal.any([active.signal, AbortSignal.timeout(115000)]),
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token.value },
-      body: JSON.stringify({ messages: requestMessages }),
+      body: JSON.stringify({
+        messages: requestMessages,
+        ...(modeForRequest === 'MAX' ? { responseMode: 'MAX' } : {}),
+      }),
     });
     const data = await response.json();
     if (!response.ok) {
@@ -753,6 +776,8 @@ $('#chat-form').addEventListener('submit', async (event) => {
         CHAT_MODEL_RESPONSE_SCHEMA_INVALID: 'invalid',
         CHAT_MODEL_RESPONSE_INCOMPLETE: 'incomplete',
         CHAT_MODEL_RESPONSE_TOO_LARGE: 'invalid',
+        CHAT_MODE_INVALID: 'invalid',
+        CHAT_MAX_CONTEXT_TOO_LARGE: 'invalid',
       };
       throw Object.assign(Error('Request failed'), { display: errors[data.code] || 'failed' });
     }
@@ -761,13 +786,18 @@ $('#chat-form').addEventListener('submit', async (event) => {
       !data.answer.trim() ||
       data.answer.length > 4000 ||
       !['ollama-local', 'llama-cpp-local'].includes(data.receipt?.provider) ||
-      data.receipt?.toolAccess !== 'NONE'
+      data.receipt?.toolAccess !== 'NONE' ||
+      (modeForRequest === 'MAX' &&
+        (data.receipt.responseMode !== 'MAX' ||
+         data.receipt.modelCalls !== 2 ||
+         data.receipt.qualityVerified !== false ||
+         data.receipt.reviewScope !== 'SAME_MODEL_LOCAL_SELF_REVIEW_ONLY'))
     )
       throw Error('Invalid response');
     chat.messages.push({ role: 'assistant', content: data.answer });
     if (!chat.title) chat.title = value.slice(0, 48);
     const saved = render();
-    if (saved) setStatus('answered');
+    if (saved) setStatus(modeForRequest === 'MAX' ? 'answeredMax' : 'answered');
     messagesBox.lastElementChild?.scrollIntoView({ block: 'nearest' });
     if (autoSpeak.checked) speakText(data.answer);
   } catch (cause) {
