@@ -6,6 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { localChatServiceFromEnv } from './chat-service.mjs';
 import { TASK_DRAFT_FORMAT } from './task-draft-schema.mjs';
+import { runReadOnlySkill } from './enterprise-skills.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'public');
 const routes = new Map([
@@ -58,6 +59,61 @@ export function createAppServer({ localChatService = null } = {}) {
     } catch {
       res.writeHead(400);
       res.end('Bad URL');
+      return;
+    }
+    if (pathname === '/api/skills/run') {
+      if (req.method !== 'POST') {
+        res.writeHead(405, { Allow: 'POST' });
+        res.end();
+        return;
+      }
+      // The skill endpoint is OFF until the same local chat session exists.
+      // Model text cannot call this route; only an authenticated local client
+      // can deliberately submit the strict deterministic schema.
+      if (!localChatService) {
+        req.resume();
+        reply(res, 503, { code: 'CHAT_DISABLED' });
+        return;
+      }
+      const addr = server.address();
+      const remote = req.socket.remoteAddress;
+      const authority = addr && typeof addr === 'object' ? '127.0.0.1:' + addr.port : '';
+      if (
+        !['127.0.0.1', '::ffff:127.0.0.1'].includes(remote) ||
+        req.headers.host !== authority ||
+        req.headers.origin !== 'http://' + authority
+      ) {
+        req.resume();
+        reply(res, 403, { code: 'LOCAL_ORIGIN_REQUIRED' });
+        return;
+      }
+      if (!localChatService.authenticate(req.headers.authorization)) {
+        req.resume();
+        reply(res, 401, { code: 'LOCAL_ACCESS_TOKEN_REQUIRED' });
+        return;
+      }
+      if (!/^application\/json(?:\s*;\s*charset=utf-8)?$/i.test(req.headers['content-type'] || '')) {
+        req.resume();
+        reply(res, 415, { code: 'JSON_REQUIRED' });
+        return;
+      }
+      if (Number(req.headers['content-length']) > 2048) {
+        req.resume();
+        reply(res, 413, { code: 'SKILL_REQUEST_TOO_LARGE' });
+        return;
+      }
+      try {
+        const bytes = await readBody(req);
+        if (bytes.byteLength > 2048) {
+          reply(res, 413, { code: 'SKILL_REQUEST_TOO_LARGE' });
+          return;
+        }
+        const input = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+        reply(res, 200, runReadOnlySkill(input));
+      } catch (cause) {
+        reply(res, 400, { code: cause?.code === 'SKILL_REQUEST_DENIED'
+          ? 'SKILL_REQUEST_DENIED' : 'INVALID_JSON' });
+      }
       return;
     }
     if (pathname === '/api/chat') {
