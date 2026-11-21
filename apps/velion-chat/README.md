@@ -141,6 +141,30 @@ See the [exact-source 25-test checkpoint](../../docs/VELION_LOCAL_ENTERPRISE_SKI
 This addition is under review on a separate development branch; it is
 not production or Astra 6.2 parity.
 
+## VELION model-assisted Skill proposal preview (experimental)
+
+In **Settings → VELION · suggest a Skill**, enter a short arithmetic task and
+press **Suggest without executing**. The existing local chat model returns a
+candidate operation and operands. A separate strict validator accepts only
+`velion.arithmetic.exact_v1` on the fixed `velion-local` scope, with
+canonical signed decimal integers. It refuses unexpected keys, duplicate
+JSON members, privileged fields, unsupported operations and malformed answers.
+
+The preview is **PROPOSAL_ONLY** and **NOT EXECUTED**. It cannot be posted
+directly to the separate calculator executor, does not carry `clientConsent`,
+and does not fill the calculation form or turn on any permission. The model
+can misunderstand the arithmetic; review its proposed inputs before any
+separate manual operation. No model response authorizes a tool, payment,
+file change, email, web browsing or NCA execution.
+
+The endpoint `POST /api/skills/propose` is only reachable using the existing
+local session token and loopback Host/Origin checks, and it calls a local
+model only when explicitly requested. A model must already be installed and
+configured as described above. There is no cloud/provider fallback.
+[Implementation, verified **35/35** synthetic Node/HTTP tests and limitations](../../docs/VELION_MODEL_SKILL_PROPOSAL_20261121.md).
+Actual model proposal accuracy, iPhone Safari usability and independent
+security approval have not been demonstrated.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
