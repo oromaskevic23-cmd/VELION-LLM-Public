@@ -3,6 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { request as httpRequest } from 'node:http';
 import { createHash } from 'node:crypto';
 import { createLocalChatService } from '../chat-service.mjs';
 import { createAppServer } from '../server.mjs';
@@ -119,7 +120,6 @@ test('wrong local origin, token, content-type and HTTP method are denied', async
   const origin = await start(chat, t);
   for (const [headers, code, status] of [
     [{ Origin: 'http://evil.example' }, 'LOCAL_ORIGIN_REQUIRED', 403],
-    [{ Host: 'malicious.example' }, 'LOCAL_ORIGIN_REQUIRED', 403],
     [{ Authorization: 'Bearer unauthorized' }, 'LOCAL_ACCESS_TOKEN_REQUIRED', 401],
     [{ 'Content-Type': 'text/plain' }, 'JSON_REQUIRED', 415],
   ]) {
@@ -127,6 +127,25 @@ test('wrong local origin, token, content-type and HTTP method are denied', async
     assert.equal(r.status, status);
     assert.deepEqual(await r.json(), { code });
   }
+  // undici/fetch normalizes authority headers; use raw node:http to
+  // prove a deliberately mismatched Host header reaches the server.
+  const rawHostStatus = await new Promise((resolve, reject) => {
+    const req = httpRequest(origin + '/api/skills/run', {
+      method: 'POST',
+      headers: {
+        Host: 'malicious.example',
+        Origin: origin,
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + TOKEN,
+      },
+    }, response => {
+      response.resume();
+      response.on('end', () => resolve(response.statusCode));
+    });
+    req.on('error', reject);
+    req.end(JSON.stringify(example()));
+  });
+  assert.equal(rawHostStatus, 403);
   const get = await fetch(origin + '/api/skills/run', { method: 'GET' });
   assert.equal(get.status, 405);
 });
