@@ -15,9 +15,30 @@ const exact = (value, names) => value !== null && typeof value === 'object' &&
   !Array.isArray(value) &&
   Object.keys(value).sort().join('|') === names.slice().sort().join('|');
 
+// This fixed proposal carries exactly six JSON member names in total.
+// Reject duplicate fields BEFORE JSON.parse can silently keep the last value.
+// Model-controlled string values have a restricted vocabulary, so no valid
+// value can contain a nested JSON-looking member token.
+function requireUnambiguousKeys(raw) {
+  const members = [];
+  const regex = /"((?:\\.|[^"\\])*)"\s*:/g;
+  for (const match of raw.matchAll(regex)) {
+    try {
+      members.push(JSON.parse('"' + match[1] + '"'));
+    } catch {
+      throw fail('SKILL_PROPOSAL_INVALID');
+    }
+  }
+  const expected = ['arguments', 'left', 'operation', 'right', 'skill', 'tenant'];
+  if (members.length !== expected.length ||
+      members.slice().sort().join('|') !== expected.join('|'))
+    throw fail('SKILL_PROPOSAL_INVALID');
+}
+
 export function validateModelSkillProposal(raw) {
   if (typeof raw !== 'string' || Buffer.byteLength(raw, 'utf8') > 2048 || !raw.trim())
     throw fail('SKILL_PROPOSAL_INVALID');
+  requireUnambiguousKeys(raw);
   let value;
   try {
     value = JSON.parse(raw);
