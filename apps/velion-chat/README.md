@@ -121,6 +121,26 @@ default and does not affect ordinary chat. The format constrains syntax, not
 correctness, safety, execution permission or release. The generated source
 remains untrusted and must still pass Constructor's quarantine and separate QA.
 
+## Local read-only Enterprise Skill (development branch)
+
+In **Settings → Enterprise Skills · exact calculator**, enter two integer
+values, select an operation and explicitly press **Calculate locally**.
+The result stays in a separate output field; it is **not** injected into
+chat history or sent to the model. Supported deterministic operations are
+add, subtract, multiply and divide with remainder, using precise BigInt
+arithmetic on canonical signed decimal strings of up to 18 digits.
+
+The `/api/skills/run` endpoint requires the configured local chat token,
+loopback Host/Origin, JSON, a declared client consent marker, a fixed local
+tenant and a strict request schema. This is **not** signed consent, real AI
+Passport, Guardian Core approval, a durable Audit Ledger or externally
+authenticated Enterprise Skills. No model output can automatically call this
+endpoint, and it has **no file, network, payment or execution authority**.
+
+See the [exact-source 25-test checkpoint](../../docs/VELION_LOCAL_ENTERPRISE_SKILL_20261121.md).
+This addition is under review on a separate development branch; it is
+not production or Astra 6.2 parity.
+
 ## Voice and privacy
 
 Speech-to-text and speech output depend on the browser and device. The
