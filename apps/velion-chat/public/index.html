@@ -240,6 +240,15 @@
         <p class="hint" data-i18n="tokenHint">
           Ключ хранится только в этой вкладке. Ответ формирует отдельно подключённая локальная модель.
         </p>
+        <label for="response-mode" data-i18n="responseMode">Режим ответа</label>
+        <select id="response-mode">
+          <option value="STANDARD" data-i18n="standardMode">STANDARD — один ответ</option>
+          <option value="MAX" data-i18n="maxMode">VELION MAX — два прохода</option>
+        </select>
+        <p class="hint" data-i18n="maxModeHint">
+          MAX дополнительно пересматривает ответ той же локальной моделью.
+          Это не независимая проверка, не доступ к инструментам и не разрешение на действия.
+        </p>
         <label class="check"
           ><input id="auto-speak" type="checkbox" /><span data-i18n="autoSpeak"
             >Озвучивать ответы</span
