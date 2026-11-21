@@ -11,6 +11,32 @@ Two explicit local backends are available: an existing Ollama service or an
 optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
 automatic fallback between them.
 
+## Response modes: STANDARD and VELION MAX (21 November 2026)
+
+Open **Settings → Response mode**. `STANDARD` is the default and makes one
+local model inference. `VELION MAX` is an **opt-in bounded, two-pass same-model
+self-review**: VELION generates a draft, then asks the same local model to
+review the latest user request and the untrusted draft for reasoning or
+formatting problems. Only the second-pass answer is displayed. This is a
+local model-adapter feature, not a separate model, independently checked
+reasoning, paid service or Astra 6.2 quality parity.
+
+MAX can be slower. The two passes share the current request deadline; the
+latest user request and first draft must each be no longer than 1,800
+characters for bounded local review. Unsupported mode names or a MAX
+request combined with the structured Constructor draft format are denied.
+When either model pass fails, the entire request fails closed without
+labeling the initial draft a verified answer. The result receipt states
+`qualityVerified: false` and `SAME_MODEL_LOCAL_SELF_REVIEW_ONLY`.
+The session's response-mode selection is not saved with browser history.
+
+MAX **does not** execute model text, invoke external tools or agents,
+authorize approvals, prove factual correctness or create persistent memory.
+Actual-model quality, laptop/phone responsiveness and browser/Safari
+interactions are separate acceptance gates. See the
+[exact-source 18-test checkpoint](../../docs/VELION_MAX_TWO_PASS_20261121.md).
+
+
 ## Run with an existing Ollama service
 
 Requires Node.js 22 or later and a separately installed, running Ollama service
