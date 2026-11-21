@@ -249,6 +249,21 @@
           MAX дополнительно пересматривает ответ той же локальной моделью.
           Это не независимая проверка, не доступ к инструментам и не разрешение на действия.
         </p>
+        <section class="skill-lab" aria-labelledby="skill-proposal-title">
+          <h3 id="skill-proposal-title" data-i18n="proposalTitle">VELION · предложить Skill</h3>
+          <p class="hint" data-i18n="proposalHint">
+            Спросите локальную модель о целочисленном расчёте. Результат только для проверки,
+            без автоматического исполнения и без одобрений.
+          </p>
+          <form id="skill-proposal-form" autocomplete="off">
+            <label for="skill-proposal-task" data-i18n="proposalTask">Задача для предложения</label>
+            <input id="skill-proposal-task" type="text" minlength="3" maxlength="300"
+              placeholder="Сколько будет 12 плюс 3?" data-i18n-placeholder="proposalPlaceholder" required />
+            <button id="skill-proposal-button" class="skill-run-button" type="submit"
+              data-i18n="proposalSubmit">Предложить без исполнения</button>
+          </form>
+          <output id="skill-proposal-output" role="status" aria-live="polite"></output>
+        </section>
         <section class="skill-lab" aria-labelledby="skill-lab-title">
           <h3 id="skill-lab-title" data-i18n="skillTitle">Enterprise Skills · точный расчёт</h3>
           <p class="hint" data-i18n="skillHint">
