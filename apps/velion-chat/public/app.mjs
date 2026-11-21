@@ -368,6 +368,39 @@ Object.assign(translations['uk-UA'], {
   skillInvalid: 'Введіть цілі числа в допустимому діапазоні.',
   skillFailed: 'Локальний розрахунок недоступний або відхилений. Перевірте ключ сесії.',
 });
+Object.assign(translations['ru-RU'], {
+  proposalTitle: 'VELION · предложить Skill',
+  proposalHint: 'Модель предлагает только точный целочисленный расчёт. Это черновик без исполнения и одобрения.',
+  proposalTask: 'Задача для предложения',
+  proposalPlaceholder: 'Сколько будет 12 плюс 3?',
+  proposalSubmit: 'Предложить без исполнения',
+  proposalWaiting: 'Локальная модель готовит предложение…',
+  proposalRejected: 'Предложение отклонено или модель недоступна. Проверьте задачу и локальное подключение.',
+  proposalPreview: 'Черновик',
+  proposalNoExecution: 'НЕ ВЫПОЛНЕНО · проверьте числа самостоятельно.',
+});
+Object.assign(translations['en-US'], {
+  proposalTitle: 'VELION · suggest a Skill',
+  proposalHint: 'The model can only suggest exact-integer arithmetic. This is an unapproved, unexecuted draft.',
+  proposalTask: 'Task for the proposal',
+  proposalPlaceholder: 'What is 12 plus 3?',
+  proposalSubmit: 'Suggest without executing',
+  proposalWaiting: 'The local model is drafting a proposal…',
+  proposalRejected: 'Proposal denied or model unavailable. Check the task and local connection.',
+  proposalPreview: 'Draft',
+  proposalNoExecution: 'NOT EXECUTED · independently review the operands.',
+});
+Object.assign(translations['uk-UA'], {
+  proposalTitle: 'VELION · запропонувати Skill',
+  proposalHint: 'Модель лише пропонує точний цілочисельний розрахунок. Це чернетка без виконання та схвалення.',
+  proposalTask: 'Завдання для пропозиції',
+  proposalPlaceholder: 'Скільки буде 12 плюс 3?',
+  proposalSubmit: 'Запропонувати без виконання',
+  proposalWaiting: 'Локальна модель готує пропозицію…',
+  proposalRejected: 'Пропозицію відхилено або модель недоступна. Перевірте завдання та підключення.',
+  proposalPreview: 'Чернетка',
+  proposalNoExecution: 'НЕ ВИКОНАНО · перевірте числа самостійно.',
+});
 const setStatus = (key) => {
   status.textContent = tr(key);
 };
@@ -619,6 +652,76 @@ for (const id of ['#open-settings', '#settings-top'])
     dialog.showModal();
   });
 $('#close-settings').addEventListener('click', () => dialog.close());
+let localProposalBusy = false;
+$('#skill-proposal-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  if (localProposalBusy) return;
+  const output = $('#skill-proposal-output');
+  const task = $('#skill-proposal-task').value.trim();
+  const endpoint = localEndpoint();
+  if (!endpoint || !token.value) {
+    output.textContent = !endpoint ? tr('notLocal') : tr('enterToken');
+    return;
+  }
+  if (task.length < 3 || task.length > 300 || /[\u0000-\u001f\u007f]/.test(task)) {
+    output.textContent = tr('proposalRejected');
+    return;
+  }
+  const chosenToken = token.value;
+  const button = $('#skill-proposal-button');
+  localProposalBusy = true;
+  button.disabled = true;
+  output.textContent = tr('proposalWaiting');
+  try {
+    // The only allowed path is a USER-triggered proposal-only endpoint.
+    // Never call /api/skills/run or auto-fill its consent-bearing form.
+    const response = await fetch(new URL('/api/skills/propose', endpoint).href, {
+      method: 'POST',
+      mode: 'same-origin',
+      credentials: 'omit',
+      cache: 'no-store',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+      signal: AbortSignal.timeout(95000),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + chosenToken,
+      },
+      body: JSON.stringify({ task }),
+    });
+    const data = await response.json();
+    const integer = /^(?:0|[1-9][0-9]{0,17}|-[1-9][0-9]{0,17})$/;
+    const operation = data?.arguments?.operation;
+    const left = data?.arguments?.left;
+    const right = data?.arguments?.right;
+    if (!response.ok || token.value !== chosenToken ||
+        data?.schema !== 'velion-local-skill-proposal-v1' ||
+        data?.status !== 'PROPOSAL_ONLY' ||
+        data?.tenant !== 'velion-local' ||
+        data?.skill !== 'velion.arithmetic.exact_v1' ||
+        !['add', 'subtract', 'multiply', 'divide_with_remainder'].includes(operation) ||
+        !integer.test(left) || !integer.test(right) ||
+        data?.receipt?.execution !== 'NOT_EXECUTED' ||
+        data?.receipt?.clientConsent !== false ||
+        data?.receipt?.humanConfirmationRequired !== true ||
+        data?.receipt?.approvalGatewayApproved !== false ||
+        data?.receipt?.productionRelease !== 'NOT_AUTHORIZED')
+      throw Error('Untrusted proposal');
+    const names = {
+      add: 'skillAdd', subtract: 'skillSubtract',
+      multiply: 'skillMultiply', divide_with_remainder: 'skillDivide',
+    };
+    output.textContent =
+      tr('proposalPreview') + ': ' + tr(names[operation]) + ' (' + left + ', ' + right +
+      '). ' + tr('proposalNoExecution');
+  } catch {
+    output.textContent = tr('proposalRejected');
+  } finally {
+    localProposalBusy = false;
+    button.disabled = false;
+  }
+});
+
 let localSkillBusy = false;
 $('#skill-form').addEventListener('submit', async event => {
   event.preventDefault();
