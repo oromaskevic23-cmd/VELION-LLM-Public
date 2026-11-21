@@ -604,6 +604,60 @@ dialog::backdrop {
   color: #9facbc;
   margin: 0 0 5px;
 }
+.skill-lab {
+  margin: 8px 0;
+  padding: 14px;
+  border: 1px solid #bda57436;
+  border-radius: 12px;
+  background: #0e1826;
+}
+.skill-lab h3 {
+  margin: 0 0 8px;
+  color: #e8ca8e;
+  font-size: 14px;
+  font-weight: 650;
+}
+.skill-lab form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px;
+}
+.skill-lab label {
+  color: #dce3eb;
+  font-size: 12px;
+}
+.skill-lab input,
+.skill-lab select {
+  min-width: 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #445166;
+  border-radius: 8px;
+  background: #0d1621;
+  color: #fff;
+}
+.skill-run-button {
+  margin-top: 5px;
+  border: 1px solid #d4ba83;
+  border-radius: 9px;
+  padding: 11px;
+  font-weight: 600;
+  background: #dec17e;
+  color: #152030;
+  cursor: pointer;
+}
+.skill-run-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+#skill-result {
+  display: block;
+  min-height: 18px;
+  overflow-wrap: anywhere;
+  color: #f2e6bf;
+  font-size: 12px;
+  margin-top: 9px;
+}
 .check {
   display: flex;
   align-items: center;
