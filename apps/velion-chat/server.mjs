@@ -112,7 +112,9 @@ export function createAppServer({ localChatService = null } = {}) {
         typeof input !== 'object' ||
         Array.isArray(input) ||
         !Object.hasOwn(input, 'messages') ||
-        Object.keys(input).some((key) => !['messages', 'responseFormat', 'responseMode'].includes(key)) ||
+        Object.keys(input).some((key) => !['messages', 'responseFormat', 'responseMode', 'skillId'].includes(key)) ||
+        (input.skillId !== undefined && (input.skillId !== 'arithmetic.v1' ||
+          input.responseFormat !== undefined || input.responseMode === 'MAX')) ||
         (input.responseFormat !== undefined && input.responseFormat !== TASK_DRAFT_FORMAT) ||
         (input.responseMode !== undefined && !['STANDARD', 'MAX'].includes(input.responseMode)) ||
         (input.responseMode === 'MAX' && input.responseFormat !== undefined)
@@ -126,13 +128,13 @@ export function createAppServer({ localChatService = null } = {}) {
       };
       res.once('close', cancel);
       try {
-        const result = await localChatService.chat(input.messages, { signal: controller.signal, responseFormat:input.responseFormat, responseMode:input.responseMode });
+        const result = await localChatService.chat(input.messages, { signal: controller.signal, responseFormat:input.responseFormat, responseMode:input.responseMode, skillId:input.skillId });
         if (!controller.signal.aborted) reply(res, 200, result);
       } catch (cause) {
         if (!controller.signal.aborted) {
           const code = cause?.code,
-            status = ['CHAT_INVALID_MESSAGES','CHAT_FORMAT_INVALID','CHAT_MODE_INVALID','CHAT_MAX_CONTEXT_TOO_LARGE'].includes(code) ? 400 :
-              code === 'CHAT_FORMAT_DISABLED' ? 503 : code === 'CHAT_BUSY' ? 409 : 502;
+            status = ['CHAT_INVALID_MESSAGES','CHAT_FORMAT_INVALID','CHAT_MODE_INVALID','CHAT_MAX_CONTEXT_TOO_LARGE','CHAT_SKILL_INVALID','CHAT_SKILL_INVALID_EXPRESSION','CHAT_SKILL_RESOURCE_LIMIT','CHAT_SKILL_DIV_ZERO'].includes(code) ? 400 :
+              ['CHAT_FORMAT_DISABLED','CHAT_SKILL_DISABLED'].includes(code) ? 503 : code === 'CHAT_BUSY' ? 409 : 502;
           reply(res, status, {
             code: [
               'CHAT_INVALID_MESSAGES',
@@ -141,6 +143,11 @@ export function createAppServer({ localChatService = null } = {}) {
               'CHAT_BUSY',
               'CHAT_MODE_INVALID',
               'CHAT_MAX_CONTEXT_TOO_LARGE',
+              'CHAT_SKILL_INVALID',
+              'CHAT_SKILL_DISABLED',
+              'CHAT_SKILL_INVALID_EXPRESSION',
+              'CHAT_SKILL_RESOURCE_LIMIT',
+              'CHAT_SKILL_DIV_ZERO',
               'CHAT_MODEL_UNAVAILABLE',
               'CHAT_MODEL_HTTP_FAILED',
               'CHAT_MODEL_RESPONSE_INVALID',
