@@ -108,9 +108,9 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
     async chat(messages, { signal, responseFormat, responseMode = 'STANDARD' } = {}) {
       const clean = validateMessages(messages);
       if (responseFormat !== undefined && responseFormat !== TASK_DRAFT_FORMAT) throw error('CHAT_FORMAT_INVALID');
-      if (responseFormat && !enableStructured) throw error('CHAT_FORMAT_DISABLED');
       if (!['STANDARD', 'MAX'].includes(responseMode) || (responseMode === 'MAX' && responseFormat))
         throw error('CHAT_MODE_INVALID');
+      if (responseFormat && !enableStructured) throw error('CHAT_FORMAT_DISABLED');
       if (responseMode === 'MAX' && clean.at(-1).content.length > MAX_REVIEW_CONTEXT_CHARS)
         throw error('CHAT_MAX_CONTEXT_TOO_LARGE');
       if (busy) throw error('CHAT_BUSY');
@@ -190,7 +190,7 @@ export function createLocalChatService({ accessToken, model, fetchImpl = fetch, 
           receipt: {
             provider: 'ollama-local',
             requestedModel: model,
-            returnedModel: result.model,
+            returnedModel: model,
             startedAt: new Date(started).toISOString(),
             finishedAt: new Date(finished).toISOString(),
             latencyMs: finished - started,
