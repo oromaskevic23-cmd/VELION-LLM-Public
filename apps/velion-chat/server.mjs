@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { localChatServiceFromEnv } from './chat-service.mjs';
 import { TASK_DRAFT_FORMAT } from './task-draft-schema.mjs';
 import { runReadOnlySkill } from './enterprise-skills.mjs';
+import { proposeLocalSkill } from './skill-proposal.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'public');
 const routes = new Map([
@@ -59,6 +60,94 @@ export function createAppServer({ localChatService = null } = {}) {
     } catch {
       res.writeHead(400);
       res.end('Bad URL');
+      return;
+    }
+    if (pathname === '/api/skills/propose') {
+      if (req.method !== 'POST') {
+        res.writeHead(405, { Allow: 'POST' });
+        res.end();
+        return;
+      }
+      // No endpoint is active without the existing explicit local session.
+      if (!localChatService) {
+        req.resume();
+        reply(res, 503, { code: 'CHAT_DISABLED' });
+        return;
+      }
+      const addr = server.address();
+      const remote = req.socket.remoteAddress;
+      const authority = addr && typeof addr === 'object' ? '127.0.0.1:' + addr.port : '';
+      if (
+        !['127.0.0.1', '::ffff:127.0.0.1'].includes(remote) ||
+        req.headers.host !== authority ||
+        req.headers.origin !== 'http://' + authority
+      ) {
+        req.resume();
+        reply(res, 403, { code: 'LOCAL_ORIGIN_REQUIRED' });
+        return;
+      }
+      if (!localChatService.authenticate(req.headers.authorization)) {
+        req.resume();
+        reply(res, 401, { code: 'LOCAL_ACCESS_TOKEN_REQUIRED' });
+        return;
+      }
+      if (!/^application\\/json(?:\\s*;\\s*charset=utf-8)?$/i.test(req.headers['content-type'] || '')) {
+        req.resume();
+        reply(res, 415, { code: 'JSON_REQUIRED' });
+        return;
+      }
+      if (Number(req.headers['content-length']) > 2048) {
+        req.resume();
+        reply(res, 413, { code: 'SKILL_PROPOSAL_TOO_LARGE' });
+        return;
+      }
+      let input;
+      try {
+        const bytes = await readBody(req);
+        if (bytes.length > 2048) {
+          reply(res, 413, { code: 'SKILL_PROPOSAL_TOO_LARGE' });
+          return;
+        }
+        input = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+      } catch {
+        reply(res, 400, { code: 'INVALID_JSON' });
+        return;
+      }
+      if (!input || typeof input !== 'object' || Array.isArray(input) ||
+          Object.keys(input).length !== 1 || !Object.hasOwn(input, 'task')) {
+        reply(res, 400, { code: 'SKILL_PROPOSAL_TASK_INVALID' });
+        return;
+      }
+      const controller = new AbortController();
+      const cancel = () => {
+        if (!res.writableEnded) controller.abort();
+      };
+      res.once('close', cancel);
+      try {
+        const result = await proposeLocalSkill(localChatService, input.task, {
+          signal: controller.signal,
+        });
+        if (!controller.signal.aborted) reply(res, 200, result);
+      } catch (cause) {
+        if (!controller.signal.aborted) {
+          const code = cause?.code;
+          const status = code === 'SKILL_PROPOSAL_TASK_INVALID' ? 400 :
+            code === 'SKILL_PROPOSAL_INVALID' ? 422 :
+            code === 'CHAT_BUSY' ? 409 : 502;
+          reply(res, status, {
+            code: [
+              'SKILL_PROPOSAL_TASK_INVALID',
+              'SKILL_PROPOSAL_INVALID',
+              'SKILL_PROPOSAL_UNAVAILABLE',
+              'CHAT_BUSY',
+              'CHAT_MODEL_UNAVAILABLE',
+              'CHAT_MODEL_RESPONSE_INVALID',
+            ].includes(code) ? code : 'SKILL_PROPOSAL_FAILED',
+          });
+        }
+      } finally {
+        res.off('close', cancel);
+      }
       return;
     }
     if (pathname === '/api/skills/run') {
