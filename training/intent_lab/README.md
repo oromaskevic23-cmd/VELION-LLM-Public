@@ -82,4 +82,4 @@ Do not submit private data or weights to public CI.
 The wider architecture remains federated. AI Passport, Enterprise Skills,
 Guardian Core, Approval Gateway, Audit Ledger, Zero Trust, Public/Private and
 CRYPTO IMPERIAL boundaries remain requirements; this standalone lab does not
-implement or replace them. **MAX is a mode; VELION is the project name.**
+implement or replace them.

@@ -2,7 +2,7 @@
 
 **Status: opt-in training research / not an activated model runtime.**
 **Owner: Alexander Romaskevich (RomaskevicH), Founder / Owner / CEO.**
-**Date: 29 October 2026.** Canonical product: **VELION**. MAX is only a mode.
+**Date: 29 October 2026.** Canonical product: **VELION**.
 
 ## Purpose and exact boundary
 

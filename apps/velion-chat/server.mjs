@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { localChatServiceFromEnv } from './chat-service.mjs';
+import { isReviewMode, localChatServiceFromEnv } from './chat-service.mjs';
 import { TASK_DRAFT_FORMAT } from './task-draft-schema.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), 'public');
@@ -114,8 +114,8 @@ export function createAppServer({ localChatService = null } = {}) {
         !Object.hasOwn(input, 'messages') ||
         Object.keys(input).some((key) => !['messages', 'responseFormat', 'responseMode'].includes(key)) ||
         (input.responseFormat !== undefined && input.responseFormat !== TASK_DRAFT_FORMAT) ||
-        (input.responseMode !== undefined && !['STANDARD', 'MAX'].includes(input.responseMode)) ||
-        (input.responseMode === 'MAX' && input.responseFormat !== undefined)
+        (input.responseMode !== undefined && input.responseMode !== 'STANDARD' && !isReviewMode(input.responseMode)) ||
+        (isReviewMode(input.responseMode) && input.responseFormat !== undefined)
       ) {
         reply(res, 400, { code: 'INVALID_REQUEST' });
         return;
@@ -131,7 +131,7 @@ export function createAppServer({ localChatService = null } = {}) {
       } catch (cause) {
         if (!controller.signal.aborted) {
           const code = cause?.code,
-            status = ['CHAT_INVALID_MESSAGES','CHAT_FORMAT_INVALID','CHAT_MODE_INVALID','CHAT_MAX_CONTEXT_TOO_LARGE'].includes(code) ? 400 :
+            status = ['CHAT_INVALID_MESSAGES','CHAT_FORMAT_INVALID','CHAT_MODE_INVALID','CHAT_REVIEW_CONTEXT_TOO_LARGE','CHAT_MAX_CONTEXT_TOO_LARGE'].includes(code) ? 400 :
               code === 'CHAT_FORMAT_DISABLED' ? 503 : code === 'CHAT_BUSY' ? 409 : 502;
           reply(res, status, {
             code: [
@@ -140,6 +140,7 @@ export function createAppServer({ localChatService = null } = {}) {
               'CHAT_FORMAT_DISABLED',
               'CHAT_BUSY',
               'CHAT_MODE_INVALID',
+              'CHAT_REVIEW_CONTEXT_TOO_LARGE',
               'CHAT_MAX_CONTEXT_TOO_LARGE',
               'CHAT_MODEL_UNAVAILABLE',
               'CHAT_MODEL_HTTP_FAILED',

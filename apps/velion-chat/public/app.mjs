@@ -318,22 +318,22 @@ Object.assign(translations['uk-UA'], {
   failedCopied: 'Попередній запит скопійовано.',
 });
 Object.assign(translations['ru-RU'], {
-  responseMode: 'Режим ответа', standardMode: 'STANDARD — один проход',
-  maxMode: 'VELION MAX — два прохода',
-  maxModeHint: 'MAX делает вторую проверку той же локальной моделью. Это не независимая проверка и не доступ к инструментам.',
-  answeredMax: 'VELION MAX завершил два локальных прохода. Факты и выводы требуют проверки.',
+  responseMode: 'Режим ответа', standardMode: 'Обычный ответ',
+  reviewMode: 'Проверка ответа',
+  reviewModeHint: 'Та же локальная модель перечитывает черновик. Важные выводы требуют отдельной проверки.',
+  answeredReview: 'VELION перечитал черновик. Факты и выводы требуют проверки.',
 });
 Object.assign(translations['en-US'], {
-  responseMode: 'Response mode', standardMode: 'STANDARD — one pass',
-  maxMode: 'VELION MAX — two passes',
-  maxModeHint: 'MAX reviews the draft with the same local model. It is not independent verification or tool access.',
-  answeredMax: 'VELION MAX completed two local passes. Verify important facts and conclusions.',
+  responseMode: 'Response mode', standardMode: 'Regular answer',
+  reviewMode: 'Review the answer',
+  reviewModeHint: 'The same local model reviews its draft. Verify important conclusions independently.',
+  answeredReview: 'VELION reviewed its draft. Verify important facts and conclusions.',
 });
 Object.assign(translations['uk-UA'], {
-  responseMode: 'Режим відповіді', standardMode: 'STANDARD — один прохід',
-  maxMode: 'VELION MAX — два проходи',
-  maxModeHint: 'MAX перевіряє чернетку тією ж локальною моделлю. Це не незалежна перевірка й не доступ до інструментів.',
-  answeredMax: 'VELION MAX виконав два локальні проходи. Перевіряйте важливі факти й висновки.',
+  responseMode: 'Режим відповіді', standardMode: 'Звичайна відповідь',
+  reviewMode: 'Перевірка відповіді',
+  reviewModeHint: 'Та сама локальна модель перечитує чернетку. Важливі висновки потребують окремої перевірки.',
+  answeredReview: 'VELION перечитав чернетку. Перевіряйте важливі факти й висновки.',
 });
 const setStatus = (key) => {
   status.textContent = tr(key);
@@ -731,7 +731,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
   }
   if (listening) recognition.stop();
   const chat = selected();
-  const modeForRequest = responseMode.value === 'MAX' ? 'MAX' : 'STANDARD';
+  const modeForRequest = responseMode.value === 'REVIEW' ? 'REVIEW' : 'STANDARD';
   chat.messages.push({ role: 'user', content: value });
   renderMessages();
   prompt.value = '';
@@ -760,7 +760,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token.value },
       body: JSON.stringify({
         messages: requestMessages,
-        ...(modeForRequest === 'MAX' ? { responseMode: 'MAX' } : {}),
+        ...(modeForRequest === 'REVIEW' ? { responseMode: 'REVIEW' } : {}),
       }),
     });
     const data = await response.json();
@@ -777,7 +777,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
         CHAT_MODEL_RESPONSE_INCOMPLETE: 'incomplete',
         CHAT_MODEL_RESPONSE_TOO_LARGE: 'invalid',
         CHAT_MODE_INVALID: 'invalid',
-        CHAT_MAX_CONTEXT_TOO_LARGE: 'invalid',
+        CHAT_REVIEW_CONTEXT_TOO_LARGE: 'invalid',
       };
       throw Object.assign(Error('Request failed'), { display: errors[data.code] || 'failed' });
     }
@@ -787,8 +787,8 @@ $('#chat-form').addEventListener('submit', async (event) => {
       data.answer.length > 4000 ||
       !['ollama-local', 'llama-cpp-local'].includes(data.receipt?.provider) ||
       data.receipt?.toolAccess !== 'NONE' ||
-      (modeForRequest === 'MAX' &&
-        (data.receipt.responseMode !== 'MAX' ||
+      (modeForRequest === 'REVIEW' &&
+        (data.receipt.responseMode !== 'REVIEW' ||
          data.receipt.modelCalls !== 2 ||
          data.receipt.qualityVerified !== false ||
          data.receipt.reviewScope !== 'SAME_MODEL_LOCAL_SELF_REVIEW_ONLY'))
@@ -797,7 +797,7 @@ $('#chat-form').addEventListener('submit', async (event) => {
     chat.messages.push({ role: 'assistant', content: data.answer });
     if (!chat.title) chat.title = value.slice(0, 48);
     const saved = render();
-    if (saved) setStatus(modeForRequest === 'MAX' ? 'answeredMax' : 'answered');
+    if (saved) setStatus(modeForRequest === 'REVIEW' ? 'answeredReview' : 'answered');
     messagesBox.lastElementChild?.scrollIntoView({ block: 'nearest' });
     if (autoSpeak.checked) speakText(data.answer);
   } catch (cause) {

@@ -16,7 +16,7 @@
 | Google crawled or indexed this page | NOT_VERIFIED | Actual Google URL Inspection required |
 | Google Knowledge Graph entity recognition / search ranking | NOT_VERIFIED | Independent Google evidence needed |
 
-VELION MAX remains a mode, not an independent LLM. V2's model router code is a bounded non-executing planner; real previous CPU inference used third-party model weights. This does not establish proprietary foundation weights, live production AI, globally operating agents, comparative technological superiority or 24/7 runtime.
+V2's model router code is a bounded non-executing planner; real previous CPU inference used third-party model weights. This does not establish proprietary foundation weights, live production AI, globally operating agents, comparative technological superiority or 24/7 runtime.
 
 Third-party models and libraries retain their own copyright, contributors and licenses. IMPERIAL Core's founder attribution is restricted to original protectable architecture and account source contributions.
 
