@@ -117,4 +117,11 @@ Do not add another orchestrator, repository, public endpoint, paid inference, or
 
 ## 8. Truthful current verdict
 
-**ARCHITECTURE SPECIFICATION CREATED. IMPLEMENTATION / BENCHMARK NOT YET EXECUTED. ASTRA 6.2 PARITY NOT ESTABLISHED.** Keep draft PR #32 and main unchanged until reviewed acceptance. The goal is ambitious and legitimate; progress is measured only by reproducible results.
+### 23 November implementation checkpoint
+
+- The Ollama MAX adapter now uses the full validated conversation in its bounded second-pass review. An oversized encoded context fails explicitly. The model reply remains advisory.
+- `npm run evaluate:intelligence -- --paired` runs the existing twenty development cases against STANDARD and MAX. It alternates the mode order, verifies both receipts against the same named local model and input hash, and withholds aggregate scores for incomplete runs. Six cases need human grading.
+- Use this comparison to decide whether the extra verification pass earns its latency. For the Astra comparison, freeze unseen tasks and publish a scoring rubric before collecting either system's outputs. Provide both systems the same authorized tools, time and token allowances. Record which actions were actually verified.
+- For model selection and access policy, evolve the existing VELION model router and fabric contracts. Keep consented, provenance-bound memory and read-only Skills separate from an independently authorized action. VELION proposes and evaluates. HANTER dispatches work through the Federated Multi-Orchestrator Architecture. Guardian Core, Approval Gateway and Audit Ledger retain their established roles.
+
+**Astra 6.2 parity remains unmeasured.** Tests with simulated model responses establish software behavior only. Keep the draft subject to review before release.

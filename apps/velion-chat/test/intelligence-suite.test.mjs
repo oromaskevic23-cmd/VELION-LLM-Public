@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {intelligenceCases, scoreIntelligenceCase} from '../tools/intelligence-cases.mjs';
-import {runIntelligenceSuite, SUITE_SHA256} from '../tools/intelligence-suite.mjs';
+import {runIntelligenceSuite, runPairedIntelligenceSuite, SUITE_SHA256} from '../tools/intelligence-suite.mjs';
 import {localIntelligenceService} from '../tools/local-intelligence-service.mjs';
 
 test('evaluation requires opt-in and selects only a configured local backend', async () => {
@@ -64,4 +65,56 @@ test('suite stops on the first provider failure instead of spending on retries',
   assert.equal(report.completed, false);
   assert.equal(report.requestFailures, 1);
   assert.equal(report.results[0].error, 'CHAT_MODEL_UNAVAILABLE');
+});
+
+const hash = value => createHash('sha256').update(value).digest('hex');
+function fixture(messages, responseMode, answer) {
+  return {answer, receipt:{
+    provider:'ollama-local', requestedModel:'fixture:local', returnedModel:'fixture:local',
+    responseMode, modelCalls:responseMode === 'MAX' ? 2 : 1,
+    inputSha256:hash(JSON.stringify(messages)), outputSha256:hash(answer),
+    toolAccess:'NONE', approval:'NOT_GRANTED',
+  }};
+}
+
+test('paired run uses identical tasks, alternates order and excludes manually scored cases', async () => {
+  const calls = [];
+  const report = await runPairedIntelligenceSuite({async chat(messages, {responseMode}) {
+    const item = intelligenceCases[Math.floor(calls.length / 2)];
+    assert.deepEqual(messages, item.messages);
+    calls.push(responseMode);
+    const answer = responseMode === 'MAX' && item.kind !== 'manual'
+      ? item.kind === 'json' ? JSON.stringify(item.expected) : String(item.expected)
+      : 'Synthetic response for reviewer';
+    return fixture(messages, responseMode, answer);
+  }});
+  assert.deepEqual(calls.slice(0, 6), ['STANDARD','MAX','MAX','STANDARD','STANDARD','MAX']);
+  assert.equal(calls.length, 40);
+  assert.equal(report.completedPairs, 20);
+  assert.equal(report.manualPairs, 6);
+  assert.equal(report.scoredPairs, 14);
+  assert.equal(report.completed, true);
+  assert.deepEqual(report.scores, {standardPassed:0,maxPassed:14,difference:14});
+});
+
+test('paired run rejects a mismatched model or a silently downgraded MAX with no score', async () => {
+  const mutate = [
+    receipt => {receipt.requestedModel = receipt.returnedModel = 'other:local';},
+    receipt => {receipt.responseMode = 'STANDARD'; receipt.modelCalls = 1;},
+    receipt => {receipt.inputSha256 = '0'.repeat(64);},
+    receipt => {receipt.outputSha256 = '0'.repeat(64);},
+  ];
+  for (const change of mutate) {
+    let calls = 0;
+    const report = await runPairedIntelligenceSuite({async chat(messages, {responseMode}) {
+      calls++;
+      const result = fixture(messages, responseMode, '70');
+      if (responseMode === 'MAX') change(result.receipt);
+      return result;
+    }});
+    assert.equal(calls, 2);
+    assert.deepEqual(report.failure, {id:'inventory',mode:'MAX',error:'PAIRED_RECEIPT_INVALID'});
+    assert.equal(report.completedPairs, 0);
+    assert.equal(report.scores, null);
+  }
 });

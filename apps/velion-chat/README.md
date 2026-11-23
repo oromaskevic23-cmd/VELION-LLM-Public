@@ -16,14 +16,17 @@ automatic fallback between them.
 Open **Settings → Response mode**. `STANDARD` is the default and makes one
 local model inference. `VELION MAX` is an **opt-in bounded, two-pass same-model
 self-review**: VELION generates a draft, then asks the same local model to
-review the latest user request and the untrusted draft for reasoning or
-formatting problems. Only the second-pass answer is displayed. This is a
+review it against the validated conversation, including constraints from
+earlier turns. The conversation and draft are separate JSON fields. Only the
+second-pass answer is displayed. This is a
 local model-adapter feature, not a separate model, independently checked
 reasoning, paid service or Astra 6.2 quality parity.
 
 MAX can be slower. The two passes share the current request deadline; the
 latest user request and first draft must each be no longer than 1,800
-characters for bounded local review. Unsupported mode names or a MAX
+characters for bounded local review. The encoded review input is limited to
+32 KiB. Oversized inputs are refused without dropping earlier turns.
+Unsupported mode names or a MAX
 request combined with the structured Constructor draft format are denied.
 When either model pass fails, the entire request fails closed without
 labeling the initial draft a verified answer. The result receipt states
@@ -262,6 +265,16 @@ runner stops at the first provider error instead of making repeated requests.
 This small public suite is useful for spotting regressions, not for claiming a
 general intelligence ranking or superiority over Astra. Comparison requires
 the same prompts, settings and independently reviewed, unseen tasks.
+
+With the configured local Ollama backend, run
+`npm run evaluate:intelligence -- --paired` to compare STANDARD and MAX on
+the same 20 conversations. The runner alternates which mode runs first,
+checks each receipt against the requested mode, exact input and same named
+model, and stops at the first request or receipt failure. It reports the
+difference across the 14 automatically graded pairs only after all 20
+pairs are complete. The six manual pairs remain available for review. A
+complete paired run makes up to 60 local model requests and does not
+compare either mode with Astra.
 
 One [real local Qwen2.5 1.5B evaluation](evidence/INTELLIGENCE_1P5B_20261110.md)
 passed 3 of 14 strict checks and included unsafe advice in a manual case. It is
