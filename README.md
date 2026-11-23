@@ -22,6 +22,25 @@ This image is a design concept for the desktop and mobile experience, not a scre
 
 **Optional two-pass answer review (21 November 2026):** the VELION chat can ask the **same configured local model** for a bounded second review; it does not add proprietary weights, tools, autonomous execution or independent fact-checking. **18/18 exact-source synthetic Node.js/HTTP regression tests PASS** on code commit `beaa1b7c774601a417c718be4ed4b7b22ba1c195`. [Implementation and evidence](docs/VELION_TWO_PASS_REVIEW_20261121.md) · [local usage](apps/velion-chat/README.md). **Astra 6.2 capability parity and real model-quality improvement have not been verified.**
 
+**In development — VELION local Enterprise Skills prototype (21 November 2026):**
+a new **explicitly user-operated** exact-integer calculator and authenticated,
+loopback-only, read-only HTTP endpoint have passed **25/25 exact-source
+Node.js/HTTP synthetic tests** on a temporary development branch. It does not
+grant the model autonomous tool use or imply real Owner approval. [Scope,
+test evidence and limitations](docs/VELION_LOCAL_ENTERPRISE_SKILL_20261121.md).
+This is not merged into `main` and is not a production feature.
+
+**In development — VELION Skill proposal guard (21 November 2026):**
+a manually triggered, authenticated, loopback-only `/api/skills/propose`
+endpoint now requests **proposal-only** arithmetic arguments from the
+configured local model. Untrusted JSON is allowlisted and must not mint
+consent, Guardian authorization, AI Passport rights or execute the skill.
+In the existing **draft PR #32**, **35/35 exact-source synthetic Node/HTTP
+regression tests PASS**, extending the earlier 25-test calculator checkpoint.
+[Source-pinned implementation evidence and release boundaries](docs/VELION_MODEL_SKILL_PROPOSAL_20261121.md).
+**No live model-quality benchmark, Astra 6.2 parity, iPhone acceptance or
+production capability is claimed; the PR is unmerged.**
+
 **Local model quality warning:** external Qwen2.5 1.5B and Qwen2.5-Coder 7B models passed 3/14 and 8/14 strict synthetic checks respectively. Both gave unsafe advice in a manually reviewed case. Neither configuration is ready for a phone-facing service. [1.5B evidence](apps/velion-chat/evidence/INTELLIGENCE_1P5B_20261110.md) · [7B evidence](apps/velion-chat/evidence/INTELLIGENCE_CODER7B_20261110.md).
 
 **Verified 28 October 2026:** NVIDIA Nemotron 3 Nano 4B (external open model) completed real CPU inference in a free isolated GitHub Actions run: **11 generated tokens**, locally installed 2,837,597,147-byte model, output SHA-256 receipt. [Run evidence](https://github.com/oromaskevic23-cmd/VELION-LLM-Public/actions/runs/40669452722) · [installation and limitations](docs/NEMOTRON3_NANO4B_REAL_RUN.md). **This does not establish VELION-owned weights or a persistent live endpoint.**

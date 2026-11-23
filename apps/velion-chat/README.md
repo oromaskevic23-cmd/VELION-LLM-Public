@@ -16,14 +16,17 @@ automatic fallback between them.
 Open **Settings → Response mode**. **Regular answer** is the default and makes one
 local model inference. **Review the answer** is an **opt-in bounded, two-pass same-model
 self-review**: VELION generates a draft, then asks the same local model to
-review the latest user request and the untrusted draft for reasoning or
-formatting problems. Only the second-pass answer is displayed. This is a
+review it against the validated conversation, including constraints from
+earlier turns. The conversation and draft are separate JSON fields. Only the
+second-pass answer is displayed. This is a
 local model-adapter feature, not a separate model, independently checked
 reasoning, paid service or Astra 6.2 quality parity.
 
 The second pass can take longer. The two passes share the current request deadline; the
 latest user request and first draft must each be no longer than 1,800
-characters for bounded local review. Unsupported mode names or a review
+characters for bounded local review. The encoded review input is limited to
+32 KiB. Oversized inputs are refused without dropping earlier turns.
+Unsupported mode names or a review
 request combined with the structured Constructor draft format are denied.
 When either model pass fails, the entire request fails closed without
 labeling the initial draft a verified answer. The result receipt states
@@ -120,6 +123,50 @@ shape check; callers cannot supply an arbitrary schema. It is disabled by
 default and does not affect ordinary chat. The format constrains syntax, not
 correctness, safety, execution permission or release. The generated source
 remains untrusted and must still pass Constructor's quarantine and separate QA.
+
+## Local read-only Enterprise Skill (development branch)
+
+In **Settings → Enterprise Skills · exact calculator**, enter two integer
+values, select an operation and explicitly press **Calculate locally**.
+The result stays in a separate output field; it is **not** injected into
+chat history or sent to the model. Supported deterministic operations are
+add, subtract, multiply and divide with remainder, using precise BigInt
+arithmetic on canonical signed decimal strings of up to 18 digits.
+
+The `/api/skills/run` endpoint requires the configured local chat token,
+loopback Host/Origin, JSON, a declared client consent marker, a fixed local
+tenant and a strict request schema. This is **not** signed consent, real AI
+Passport, Guardian Core approval, a durable Audit Ledger or externally
+authenticated Enterprise Skills. No model output can automatically call this
+endpoint, and it has **no file, network, payment or execution authority**.
+
+See the [exact-source 25-test checkpoint](../../docs/VELION_LOCAL_ENTERPRISE_SKILL_20261121.md).
+This addition is under review on a separate development branch; it is
+not production or Astra 6.2 parity.
+
+## VELION model-assisted Skill proposal preview (experimental)
+
+In **Settings → VELION · suggest a Skill**, enter a short arithmetic task and
+press **Suggest without executing**. The existing local chat model returns a
+candidate operation and operands. A separate strict validator accepts only
+`velion.arithmetic.exact_v1` on the fixed `velion-local` scope, with
+canonical signed decimal integers. It refuses unexpected keys, duplicate
+JSON members, privileged fields, unsupported operations and malformed answers.
+
+The preview is **PROPOSAL_ONLY** and **NOT EXECUTED**. It cannot be posted
+directly to the separate calculator executor, does not carry `clientConsent`,
+and does not fill the calculation form or turn on any permission. The model
+can misunderstand the arithmetic; review its proposed inputs before any
+separate manual operation. No model response authorizes a tool, payment,
+file change, email, web browsing or NCA execution.
+
+The endpoint `POST /api/skills/propose` is only reachable using the existing
+local session token and loopback Host/Origin checks, and it calls a local
+model only when explicitly requested. A model must already be installed and
+configured as described above. There is no cloud/provider fallback.
+[Implementation, verified **35/35** synthetic Node/HTTP tests and limitations](../../docs/VELION_MODEL_SKILL_PROPOSAL_20261121.md).
+Actual model proposal accuracy, iPhone Safari usability and independent
+security approval have not been demonstrated.
 
 ## Voice and privacy
 
@@ -218,6 +265,16 @@ runner stops at the first provider error instead of making repeated requests.
 This small public suite is useful for spotting regressions, not for claiming a
 general intelligence ranking or superiority over Astra. Comparison requires
 the same prompts, settings and independently reviewed, unseen tasks.
+
+With the configured local Ollama backend, run
+`npm run evaluate:intelligence -- --paired` to compare STANDARD and REVIEW on
+the same 20 conversations. The runner alternates which mode runs first,
+checks each receipt against the requested mode, exact input and same named
+model, and stops at the first request or receipt failure. It reports the
+difference across the 14 automatically graded pairs only after all 20
+pairs are complete. The six manual pairs remain available for review. A
+complete paired run makes up to 60 local model requests and does not
+compare either mode with Astra.
 
 One [real local Qwen2.5 1.5B evaluation](evidence/INTELLIGENCE_1P5B_20261110.md)
 passed 3 of 14 strict checks and included unsafe advice in a manual case. It is
