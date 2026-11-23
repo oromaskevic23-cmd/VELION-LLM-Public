@@ -20,7 +20,7 @@ Intelligence architecture and bounded model-proposal gateways for IMPERIAL Core.
 
 This image is a design concept for the desktop and mobile experience, not a screenshot of the current application or evidence of a deployed service.
 
-**VELION MAX — new local two-pass reply mode (21 November 2026):** the standalone chat now offers an optional STANDARD / VELION MAX selector. MAX asks the **same configured local model** for a bounded second review; it does not add proprietary weights, tools, autonomous execution or independent fact-checking. **18/18 exact-source synthetic Node.js/HTTP regression tests PASS** on code commit `beaa1b7c774601a417c718be4ed4b7b22ba1c195`. [Implementation and evidence](docs/VELION_MAX_TWO_PASS_20261121.md) · [local usage](apps/velion-chat/README.md). **Astra 6.2 capability parity and real model-quality improvement have not been verified.**
+**Optional two-pass answer review (21 November 2026):** the VELION chat can ask the **same configured local model** for a bounded second review; it does not add proprietary weights, tools, autonomous execution or independent fact-checking. **18/18 exact-source synthetic Node.js/HTTP regression tests PASS** on code commit `beaa1b7c774601a417c718be4ed4b7b22ba1c195`. [Implementation and evidence](docs/VELION_TWO_PASS_REVIEW_20261121.md) · [local usage](apps/velion-chat/README.md). **Astra 6.2 capability parity and real model-quality improvement have not been verified.**
 
 **In development — VELION local Enterprise Skills prototype (21 November 2026):**
 a new **explicitly user-operated** exact-integer calculator and authenticated,
@@ -82,7 +82,7 @@ This is tested reference scope, not a merged release or verified production depl
 
 ## Canonical name
 
-The canonical product name is **VELION ⚡️** (owner-approved). **MAX** is an operating mode, not a separate product name. The historical URL `VELION-LLM-Public` is retained. The reference PR includes a cloud-first proposal gateway; no local workstation or live cloud inference is implied by its mocked test results.
+The canonical product name is **VELION ⚡️** (owner-approved). The historical URL `VELION-LLM-Public` is retained. The reference PR includes a cloud-first proposal gateway; no local workstation or live cloud inference is implied by its mocked test results.
 
 ## Architecture and governance
 
@@ -109,9 +109,9 @@ Start non-confidential collaboration through the [founder profile](https://githu
 
 ## VELION v2 — Enterprise Modular Intelligence Fabric (31 October 2026)
 
-**Founder / Architect:** Alexander Nikolaevich Romaskevich (**RomaskevicH**), Founder · Owner · CEO of IMPERIAL Core; Final Architectural Decision Authority. **VELION MAX is a mode**, not a second model. HANTER remains the AI Command Center, federated domain orchestrators retain independent scoped execution, and ORION is advisory.
+**Founder / Architect:** Alexander Nikolaevich Romaskevich (**RomaskevicH**), Founder · Owner · CEO of IMPERIAL Core; Final Architectural Decision Authority. HANTER remains the AI Command Center, federated domain orchestrators retain independent scoped execution, and ORION is advisory.
 
-VELION v2 introduces [immutable module contracts and source-level routing](src/velion_fabric/): tenant- and NCA-scoped policy gates, a deterministic free-only Model Registry, STANDARD/MAX bounded route selection and SHA-256 evidence receipts. The v2 reference is deliberately **non-executing**; it never calls a model, a browser, a financial tool or a customer platform. The earlier v1 real CPU Nemotron model integration and CONSTRUCTOR AI bridge remain intact.
+VELION v2 introduces [immutable module contracts and source-level routing](src/velion_fabric/): tenant- and NCA-scoped policy gates, a deterministic free-only Model Registry, STANDARD/REVIEW bounded route selection and SHA-256 evidence receipts. The v2 reference is deliberately **non-executing**; it never calls a model, a browser, a financial tool or a customer platform. The earlier v1 real CPU Nemotron model integration and CONSTRUCTOR AI bridge remain intact.
 
 **Read the canonical architecture:** [12-module design](docs/VELION_ENTERPRISE_MODULAR_ARCHITECTURE_V2.md) · [interface contracts](docs/VELION_MODULE_CONTRACTS_V2.md) · [engineering gates](docs/VELION_IMPLEMENTATION_ROADMAP_V2.md) · [fair competitive evaluation](docs/VELION_COMPETITIVE_BENCHMARK_PROTOCOL.md) · [founder and Google discoverability plan](docs/GOOGLE_FOUNDER_TECHNOLOGY_INDEXING.md).
 

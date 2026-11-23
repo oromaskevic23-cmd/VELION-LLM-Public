@@ -31,7 +31,7 @@ No single global execution orchestrator. HANTER coordinates; federated orchestra
 | VELION Gateway | Signed/authorized ingress, request schema, quotas | Existing v1 HMAC loopback; v2 target |
 | Model Registry | Provider/model identity, weight digest, license, cost, residency, health | v2 deterministic descriptor/reference |
 | Model Engine/Router | Capability routing, no hidden paid fallback, provider isolation | v1 real two-task Nemotron; v2 offline planner |
-| Reasoning Modes | STANDARD and MAX bounded planning budgets | v2 reference; MAX is not another product |
+| Planning Budgets | Standard and review token budgets | v2 reference |
 | Context Shield | Context origin, privacy labels, token/resource budgeting | Specified |
 | VELION Memory | Ephemeral, NCA, team/domain, approved continuity tiers | Specified; separate IMPERIAL memory exists |
 | Enterprise Skills / Tools | Versioned least-privilege plugins and capability grants | Specified; IMPERIAL Plugins separate prototypes |
@@ -43,14 +43,14 @@ No single global execution orchestrator. HANTER coordinates; federated orchestra
 
 ### Versioned task and model contracts
 
-The *executable reference* lives in [src/velion_fabric](../src/velion_fabric/), not in an unverified deployed service. Its immutable Task specifies a task ID, tenant, orchestrator, agent, capability, data class, input SHA-256, STANDARD/MAX mode, zero spending and no external effects. ModelDescriptor specifies provider/model ID, declared digest, supported capabilities, data classes, flags and token ceilings. Models are filtered by capability, declared provenance, locality, health, FREE_ONLY and task mode; routing is deterministic.
+The *executable reference* lives in [src/velion_fabric](../src/velion_fabric/), not in an unverified deployed service. Its immutable Task specifies a task ID, tenant, orchestrator, agent, capability, data class, input SHA-256, STANDARD/REVIEW mode, zero spending and no external effects. ModelDescriptor specifies provider/model ID, declared digest, supported capabilities, data classes, flags and token ceilings. Models are filtered by capability, declared provenance, locality, health, FREE_ONLY and task mode; routing is deterministic.
 
-**Deliberate limitations:** model hashes are declared inputs and are not rechecked against bytes; synthetic approval is not a real signed AI Passport/Guardian/Approval service; route SHA-256 receipts are integrity identifiers, not release signatures; neither routing nor MAX invokes a model or executes code.
+**Deliberate limitations:** model hashes are declared inputs and are not rechecked against bytes; synthetic approval is not a real signed AI Passport/Guardian/Approval service; route SHA-256 receipts are integrity identifiers, not release signatures; neither planning budget invokes a model or executes code.
 
-### STANDARD vs MAX
+### STANDARD vs REVIEW
 
 - **STANDARD:** default route plan capped to 4,096 context / 512 output tokens in this reference.
-- **MAX:** higher-complexity *mode*, capped to 16,384 context / 2,048 output tokens and the model's actual descriptor limits.
+- **REVIEW:** higher-complexity *mode*, capped to 16,384 context / 2,048 output tokens and the model's actual descriptor limits.
 - Neither bypasses Zero Trust, budget, data classification, independent QA or Owner Approval Gateway.
 
 ### VELION Memory

@@ -11,7 +11,7 @@ def select_model(task: Task, models: tuple, *, allow_remote: bool=False) -> Mode
        and (m.local or allow_remote)
        and task.capability in m.capabilities
        and task.data_class in m.allowed_data_classes
-       and (task.mode!="MAX" or m.supports_max)]
+       and (not task.uses_review_budget or m.supports_max)]
     if not candidates:
         raise ContractError("NO_ELIGIBLE_MODEL")
     candidates.sort(key=lambda m:(m.priority,not m.local,m.provider_id,m.model_id))

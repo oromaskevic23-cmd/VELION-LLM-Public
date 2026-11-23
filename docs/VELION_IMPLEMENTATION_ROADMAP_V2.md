@@ -4,7 +4,7 @@
 
 | Gate | Deliverable | Verification condition | State |
 | --- | --- | --- | --- |
-| V2-001 | Immutable Task/ModelDescriptor, policy gate, deterministic Model Registry, STANDARD/MAX receipt | GitHub CI on source revision | Source added, CI must confirm |
+| V2-001 | Immutable Task/ModelDescriptor, policy gate, deterministic Model Registry, STANDARD/REVIEW receipt | GitHub CI on source revision | Source added, CI must confirm |
 | V2-002 | Backward-compatible bridge to existing real Nemotron router | v1 and v2 regression plus E2E evidence | Planned |
 | V2-003 | Provider adapter isolation + first two real models | actual signed/verified inference from both | Planned |
 | V2-004 | Context Shield and tiered Memory | privacy and retrieval injection tests | Planned |

@@ -71,7 +71,7 @@ const hash = value => createHash('sha256').update(value).digest('hex');
 function fixture(messages, responseMode, answer) {
   return {answer, receipt:{
     provider:'ollama-local', requestedModel:'fixture:local', returnedModel:'fixture:local',
-    responseMode, modelCalls:responseMode === 'MAX' ? 2 : 1,
+    responseMode, modelCalls:responseMode === 'REVIEW' ? 2 : 1,
     inputSha256:hash(JSON.stringify(messages)), outputSha256:hash(answer),
     toolAccess:'NONE', approval:'NOT_GRANTED',
   }};
@@ -83,21 +83,21 @@ test('paired run uses identical tasks, alternates order and excludes manually sc
     const item = intelligenceCases[Math.floor(calls.length / 2)];
     assert.deepEqual(messages, item.messages);
     calls.push(responseMode);
-    const answer = responseMode === 'MAX' && item.kind !== 'manual'
+    const answer = responseMode === 'REVIEW' && item.kind !== 'manual'
       ? item.kind === 'json' ? JSON.stringify(item.expected) : String(item.expected)
       : 'Synthetic response for reviewer';
     return fixture(messages, responseMode, answer);
   }});
-  assert.deepEqual(calls.slice(0, 6), ['STANDARD','MAX','MAX','STANDARD','STANDARD','MAX']);
+  assert.deepEqual(calls.slice(0, 6), ['STANDARD','REVIEW','REVIEW','STANDARD','STANDARD','REVIEW']);
   assert.equal(calls.length, 40);
   assert.equal(report.completedPairs, 20);
   assert.equal(report.manualPairs, 6);
   assert.equal(report.scoredPairs, 14);
   assert.equal(report.completed, true);
-  assert.deepEqual(report.scores, {standardPassed:0,maxPassed:14,difference:14});
+  assert.deepEqual(report.scores, {standardPassed:0,reviewPassed:14,difference:14});
 });
 
-test('paired run rejects a mismatched model or a silently downgraded MAX with no score', async () => {
+test('paired run rejects a mismatched model or a silently downgraded REVIEW with no score', async () => {
   const mutate = [
     receipt => {receipt.requestedModel = receipt.returnedModel = 'other:local';},
     receipt => {receipt.responseMode = 'STANDARD'; receipt.modelCalls = 1;},
@@ -109,11 +109,11 @@ test('paired run rejects a mismatched model or a silently downgraded MAX with no
     const report = await runPairedIntelligenceSuite({async chat(messages, {responseMode}) {
       calls++;
       const result = fixture(messages, responseMode, '70');
-      if (responseMode === 'MAX') change(result.receipt);
+      if (responseMode === 'REVIEW') change(result.receipt);
       return result;
     }});
     assert.equal(calls, 2);
-    assert.deepEqual(report.failure, {id:'inventory',mode:'MAX',error:'PAIRED_RECEIPT_INVALID'});
+    assert.deepEqual(report.failure, {id:'inventory',mode:'REVIEW',error:'PAIRED_RECEIPT_INVALID'});
     assert.equal(report.completedPairs, 0);
     assert.equal(report.scores, null);
   }

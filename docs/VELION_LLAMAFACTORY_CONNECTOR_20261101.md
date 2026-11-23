@@ -11,7 +11,7 @@ Canonical relationship:
 
 Architect → HANTER AI Command Center → federated Engineering Orchestrator → VELION Intelligence Fabric → **VELION Training Adapter in IMPERIAL-Plugins** → optional approved LLaMA-Factory LoRA/QLoRA experiment → independently held-out model testing → ProofGraph / Audit Ledger → separate signed release.
 
-VELION's **MAX is a mode**, never a new model or independent global orchestrator. All Runtime Domains, Guardian Core, Approval Gateway, Enterprise Skills, AI Passport, IntentLock, Owner Kill Switch, Zero Trust and Public/Private/CRYPTO IMPERIAL ecosystem boundaries remain intact.
+All Runtime Domains, Guardian Core, Approval Gateway, Enterprise Skills, AI Passport, IntentLock, Owner Kill Switch, Zero Trust and Public/Private/CRYPTO IMPERIAL ecosystem boundaries remain intact.
 
 ## Implemented public integration
 

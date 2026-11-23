@@ -50,7 +50,7 @@ function pairedModel(result, item, mode, expectedModel) {
   const model = receipt?.requestedModel;
   if (receipt?.provider !== 'ollama-local' || typeof model !== 'string' || !model ||
       model !== receipt.returnedModel || (expectedModel && model !== expectedModel) ||
-      receipt.responseMode !== mode || receipt.modelCalls !== (mode === 'MAX' ? 2 : 1) ||
+      receipt.responseMode !== mode || receipt.modelCalls !== (mode === 'REVIEW' ? 2 : 1) ||
       receipt.inputSha256 !== digest(JSON.stringify(item.messages)) ||
       typeof result.answer !== 'string' || receipt.outputSha256 !== digest(result.answer) ||
       receipt.toolAccess !== 'NONE' || receipt.approval !== 'NOT_GRANTED') {
@@ -65,7 +65,7 @@ export async function runPairedIntelligenceSuite(service) {
   let failure = null;
   let model = null;
   for (const [index, item] of intelligenceCases.entries()) {
-    const modeOrder = index % 2 ? ['MAX', 'STANDARD'] : ['STANDARD', 'MAX'];
+    const modeOrder = index % 2 ? ['REVIEW', 'STANDARD'] : ['STANDARD', 'REVIEW'];
     const pair = {id:item.id, kind:item.kind, modeOrder};
     for (const mode of modeOrder) {
       try {
@@ -82,7 +82,7 @@ export async function runPairedIntelligenceSuite(service) {
   }
   const automatic = pairs.filter(pair => pair.kind !== 'manual');
   const standardPassed = automatic.filter(pair => pair.STANDARD.passed === true).length;
-  const maxPassed = automatic.filter(pair => pair.MAX.passed === true).length;
+  const reviewPassed = automatic.filter(pair => pair.REVIEW.passed === true).length;
   const completed = pairs.length === intelligenceCases.length;
   return {
     suite:SUITE_ID, suiteSha256:SUITE_SHA256, executedAt:new Date().toISOString(),
@@ -90,7 +90,7 @@ export async function runPairedIntelligenceSuite(service) {
     expectedPairs:intelligenceCases.length, completedPairs:pairs.length,
     scoredPairs:automatic.length,
     manualPairs:pairs.length - automatic.length,
-    scores:completed ? {standardPassed, maxPassed, difference:maxPassed - standardPassed} : null,
+    scores:completed ? {standardPassed, reviewPassed, difference:reviewPassed - standardPassed} : null,
     limitations:'Source-visible development cases. Six cases require manual review. This run does not compare Astra or establish model superiority.',
     pairs,
   };

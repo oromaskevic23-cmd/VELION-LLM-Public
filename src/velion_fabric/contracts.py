@@ -24,6 +24,10 @@ class Task:
     budget_cents: int = 0
     external_effects: bool = False
     action: str = "PROPOSAL_ONLY"
+    @property
+    def uses_review_budget(self):
+        return self.mode in ("REVIEW", "MAX")
+
     def __post_init__(self):
         if any(not valid_id(x) for x in (self.task_id,self.tenant_id,self.orchestrator_id,self.agent_id)):
             raise ContractError("ID_INVALID")
@@ -31,7 +35,7 @@ class Task:
             raise ContractError("SCOPE_DENIED")
         if type(self.input_sha256) is not str or not SHA.fullmatch(self.input_sha256):
             raise ContractError("DIGEST_INVALID")
-        if self.mode not in ("STANDARD","MAX"):
+        if self.mode != "STANDARD" and not self.uses_review_budget:
             raise ContractError("MODE_DENIED")
         if type(self.budget_cents) is not int or self.budget_cents != 0:
             raise ContractError("FREE_ONLY")

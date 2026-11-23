@@ -8,7 +8,6 @@
 - `policy.py`: default kill switch engaged; requires explicit synthetic approval and exact tenant/orchestrator/NCA allowlist for local planning. **This is not a production signed Approval Gateway.**
 - `registry.py`: deterministic eligible provider/model selection; healthy, compatible, FREE_ONLY and local by default.
 - `engine.py`: evidence-linked bounded route plan; SHA-256 receipt; absolutely no provider calls, tools or execution.
-- `MAX` is one VELION mode; it is never a separate LLM identity.
 
 ## Security invariants
 

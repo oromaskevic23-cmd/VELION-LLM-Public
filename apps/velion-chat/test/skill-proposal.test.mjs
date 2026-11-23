@@ -118,7 +118,7 @@ test('untrusted or mismatched model receipt cannot fabricate a proposal',async()
     {answer:JSON.stringify(candidate()),receipt:{}},
     {answer:JSON.stringify(candidate()),receipt:{toolAccess:'SHELL',approval:'NOT_GRANTED',responseMode:'STANDARD',modelCalls:1}},
     {answer:JSON.stringify(candidate()),receipt:{toolAccess:'NONE',approval:'APPROVED',responseMode:'STANDARD',modelCalls:1}},
-    {answer:JSON.stringify(candidate()),receipt:{toolAccess:'NONE',approval:'NOT_GRANTED',responseMode:'MAX',modelCalls:2}},
+    {answer:JSON.stringify(candidate()),receipt:{toolAccess:'NONE',approval:'NOT_GRANTED',responseMode:'REVIEW',modelCalls:2}},
     {answer:'not-json',receipt:{toolAccess:'NONE',approval:'NOT_GRANTED',responseMode:'STANDARD',modelCalls:1}},
   ];
   for(const result of invalid)

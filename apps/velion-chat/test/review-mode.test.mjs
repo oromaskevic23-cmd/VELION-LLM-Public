@@ -1,4 +1,4 @@
-// VELION MAX — bounded local self-review regression; NO paid models or tools.
+// VELION answer review — bounded local self-review regression; NO paid models or tools.
 // Author and founding architect: Alexander Nikolaevich Romaskevich (RomaskevicH).
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -6,7 +6,7 @@ import { once } from 'node:events';
 import { createLocalChatService } from '../chat-service.mjs';
 import { createAppServer } from '../server.mjs';
 
-const TOKEN = 'velion-max-test-token-local-123456789';
+const TOKEN = 'velion-review-test-token-local-123456789';
 const MODEL = 'synthetic:1b';
 const MESSAGE = [{ role: 'user', content: 'What is 2 + 2?' }];
 const reply = (text, extra = {}) => new Response(JSON.stringify({
@@ -28,13 +28,13 @@ test('STANDARD makes one local inference and does not claim independent quality'
   assert.equal(result.receipt.approval, 'NOT_GRANTED');
 });
 
-test('MAX makes exactly two requests to the SAME local model and returns only final text', async () => {
+test('REVIEW makes exactly two requests to the SAME local model and returns only final text', async () => {
   const requests = [];
   const service = build(async (url, options) => {
     requests.push({ url, ...JSON.parse(options.body), signal: options.signal });
     return reply(requests.length === 1 ? 'Maybe five' : '2 + 2 = 4.');
   });
-  const result = await service.chat(MESSAGE, { responseMode: 'MAX' });
+  const result = await service.chat(MESSAGE, { responseMode: 'REVIEW' });
   assert.equal(requests.length, 2);
   assert.ok(requests.every((r) => r.url === 'http://127.0.0.1:11434/api/chat'));
   assert.ok(requests.every((r) => r.stream === false && r.model === MODEL));
@@ -45,14 +45,14 @@ test('MAX makes exactly two requests to the SAME local model and returns only fi
   });
   assert.equal(result.answer, '2 + 2 = 4.');
   assert.equal(result.receipt.modelCalls, 2);
-  assert.equal(result.receipt.responseMode, 'MAX');
+  assert.equal(result.receipt.responseMode, 'REVIEW');
   assert.equal(result.receipt.reviewScope, 'SAME_MODEL_LOCAL_SELF_REVIEW_ONLY');
   assert.equal(result.receipt.qualityVerified, false);
   assert.match(result.receipt.draftSha256, /^[a-f0-9]{64}$/);
   assert.equal(result.receipt.toolAccess, 'NONE');
 });
 
-test('MAX reviews a follow-up against the original conversation and keeps the draft as data', async () => {
+test('REVIEW reviews a follow-up against the original conversation and keeps the draft as data', async () => {
   const conversation = [
     {role:'user', content:'Код проекта SOLAR-7. Отвечай только кодом.'},
     {role:'assistant', content:'SOLAR-7'},
@@ -70,11 +70,11 @@ test('MAX reviews a follow-up against the original conversation and keeps the dr
     assert.deepEqual(JSON.parse(messages[1].content), {conversation, draft});
     return reply('SOLAR-7');
   });
-  assert.equal((await service.chat(conversation, {responseMode:'MAX'})).answer, 'SOLAR-7');
+  assert.equal((await service.chat(conversation, {responseMode:'REVIEW'})).answer, 'SOLAR-7');
   assert.equal(calls, 2);
 });
 
-test('MAX refuses an oversized encoded context instead of dropping earlier turns', async () => {
+test('REVIEW refuses an oversized encoded context instead of dropping earlier turns', async () => {
   const conversation = [
     {role:'user', content:'"'.repeat(3500)},
     {role:'assistant', content:'\\'.repeat(3500)},
@@ -86,27 +86,27 @@ test('MAX refuses an oversized encoded context instead of dropping earlier turns
   ];
   let calls = 0;
   const service = build(async () => { calls++; return reply('draft'); });
-  await assert.rejects(service.chat(conversation, {responseMode:'MAX'}), {code:'CHAT_MAX_CONTEXT_TOO_LARGE'});
+  await assert.rejects(service.chat(conversation, {responseMode:'REVIEW'}), {code:'CHAT_REVIEW_CONTEXT_TOO_LARGE'});
   assert.equal(calls, 1);
 });
 
-test('MAX rejects privileged requests, structured mode combinations, and long input before model call', async () => {
+test('REVIEW rejects privileged requests, structured mode combinations, and long input before model call', async () => {
   let calls = 0;
   const service = build(async () => { calls++; return reply('ok'); });
-  for (const opts of [{responseMode:'ADMIN'}, {responseMode:'max'},
-    {responseMode:'MAX',responseFormat:'constructor_draft_v1'}]) {
+  for (const opts of [{responseMode:'ADMIN'}, {responseMode:'review'},
+    {responseMode:'REVIEW',responseFormat:'constructor_draft_v1'}]) {
     await assert.rejects(service.chat(MESSAGE,opts), { code: 'CHAT_MODE_INVALID' });
   }
   await assert.rejects(service.chat([{role:'user',content:'x'.repeat(1801)}],
-    {responseMode:'MAX'}), {code:'CHAT_MAX_CONTEXT_TOO_LARGE'});
+    {responseMode:'REVIEW'}), {code:'CHAT_REVIEW_CONTEXT_TOO_LARGE'});
   assert.equal(calls, 0);
 });
 
-test('MAX rejects overlong draft without making a second inference', async () => {
+test('REVIEW rejects overlong draft without making a second inference', async () => {
   let calls = 0;
   const service = build(async () => { calls++; return reply('x'.repeat(1801)); });
-  await assert.rejects(service.chat(MESSAGE, {responseMode:'MAX'}),
-    {code:'CHAT_MAX_CONTEXT_TOO_LARGE'});
+  await assert.rejects(service.chat(MESSAGE, {responseMode:'REVIEW'}),
+    {code:'CHAT_REVIEW_CONTEXT_TOO_LARGE'});
   assert.equal(calls, 1);
 });
 
@@ -116,13 +116,13 @@ test('second-pass wrong model fails closed and releases busy lock', async () => 
     calls++;
     return calls === 2 ? reply('fake', {model:'untrusted:2b'}) : reply('draft');
   });
-  await assert.rejects(service.chat(MESSAGE, {responseMode:'MAX'}),
+  await assert.rejects(service.chat(MESSAGE, {responseMode:'REVIEW'}),
     {code:'CHAT_MODEL_RESPONSE_INVALID'});
   assert.equal((await service.chat(MESSAGE)).answer, 'draft');
   assert.equal(calls, 3);
 });
 
-test('abort during MAX verification cancels the whole turn without returning a draft', async () => {
+test('abort during REVIEW verification cancels the whole turn without returning a draft', async () => {
   let entered;
   const begun = new Promise(resolve => { entered = resolve; });
   let calls = 0;
@@ -136,7 +136,7 @@ test('abort during MAX verification cancels the whole turn without returning a d
     });
   });
   const ctrl = new AbortController();
-  const pending = service.chat(MESSAGE, {responseMode:'MAX',signal:ctrl.signal});
+  const pending = service.chat(MESSAGE, {responseMode:'REVIEW',signal:ctrl.signal});
   await begun;
   await assert.rejects(service.chat(MESSAGE), {code:'CHAT_BUSY'});
   ctrl.abort();
@@ -144,7 +144,7 @@ test('abort during MAX verification cancels the whole turn without returning a d
   assert.equal(calls, 2);
 });
 
-test('HTTP accepts only explicit MAX schema, and returning JSON still carries no tool permission', async t => {
+test('HTTP accepts only explicit REVIEW schema, and returning JSON still carries no tool permission', async t => {
   let calls = 0;
   const service = build(async () => { calls++; return reply(calls % 2 ? 'draft' : 'final'); });
   const server = createAppServer({ localChatService: service });
@@ -159,15 +159,15 @@ test('HTTP accepts only explicit MAX schema, and returning JSON still carries no
   });
   for (const input of [
     {messages:MESSAGE,responseMode:'ADMIN'},
-    {messages:MESSAGE,responseMode:'MAX',responseFormat:'constructor_draft_v1'},
-    {messages:MESSAGE,responseMode:'MAX',tool:'send_email'},
+    {messages:MESSAGE,responseMode:'REVIEW',responseFormat:'constructor_draft_v1'},
+    {messages:MESSAGE,responseMode:'REVIEW',tool:'send_email'},
   ]) {
     const response = await send(input);
     assert.equal(response.status, 400);
     assert.deepEqual(await response.json(), {code:'INVALID_REQUEST'});
   }
   assert.equal(calls, 0);
-  const response = await send({messages:MESSAGE,responseMode:'MAX'});
+  const response = await send({messages:MESSAGE,responseMode:'REVIEW'});
   assert.equal(response.status, 200);
   const data = await response.json();
   assert.equal(data.answer, 'final');
@@ -177,7 +177,7 @@ test('HTTP accepts only explicit MAX schema, and returning JSON still carries no
   assert.equal(calls, 2);
 });
 
-test('HTTP rejects oversize MAX context without contacting the local model', async t => {
+test('HTTP rejects oversize REVIEW context without contacting the local model', async t => {
   let calls = 0;
   const service = build(async () => { calls++; return reply('draft'); });
   const server = createAppServer({localChatService:service});
@@ -188,9 +188,9 @@ test('HTTP rejects oversize MAX context without contacting the local model', asy
   const response=await fetch(origin+'/api/chat',{
     method:'POST',
     headers:{Origin:origin,'Content-Type':'application/json',Authorization:'Bearer '+TOKEN},
-    body:JSON.stringify({messages:[{role:'user',content:'x'.repeat(1801)}],responseMode:'MAX'}),
+    body:JSON.stringify({messages:[{role:'user',content:'x'.repeat(1801)}],responseMode:'REVIEW'}),
   });
   assert.equal(response.status,400);
-  assert.deepEqual(await response.json(),{code:'CHAT_MAX_CONTEXT_TOO_LARGE'});
+  assert.deepEqual(await response.json(),{code:'CHAT_REVIEW_CONTEXT_TOO_LARGE'});
   assert.equal(calls,0);
 });

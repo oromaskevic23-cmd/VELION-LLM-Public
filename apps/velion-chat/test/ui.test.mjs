@@ -93,6 +93,7 @@ test('emulated UI: dictation, chat, local history, language and safe text render
   assert.equal(d.querySelector('#mic').disabled, false);
   d.querySelector('#open-settings').click();
   assert.equal(d.querySelector('#settings-dialog').open, true);
+  assert.equal(d.querySelector('#response-mode option[value=REVIEW]').textContent, 'Проверка ответа');
   d.querySelector('#token').value = TOKEN;
   d.querySelector('#save-history').checked = true;
   d.querySelector('#save-history').dispatchEvent(new w.Event('change'));
@@ -128,6 +129,10 @@ test('emulated UI: dictation, chat, local history, language and safe text render
   d.querySelector('#language').value = 'en-US';
   d.querySelector('#language').dispatchEvent(new w.Event('change'));
   assert.equal(d.querySelector('#new-chat').textContent.includes('New conversation'), true);
+  assert.equal(d.querySelector('#response-mode option[value=REVIEW]').textContent, 'Review the answer');
+  d.querySelector('#language').value = 'uk-UA';
+  d.querySelector('#language').dispatchEvent(new w.Event('change'));
+  assert.equal(d.querySelector('#response-mode option[value=REVIEW]').textContent, 'Перевірка відповіді');
   storageSnapshot = w.localStorage.getItem('velion-chat-history-v1');
   await page.goto(origin + '/');
   await page.waitUntilComplete();

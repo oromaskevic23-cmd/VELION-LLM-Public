@@ -11,10 +11,10 @@ Two explicit local backends are available: an existing Ollama service or an
 optional CPU-only GGUF runtime. Neither is enabled by default, and there is no
 automatic fallback between them.
 
-## Response modes: STANDARD and VELION MAX (21 November 2026)
+## Two-pass answer review (21 November 2026)
 
-Open **Settings → Response mode**. `STANDARD` is the default and makes one
-local model inference. `VELION MAX` is an **opt-in bounded, two-pass same-model
+Open **Settings → Response mode**. **Regular answer** is the default and makes one
+local model inference. **Review the answer** is an **opt-in bounded, two-pass same-model
 self-review**: VELION generates a draft, then asks the same local model to
 review it against the validated conversation, including constraints from
 earlier turns. The conversation and draft are separate JSON fields. Only the
@@ -22,22 +22,22 @@ second-pass answer is displayed. This is a
 local model-adapter feature, not a separate model, independently checked
 reasoning, paid service or Astra 6.2 quality parity.
 
-MAX can be slower. The two passes share the current request deadline; the
+The second pass can take longer. The two passes share the current request deadline; the
 latest user request and first draft must each be no longer than 1,800
 characters for bounded local review. The encoded review input is limited to
 32 KiB. Oversized inputs are refused without dropping earlier turns.
-Unsupported mode names or a MAX
+Unsupported mode names or a review
 request combined with the structured Constructor draft format are denied.
 When either model pass fails, the entire request fails closed without
 labeling the initial draft a verified answer. The result receipt states
 `qualityVerified: false` and `SAME_MODEL_LOCAL_SELF_REVIEW_ONLY`.
 The session's response-mode selection is not saved with browser history.
 
-MAX **does not** execute model text, invoke external tools or agents,
+The second pass does not execute model text, invoke external tools or agents,
 authorize approvals, prove factual correctness or create persistent memory.
 Actual-model quality, laptop/phone responsiveness and browser/Safari
 interactions are separate acceptance gates. See the
-[exact-source 18-test checkpoint](../../docs/VELION_MAX_TWO_PASS_20261121.md).
+[exact-source 18-test checkpoint](../../docs/VELION_TWO_PASS_REVIEW_20261121.md).
 
 
 ## Run with an existing Ollama service
@@ -267,7 +267,7 @@ general intelligence ranking or superiority over Astra. Comparison requires
 the same prompts, settings and independently reviewed, unseen tasks.
 
 With the configured local Ollama backend, run
-`npm run evaluate:intelligence -- --paired` to compare STANDARD and MAX on
+`npm run evaluate:intelligence -- --paired` to compare STANDARD and REVIEW on
 the same 20 conversations. The runner alternates which mode runs first,
 checks each receipt against the requested mode, exact input and same named
 model, and stops at the first request or receipt failure. It reports the

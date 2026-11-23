@@ -42,7 +42,7 @@ The local bearer check is a development-session boundary, not externally atteste
 
 **Source:** GitHub branch `codex/velion-enterprise-skills-readonly-20261121` after UI commit `a791844ceb856e02d6bd41da7b1f85c105f14c92`.
 
-A free disposable Node.js **22.23.4** VM reconstructed **15** GitHub files: the new arithmetic skill, HTTP server, existing chat and VELION MAX adapters, three test modules, HTML/CSS/JS assets, manifest and PNG icons. The Git canonical blob SHA-1 for each byte-for-byte file was checked against GitHub before executing. Files were deleted from the test environment afterwards.
+A free disposable Node.js **22.23.4** VM reconstructed **15** GitHub files: the new arithmetic skill, HTTP server, existing chat and answer-review adapters, three test modules, HTML/CSS/JS assets, manifest and PNG icons. The Git canonical blob SHA-1 for each byte-for-byte file was checked against GitHub before executing. Files were deleted from the test environment afterwards.
 
 The actual commands:
 
@@ -50,7 +50,7 @@ The actual commands:
 node --check enterprise-skills.mjs
 node --check server.mjs
 node --check public/app.mjs
-node --test test/chat.test.mjs test/max-mode.test.mjs test/enterprise-skills.test.mjs
+node --test test/chat.test.mjs test/*-mode.test.mjs test/enterprise-skills.test.mjs
 ```
 
 **Actual results:** all three syntax checks exited **0**; the integrated Node test runner reported **25 tests / 25 passed / 0 failed / 0 skipped**, exit **0**. The test-run stdout SHA-256 was:
@@ -76,6 +76,6 @@ The seven new tests include BigInt precision, negative-number division, schema a
 1. Add real browser/iPhone accessibility tests for the explicit calculator form and preserve local-only behavior.
 2. Introduce a **proposal-only** skill plan contract with bounded tenant/NCA intent and source-bound evidence, without executing a skill from untrusted model text.
 3. Integrate independently authorized capabilities through AI Passport, Guardian Core, Approval Gateway, Audit Ledger and Owner Stop, in a Federated Multi-Orchestrator Architecture. Independent negative QA is required before enabling non-read-only actions.
-4. Run a fair, unseen, independently graded VELION STANDARD/MAX vs a specific inspectable Astra 6.2 build; report actual task correctness, security and p50/p95 latency separately.
+4. Run a fair, unseen, independently graded VELION STANDARD/REVIEW vs a specific inspectable Astra 6.2 build; report actual task correctness, security and p50/p95 latency separately.
 
 **Architecture → Implementation → Integration → Verification → Evidence → Release.** Current stage: developer-verified local implementation; *release not authorized*.

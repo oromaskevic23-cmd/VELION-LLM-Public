@@ -60,7 +60,7 @@ Commands actually executed:
 node --check skill-proposal.mjs
 node --check server.mjs
 node --check public/app.mjs
-node --test test/chat.test.mjs test/max-mode.test.mjs \
+node --test test/chat.test.mjs test/*-mode.test.mjs \
   test/enterprise-skills.test.mjs test/skill-proposal.test.mjs
 ```
 
@@ -71,7 +71,7 @@ Results:
 | 17 Git blob SHA-1 checks | 17/17 matched GitHub |
 | JavaScript syntax | 3/3 exit 0 |
 | Existing chat regression | 10/10 |
-| Existing VELION MAX regression | 8/8 |
+| Existing answer-review regression | 8/8 |
 | Manual read-only Enterprise Skill regression | 7/7 |
 | New model proposal regression | 10/10 |
 | **Combined Node test run** | **35/35 PASS, exit 0, no skips** |
