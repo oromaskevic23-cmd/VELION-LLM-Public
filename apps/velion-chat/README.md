@@ -16,14 +16,15 @@ automatic fallback between them.
 Open **Settings → Response mode**. **Regular answer** is the default and makes one
 local model inference. **Review the answer** is an **opt-in bounded, two-pass same-model
 self-review**: VELION generates a draft, then asks the same local model to
-review the latest user request and the untrusted draft for reasoning or
-formatting problems. Only the second-pass answer is displayed. This is a
+review the latest user request, bounded prior conversation data (when present),
+and the untrusted draft for reasoning or formatting problems. Only the second-pass answer is displayed. This is a
 local model-adapter feature, not a separate model, independently checked
 reasoning, paid service or Astra 6.2 quality parity.
 
 The second pass can take longer. The two passes share the current request deadline; the
-latest user request and first draft must each be no longer than 1,800
-characters for bounded local review. Unsupported mode names or a review
+latest user request plus serialized prior conversation must total no more than
+1,800 characters; the first draft has its own 1,800-character limit. Oversized
+context fails closed before inference rather than being silently truncated. Unsupported mode names or a review
 request combined with the structured Constructor draft format are denied.
 When either model pass fails, the entire request fails closed without
 labeling the initial draft a verified answer. The result receipt states
