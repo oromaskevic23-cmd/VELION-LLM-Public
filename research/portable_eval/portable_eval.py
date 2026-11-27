@@ -2,7 +2,7 @@
 import json
 import sys
 
-# Prompts never include the reference labels. This is a public regression,
+# Prompts include answer choices but do not mark correct answers. This is a public regression,
 # not a blind holdout or an independent quality certification.
 CASES = {
     'r1': ('HTTP 429 is returned. Choose BACKOFF, RETRY_NOW or IGNORE.', 'BACKOFF'),
